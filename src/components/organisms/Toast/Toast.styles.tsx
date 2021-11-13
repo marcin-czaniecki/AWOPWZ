@@ -1,0 +1,33 @@
+import styled, { keyframes } from "styled-components";
+
+const animationTouts = keyframes`
+    0%{
+        transform:translateX(-50%) translateY(600px);
+    }
+    10%{
+        transform:translateX(-50%) translateY(0px);
+    }
+    90%{
+        transform:translateX(-50%) translateY(0px);
+    }
+    100%{
+        transform:translateX(-50%) translateY(600px);
+    }
+`;
+
+export const WrapperToast = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  display: flex;
+  max-width: 300px;
+  flex-direction: column;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: snow;
+  color: red;
+  box-shadow: 0 10px 10px 3px rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%) translateY(600px);
+  animation: ${animationTouts} 7s linear;
+`;

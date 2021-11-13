@@ -1,0 +1,20 @@
+{
+  "firestore": {},
+  "functions": {
+    "predeploy": "npm  run build"
+  },
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
