@@ -66,3 +66,28 @@ export type TArrayPushOneElement = <T extends unknown>(
   FieldValue: string,
   value: T
 ) => void;
+
+export interface PropsProjectColumn {
+  doc: DocumentReference<IProject>;
+  column: IColumn;
+  tasks: ITask[];
+  columns: IColumn[];
+}
+
+export interface PropsConfirmModal {
+  textButton: string;
+  children: string | JSX.Element;
+  confirmAction: () => void;
+  buttonVersion?: "secondary" | "tertiary";
+  maxHeight?: string;
+  maxWidth?: string;
+  invisibleYes?: boolean;
+  invisibleNo?: boolean;
+}
+
+export interface PropsProjectTask {
+  doc: DocumentReference<IProject>;
+  task: ITask;
+  column: IColumn;
+  columns: IColumn[];
+}

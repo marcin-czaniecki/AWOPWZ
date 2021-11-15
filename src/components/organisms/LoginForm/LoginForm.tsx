@@ -1,40 +1,36 @@
-import { useState } from "react";
 import { useError } from "hooks/useError";
 import Button from "components/atoms/Button/Button";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
-import * as firebaseAuth from "firebase/auth";
+import fb, { auth } from "data/fb";
+import { useForm, SubmitHandler } from "react-hook-form";
+import Input from "components/atoms/Input/Input";
 
-const auth = firebaseAuth.getAuth();
+type Inputs = {
+  email: string;
+  password: string;
+};
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit } = useForm<Inputs>();
   const [, setError] = useError();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    (async () => {
+      try {
+        await fb.signInWithEmailAndPassword(auth, data.email, data.password);
+      } catch (e) {
+        setError("Nieprawidłowy email lub hasło");
+      }
+    })();
+  };
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (email && password) {
-          (async () => {
-            try {
-              await firebaseAuth.signInWithEmailAndPassword(auth, email, password);
-            } catch (e) {
-              setError("You give incorrect email or password");
-            }
-          })();
-        }
-      }}
-    >
-      <FiledInput label="Email" value={email} setValue={setEmail} name="email" type="email" placeholder="Your email" />
-      <FiledInput
-        label="Hasło"
-        value={password}
-        setValue={setPassword}
-        name="password"
-        type="password"
-        placeholder="Your password"
-      />
-      <Button>Log in</Button>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FiledInput name="email" label="Twój email">
+        <Input type="email" {...register("email", { required: true })} />
+      </FiledInput>
+      <FiledInput name="password" label="Twoje hasło">
+        <Input type="password" {...register("password", { required: true })} />
+      </FiledInput>
+      <Button type="submit">Zaloguj</Button>
     </form>
   );
 };

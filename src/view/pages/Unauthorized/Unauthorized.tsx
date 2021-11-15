@@ -18,7 +18,7 @@ const Unauthorized = () => {
               setRegister(false);
             }}
           >
-            Zaloguj
+            Logowanie
           </ControlButton>
           <ControlButton
             active={register}
@@ -26,7 +26,7 @@ const Unauthorized = () => {
               setRegister(true);
             }}
           >
-            Zarejestruj
+            Rejestracja
           </ControlButton>
         </ControlButtons>
         <WrapperForm>{register ? <AuthForm /> : <LoginForm />}</WrapperForm>

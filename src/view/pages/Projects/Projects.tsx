@@ -1,25 +1,53 @@
+import Button from "components/atoms/Button/Button";
+import Input from "components/atoms/Input/Input";
+import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import SideBar from "components/molecules/SideBar/SideBar";
 import fb, { store } from "data/fb";
-import { useState } from "react";
+import { useError } from "hooks/useError";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { IProject } from "types/types";
+import { enumName } from "utils/utils";
 
 const FormProject = styled.form`
   padding: 0 10px;
+  margin-bottom: 10px;
 `;
 
-const AddProjectBar = () => {
-  const [name, setName] = useState("");
+type Inputs = {
+  name: string;
+};
+const collection = fb.collection(store, "projects");
+
+const FormProjectCard = ({ id }: { id?: string }) => {
+  const { register, handleSubmit } = useForm<Inputs>();
+  const [, setError] = useError();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    (async () => {
+      try {
+        if (id) {
+          fb.updateDoc(fb.doc(store, "projects", id), {
+            name: data.name,
+          });
+          return;
+        }
+        fb.addDoc(collection, { name: data.name, [enumName.COLUMNS]: [], [enumName.TASKS]: [] });
+      } catch (error) {
+        setError("Coś poszło nie tak :c");
+      }
+    })();
+  };
   return (
     <>
-      <SideBar right>
-        <FormProject>
-          <FiledInput name="projectName" label={"Nazwa projektu"} value={name} setValue={setName} />
-        </FormProject>
-      </SideBar>
+      <FormProject onSubmit={handleSubmit(onSubmit)}>
+        <FiledInput name="name" label={"Nazwa projektu"}>
+          <Input type="text" {...register("name", { required: true })} />
+        </FiledInput>
+        <Button type="submit">{id ? "Zmień nazwę" : "Dodaj projekt"}</Button>
+      </FormProject>
     </>
   );
 };
@@ -42,10 +70,38 @@ const WrapperProjectCard = styled.div`
 `;
 
 const ProjectCard = ({ id, name }: { id: string; name: string }) => {
+  const [, setError] = useError();
   return (
-    <Link to={`${id}`} style={{ textDecoration: "none" }}>
-      <WrapperProjectCard key={id}>{name}</WrapperProjectCard>
-    </Link>
+    <div>
+      <ConfirmModal
+        confirmAction={async () => {
+          try {
+            fb.deleteDoc(fb.doc(store, "projects", id));
+          } catch (error) {
+            setError("Z jakiegoś powodu nie udało się usunąć projektu");
+          }
+        }}
+        textButton="Usuń"
+        buttonVersion="secondary"
+      >
+        <p>Czy na pewno chcesz usunąć projekt</p>
+      </ConfirmModal>
+      <ConfirmModal
+        confirmAction={() => {}}
+        textButton="Zmień nazwę"
+        buttonVersion="secondary"
+        maxHeight="120px"
+        invisibleYes
+        invisibleNo
+      >
+        <>
+          <FormProjectCard id={id} />
+        </>
+      </ConfirmModal>
+      <Link to={`${id}`} style={{ textDecoration: "none" }}>
+        <WrapperProjectCard key={id}>{name}</WrapperProjectCard>
+      </Link>
+    </div>
   );
 };
 
@@ -67,7 +123,9 @@ const Projects = () => {
   }
   return (
     <WrapperProjects>
-      <AddProjectBar />
+      <SideBar right>
+        <FormProjectCard />
+      </SideBar>
       {value?.docs.map((doc) => {
         const data = doc.data() as IProject;
         return <ProjectCard key={doc.id} id={doc.id} {...data} />;

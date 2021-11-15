@@ -19,7 +19,7 @@ export const Wrapper = styled.div<{ maxHeight?: string; maxWidth?: string; minWi
   height: clamp(100px, 100%, ${({ maxHeight }) => (maxHeight ? maxHeight : "70%")});
   margin: 0 10px;
   padding-top: 5px;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   background-color: ${({ theme }) => theme.color.background};
   z-index: 999;
 `;

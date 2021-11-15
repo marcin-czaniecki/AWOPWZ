@@ -2,7 +2,7 @@ import Hamburger from "components/atoms/Hamburger/Hamburger";
 import { auth } from "data/fb";
 import { signOut } from "firebase/auth";
 import useHandleModal from "hooks/useHandleModal";
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, PathMatch, useMatch, useResolvedPath } from "react-router-dom";
 import styled, { css } from "styled-components";

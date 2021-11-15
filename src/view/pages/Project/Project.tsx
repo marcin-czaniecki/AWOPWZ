@@ -1,88 +1,14 @@
 import fb, { auth, store } from "data/fb";
-import { arrayRemove, arrayUnion, DocumentReference, Timestamp, updateDoc } from "firebase/firestore";
-import { useDocumentData, useDocumentDataOnce } from "react-firebase-hooks/firestore";
-import { IColumn, IProject, ITask, TArrayPushOneElement, TypeMoveTask, TypeUpdateArray } from "types/types";
+import { DocumentReference, Timestamp, updateDoc } from "firebase/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { IProject } from "types/types";
 import { useParams } from "react-router-dom";
 import SideBar from "components/molecules/SideBar/SideBar";
 import styled from "styled-components";
+import ProjectColumn from "components/organisms/ProjectColumn/ProjectColumn";
+import { arrayPushOneElement, generateId } from "utils/utils";
+import { useNavigate } from "react-router-dom";
 
-/* 
-
-export interface ITask {
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
-  updatedAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
-  color: string;
-  column: string;
-  title: string;
-  author: string;
-}
-
-export interface IColumn {
-  order: string;
-  name: string;
-}
-
-export interface IProject {
-  name: string;
-  columns: IColumn[];
-  tasks: ITask[];
-}
-
-*/
-const generateId = () => Math.round(Math.random() * Math.pow(10, 10)).toString(16);
-
-const arrayPushOneElement: TArrayPushOneElement = async (doc, FieldValue, value) => {
-  await updateDoc(doc, {
-    [FieldValue]: fb.arrayUnion(value),
-  });
-};
-
-const updateTasksOrderFromCurrentColumn = (tasks: ITask[], column: IColumn, order?: string) => {
-  const oldVersionElements = tasks.filter(({ columnOrder }) => columnOrder === column.order);
-  const newVersionElements = oldVersionElements.map((task) => {
-    const updatingTask = { ...task };
-    updatingTask.columnOrder = order || (Number(task.columnOrder) - 1).toString();
-    return updatingTask;
-  });
-  return newVersionElements;
-};
-
-const updateArray: TypeUpdateArray = async (doc, FieldValue, oldVersionElements, newVersionElements) => {
-  updateDoc(doc, {
-    [FieldValue]: fb.arrayUnion(...newVersionElements),
-  });
-  await updateDoc(doc, {
-    [FieldValue]: fb.arrayRemove(...oldVersionElements),
-  });
-};
-
-const moveTask: TypeMoveTask = async (doc, task, columns, updateOrder) => {
-  const updatingTask = { ...task };
-  updatingTask.columnOrder = updateOrder(updatingTask, columns);
-
-  if (updatingTask.columnOrder === task.columnOrder) {
-    return;
-  }
-  updateArray(doc, "tasks", [task], [updatingTask]);
-};
-const upOrderTask = (task: ITask, columns: IColumn[]) => {
-  if (parseInt(task.columnOrder) < parseInt(columns[columns.length - 1].order)) {
-    return (parseInt(task.columnOrder) + 1).toString();
-  }
-  return task.columnOrder;
-};
-const downOrderTask = (task: ITask, columns: IColumn[]) => {
-  if (parseInt(task.columnOrder) > parseInt(columns[0].order)) {
-    return (parseInt(task.columnOrder) - 1).toString();
-  }
-  return task.columnOrder;
-};
 const EditBar = ({
   doc,
   lastOrder,
@@ -108,7 +34,6 @@ const EditBar = ({
             if (!auth.currentUser) {
               return;
             }
-
             await updateDoc(doc, {
               tasks: fb.arrayUnion({
                 id: generateId(),
@@ -135,12 +60,69 @@ const EditBar = ({
   );
 };
 
-const ModalAddTask = () => {};
-
 const WrapperColumns = styled.div`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+  @media screen and (min-width: 620px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 920px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (min-width: 1220px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media screen and (min-width: 1520px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @media screen and (min-width: 1920px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
 `;
+
+const StyledButtonBack = styled.button`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  height: 30px;
+  width: 30px;
+  background-color: ${({ theme }) => theme.color.primary};
+  border-radius: 100%;
+  border: none;
+  z-index: 8;
+  ::after {
+    content: " ";
+    position: absolute;
+    width: 30%;
+    height: 3px;
+    background-color: snow;
+    left: 32%;
+    top: calc(50% - 1.5px);
+    transform: translateY(70%) rotate(45deg);
+  }
+  ::before {
+    content: " ";
+    position: absolute;
+    width: 30%;
+    height: 3px;
+    background-color: snow;
+    left: 32%;
+    top: calc(50% - 1.5px);
+    transform: translateY(-70%) rotate(-45deg);
+  }
+`;
+
+const ButtonBack = () => {
+  const navigate = useNavigate();
+  return (
+    <StyledButtonBack
+      onClick={() => {
+        navigate(-1);
+      }}
+    />
+  );
+};
 
 const Project = () => {
   const { id } = useParams();
@@ -156,6 +138,7 @@ const Project = () => {
 
   return (
     <>
+      <ButtonBack />
       <EditBar
         doc={doc}
         lastOrder={data?.columns[data.columns.length - 1]?.order || "0"}
@@ -164,66 +147,9 @@ const Project = () => {
       <WrapperColumns>
         {data.columns
           .sort((a, b) => (Number(a.order) > Number(b.order) ? 1 : -1))
-          .map((column) => {
-            const filterFn = (task: ITask) => task.columnOrder === column.order;
-            return (
-              <div key={column.id + column.order + column.name}>
-                <div>
-                  {column.name} : {column.order}
-                  <button
-                    onClick={async () => {
-                      if (column.order !== "0") {
-                        const oldVersionTasks = data.tasks.filter(({ columnOrder }) => columnOrder === column.order);
-                        const newVersionTasks = updateTasksOrderFromCurrentColumn(data.tasks, column, "0");
-                        updateArray(doc, "tasks", oldVersionTasks, newVersionTasks);
-                      }
-                      const columnsHigherOrder = [
-                        ...data.columns.filter(({ order }) => Number(order) > Number(column.order)),
-                      ];
-                      const columnsWithUpdatedOrder = columnsHigherOrder.map((column) => {
-                        const oldVersionTasks = data.tasks.filter(({ columnOrder }) => columnOrder === column.order);
-                        const newVersionTasks = updateTasksOrderFromCurrentColumn(data.tasks, column);
-                        updateArray(doc, "tasks", oldVersionTasks, newVersionTasks);
-
-                        const updatingColumn = { ...column };
-                        updatingColumn.order = (Number(updatingColumn.order) - 1).toString();
-                        return updatingColumn;
-                      });
-
-                      updateArray(doc, "columns", [column, ...columnsHigherOrder], columnsWithUpdatedOrder);
-                    }}
-                  >
-                    usuń
-                  </button>
-                </div>
-                {data.tasks.filter(filterFn).map((task) => (
-                  <div
-                    key={task.title + task.createdAt}
-                    style={{ background: task.color, color: task.backgroundColor }}
-                  >
-                    <div>
-                      <div>{task.title}</div>
-                      <div>
-                        {
-                          <button
-                            onClick={async () => {
-                              await updateDoc(doc, {
-                                tasks: fb.arrayRemove(task),
-                              });
-                            }}
-                          >
-                            usuń
-                          </button>
-                        }
-                        <button onClick={() => moveTask(doc, task, data.columns, downOrderTask)}>cofnij</button>
-                        <button onClick={() => moveTask(doc, task, data.columns, upOrderTask)}>ukończono</button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            );
-          })}
+          .map((column) => (
+            <ProjectColumn doc={doc} tasks={data.tasks} column={column} columns={data.columns} />
+          ))}
       </WrapperColumns>
     </>
   );
