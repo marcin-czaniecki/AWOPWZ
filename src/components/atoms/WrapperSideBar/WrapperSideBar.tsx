@@ -9,6 +9,7 @@ const WrapperSideBar = styled.div<{ active?: boolean; right?: boolean }>`
   flex-direction: column;
   width: 300px;
   height: 100%;
+  padding: 0 10px;
   padding-top: 70px;
   background-color: ${({ theme }) => theme.color.background};
   border-left: ${({ theme, right }) => right && `solid 5px ${theme.color.primary}`};

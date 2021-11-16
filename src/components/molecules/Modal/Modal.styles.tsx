@@ -8,7 +8,7 @@ export const Background = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 99;
+  z-index: 13;
 `;
 
 export const Wrapper = styled.div<{ maxHeight?: string; maxWidth?: string; minWidth?: string }>`
@@ -21,7 +21,7 @@ export const Wrapper = styled.div<{ maxHeight?: string; maxWidth?: string; minWi
   padding-top: 5px;
   padding-bottom: 10px;
   background-color: ${({ theme }) => theme.color.background};
-  z-index: 999;
+  z-index: 14;
 `;
 
 export const WrapperContent = styled.section`

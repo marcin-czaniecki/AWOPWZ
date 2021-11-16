@@ -37,8 +37,8 @@ declare module "styled-components" {
 export const theme = {
   color: {
     primary: "#23b2ee",
-    secondary: "#838BD0",
-    trinary: "#1dcf19",
+    secondary: "#4A5587",
+    trinary: "#7AED18",
     error: "rgb(250, 130, 130)",
     background: "snow",
     text: "#737c8e",

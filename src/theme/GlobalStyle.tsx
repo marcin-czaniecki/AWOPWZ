@@ -3,7 +3,7 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
     *,*::after,*::before{
         box-sizing: border-box;
-        font-family: ${({ theme }) => theme.font.family.secondary};
+        font-family: ${({ theme }) => theme.font.family.primary};
         margin-top:0;
     }
 

@@ -107,7 +107,7 @@ const Navigation = () => {
 };
 
 const MainTemplateWrapper = styled.main`
-  padding: 50px 10px;
+  padding: 60px 10px;
 `;
 
 const MainTemplate = ({ children }: { children: ReactElement | ReactElement[] }) => {

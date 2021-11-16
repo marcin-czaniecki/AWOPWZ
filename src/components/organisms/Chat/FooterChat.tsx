@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const FooterChat = () => {
   const [value, setValue] = useState("");
-  const [, setError] = useError();
+  const { setError } = useError();
 
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

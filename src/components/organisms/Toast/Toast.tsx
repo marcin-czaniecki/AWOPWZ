@@ -6,7 +6,7 @@ const Toast = ({ message }: { type?: string; message?: string | null }) => {
       {message ? (
         <WrapperToast>
           <div>
-            <h3>Warring!</h3>
+            <h3>Uwaga!</h3>
           </div>
           <div>{message}</div>
         </WrapperToast>

@@ -23,7 +23,7 @@ const ConfirmModal = ({
   };
   return (
     <>
-      <Button onClick={openModal} secondary={buttonVersion === "secondary"} tertiary={buttonVersion === "tertiary"}>
+      <Button type="button" onClick={openModal}>
         {textButton}
       </Button>
       <Modal active={active} closeAction={closeModal} maxHeight={maxHeight || "100px"} maxWidth={maxWidth || "300px"}>
@@ -33,19 +33,16 @@ const ConfirmModal = ({
             {!invisibleYes && (
               <Button
                 onClick={() => {
-                  confirmAction();
+                  if (confirmAction) {
+                    confirmAction();
+                  }
                   closeModal();
                 }}
-                secondary
               >
                 Tak
               </Button>
             )}
-            {!invisibleNo && (
-              <Button onClick={closeModal} secondary>
-                Nie
-              </Button>
-            )}
+            {!invisibleNo && <Button onClick={closeModal}>Nie</Button>}
           </WrapperConfirmButtons>
         </div>
       </Modal>

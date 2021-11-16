@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
 
-export const ErrorContext = createContext<[string | null, (alert: string | null) => void]>([
-  {} as string,
-  (alert) => {},
-]);
+export const ErrorContext = createContext<{ error: string | null; setError: (alert: string | null) => void }>({
+  error: "",
+  setError: (alert) => {},
+});
 
 export const ErrorProvider = ({ children }: { children: JSX.Element }) => {
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export const ErrorProvider = ({ children }: { children: JSX.Element }) => {
     };
   }, [error, dispatchError]);
 
-  return <ErrorContext.Provider value={[error, dispatchError]}>{children}</ErrorContext.Provider>;
+  return <ErrorContext.Provider value={{ error, setError: dispatchError }}>{children}</ErrorContext.Provider>;
 };
 
 export const useError = () => {

@@ -77,7 +77,7 @@ export interface PropsProjectColumn {
 export interface PropsConfirmModal {
   textButton: string;
   children: string | JSX.Element;
-  confirmAction: () => void;
+  confirmAction?: () => void;
   buttonVersion?: "secondary" | "tertiary";
   maxHeight?: string;
   maxWidth?: string;
@@ -90,4 +90,17 @@ export interface PropsProjectTask {
   task: ITask;
   column: IColumn;
   columns: IColumn[];
+}
+
+export interface PropsColumnForm {
+  doc: DocumentReference<IProject>;
+  column?: IColumn;
+  lastOrder: string;
+  length: number;
+}
+
+export interface PropsTaskFormAndColumnFromSidebar {
+  doc: DocumentReference<IProject>;
+  lastOrder: string;
+  length: number;
 }

@@ -1,3 +1,4 @@
+import Loading from "components/molecules/Loading/Loading";
 import Message from "components/molecules/Message/Message";
 import fb, { store } from "data/fb";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -7,11 +8,11 @@ import { WrapperBodyChat } from "./Chat.styles";
 const BodyChat = () => {
   const [value, loading, error] = useCollection(fb.collection(store, "message"));
 
+  if (loading) {
+    return <Loading size="100px" />;
+  }
   if (error) {
     return <div>...</div>;
-  }
-  if (loading) {
-    return <div>loading...</div>;
   }
 
   return (

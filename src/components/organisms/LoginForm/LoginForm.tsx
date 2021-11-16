@@ -12,11 +12,11 @@ type Inputs = {
 
 const LoginForm = () => {
   const { register, handleSubmit } = useForm<Inputs>();
-  const [, setError] = useError();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const { setError } = useError();
+  const onSubmit: SubmitHandler<Inputs> = ({ email, password }) => {
     (async () => {
       try {
-        await fb.signInWithEmailAndPassword(auth, data.email, data.password);
+        await fb.signInWithEmailAndPassword(auth, email, password);
       } catch (e) {
         setError("Nieprawidłowy email lub hasło");
       }

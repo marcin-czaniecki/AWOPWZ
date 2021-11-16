@@ -1,14 +1,16 @@
 import Button from "components/atoms/Button/Button";
+import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import fb from "data/fb";
 import { updateDoc } from "firebase/firestore";
 import { useError } from "hooks/useError";
 import { PropsProjectTask } from "types/types";
-import { moveTask, downOrderTask, upOrderTask } from "utils/utils";
-import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { downOrderTask, moveTask, upOrderTask } from "utils/firebaseUtils";
+import ConfirmModal from "../../molecules/ConfirmModal/ConfirmModal";
+import TaskForm from "../TaskForm/TaskForm";
 import { ButtonsProjectTask, WrapperProjectTask } from "./ProjectTask.styles";
 
 const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
-  const [, setError] = useError();
+  const { setError } = useError();
   const taskRemove = async () => {
     try {
       await updateDoc(doc, {
@@ -23,19 +25,22 @@ const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
       <div>
         <div>{task.title}</div>
         <ButtonsProjectTask>
-          <ConfirmModal textButton="usuń" confirmAction={taskRemove} buttonVersion="secondary">
-            <p>Czy na pewno chcesz usunąć zadanie?</p>
-          </ConfirmModal>
           {Number(column.order) !== 0 && (
-            <Button onClick={() => moveTask(doc, task, columns, downOrderTask)} secondary>
-              cofnij
-            </Button>
+            <Button onClick={() => moveTask(doc, task, columns, downOrderTask)}>Cofnij</Button>
           )}
           {Number(column.order) !== columns.length - 1 && (
-            <Button onClick={() => moveTask(doc, task, columns, upOrderTask)} secondary>
-              ukończono
-            </Button>
+            <Button onClick={() => moveTask(doc, task, columns, upOrderTask)}>Ukończono</Button>
           )}
+          <KebabMenu color={task.color}>
+            <ConfirmModal textButton="Edytuj" confirmAction={taskRemove} maxHeight="250px" invisibleNo invisibleYes>
+              <>
+                <TaskForm doc={doc} task={task} />
+              </>
+            </ConfirmModal>
+            <ConfirmModal textButton="Usuń" confirmAction={taskRemove} maxHeight="110px">
+              <p>Czy na pewno chcesz usunąć zadanie?</p>
+            </ConfirmModal>
+          </KebabMenu>
         </ButtonsProjectTask>
       </div>
     </WrapperProjectTask>

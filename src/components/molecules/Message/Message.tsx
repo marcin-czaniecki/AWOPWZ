@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { IMessage } from "types/types";
-import { removeDoc } from "utils/utils";
+import { removeDoc } from "utils/firebaseUtils";
+import { enumName } from "utils/utils";
 import Modal from "../Modal/Modal";
 import { WrapperMessage, DataFiled, ContentMessage } from "./Message.styles";
 
@@ -23,10 +24,10 @@ const WrapperMessageModalButtons = styled.div`
 `;
 
 const Message = ({ author, id, uid, content, createdAt, updatedAt }: IMessage) => {
-  const [, setError] = useError();
+  const { setError } = useError();
   const [visible, setVisible] = useState(false);
   const [uidC, setUidC] = useState("unknown");
-  const [dUser] = useDocumentDataOnce(fb.doc(store, "users", uidC));
+  const [dUser] = useDocumentDataOnce(fb.doc(store, enumName.USERS, uidC));
 
   useEffect(() => {
     if (auth.currentUser?.uid) {
@@ -59,7 +60,7 @@ const Message = ({ author, id, uid, content, createdAt, updatedAt }: IMessage) =
         <div>
           <p>Czy na pewno chcesz usunąć tą wiadomość?</p>
           <WrapperMessageModalButtons>
-            <Button onClick={() => removeDoc("message", id, setError)}>tak</Button>
+            <Button onClick={() => removeDoc(enumName.MESSAGE, id, setError)}>tak</Button>
             <Button onClick={closeModal}>nie</Button>
           </WrapperMessageModalButtons>
         </div>

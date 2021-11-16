@@ -9,14 +9,22 @@ import { auth } from "data/fb";
 import Projects from "./pages/Projects/Projects";
 import MainTemplate from "components/templates/MainTamplate/MainTamplate";
 import Project from "./pages/Project/Project";
+import { useError } from "hooks/useError";
+import Toast from "components/organisms/Toast/Toast";
+import Loading from "components/molecules/Loading/Loading";
 
 const Root = () => {
   const [user, loading, error] = useAuthState(auth);
   const location = useLocation();
+  const hookError = useError();
 
-  if (loading) return <div>loading...</div>;
+  if (loading) {
+    return <Loading />;
+  }
 
-  if (error) return <div>Error</div>;
+  if (error) {
+    return <div>Error</div>;
+  }
 
   return (
     <>
@@ -54,6 +62,7 @@ const Root = () => {
           <Route path="*" element={<NoMatch />} />
         </Routes>
       </MainTemplate>
+      <Toast message={hookError.error} />
     </>
   );
 };

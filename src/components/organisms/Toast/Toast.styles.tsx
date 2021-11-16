@@ -30,4 +30,5 @@ export const WrapperToast = styled.div`
   box-shadow: 0 10px 10px 3px rgba(0, 0, 0, 0.2);
   transform: translateX(-50%) translateY(600px);
   animation: ${animationTouts} 7s linear;
+  z-index: 15;
 `;

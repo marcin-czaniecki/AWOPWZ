@@ -5,8 +5,11 @@ const Input = styled.input`
   width: 100%;
   padding: 5px 5px 5px 15px;
   margin: 5px 0 10px;
-  border: 2px solid ${({ theme }) => theme.color.primary};
-  border-radius: 30px;
+  border: 2px solid ${({ theme }) => theme.color.secondary};
+  :focus {
+    border: 2px solid ${({ theme }) => theme.color.primary};
+    outline: solid 1px ${({ theme }) => theme.color.primary};
+  }
 `;
 
 export default Input;

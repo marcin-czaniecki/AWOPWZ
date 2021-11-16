@@ -8,7 +8,7 @@ import { useLocation, Navigate } from "react-router-dom";
 const RequireAuth = ({ children }: { children: any }) => {
   let location = useLocation();
   let [user] = useAuthState(auth);
-  const [, setError] = useError();
+  const { setError } = useError();
   const [uid, setUid] = useState("unknown");
   const [dataUser] = useDocumentDataOnce(fb.doc(store, "users", uid));
 
