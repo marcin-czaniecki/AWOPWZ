@@ -2,7 +2,10 @@ import styled from "styled-components";
 import { Incoming } from "utils/animations";
 
 export const WrapperProjectCard = styled.div`
+  display: flex;
+  flex-direction: column;
   animation: ${Incoming} 1s;
+  gap: 10px;
 `;
 
 export const WrapperContentProjectCard = styled.div`

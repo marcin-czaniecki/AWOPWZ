@@ -8,6 +8,14 @@ import { Link, PathMatch, useMatch, useResolvedPath } from "react-router-dom";
 import styled, { css } from "styled-components";
 import type { LinkProps } from "react-router-dom";
 import WrapperSideBar from "components/atoms/WrapperSideBar/WrapperSideBar";
+import { getDocumentReference } from "utils/firebaseUtils";
+import { DocumentReference } from "firebase/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { IUser } from "types/types";
+import { enumName } from "utils/utils";
+import Modal from "components/molecules/Modal/Modal";
+import { BackgroundModal, WrapperContentModal, WrapperModal } from "components/molecules/Modal/Modal.styles";
+import ProfileForm from "components/organisms/ProfileForm/ProfileForm";
 
 const WrapperNavigation = styled.nav`
   display: flex;
@@ -78,6 +86,14 @@ const Navigation = () => {
             dashboard
           </CustomLink>
           <CustomLink
+            to="/profile"
+            onClick={() => {
+              close();
+            }}
+          >
+            profil
+          </CustomLink>
+          <CustomLink
             to="/users"
             onClick={() => {
               close();
@@ -112,8 +128,22 @@ const MainTemplateWrapper = styled.main`
 
 const MainTemplate = ({ children }: { children: ReactElement | ReactElement[] }) => {
   const [user] = useAuthState(auth);
+  const doc = getDocumentReference(enumName.USERS, user?.uid || "unknown");
+  const [data] = useDocumentData<IUser>(doc as DocumentReference<IUser>);
+  const isInfo = data?.firstName && data?.lastName && data?.profession;
   return (
     <>
+      {!isInfo && (
+        <BackgroundModal>
+          <WrapperModal maxHeight="250px" maxWidth="400px">
+            <WrapperContentModal>
+              <ProfileForm
+                user={{ firstName: data?.firstName, lastName: data?.lastName, profession: data?.profession }}
+              />
+            </WrapperContentModal>
+          </WrapperModal>
+        </BackgroundModal>
+      )}
       {user && <Navigation />}
       <MainTemplateWrapper>{children}</MainTemplateWrapper>
     </>

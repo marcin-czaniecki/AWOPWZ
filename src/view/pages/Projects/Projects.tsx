@@ -28,6 +28,7 @@ const Projects = () => {
       <SideBar right>
         <FormProject />
       </SideBar>
+
       {value?.docs.map((doc) => {
         const data = doc.data() as IProject;
         return <ProjectCard key={doc.id} id={doc.id} {...data} />;

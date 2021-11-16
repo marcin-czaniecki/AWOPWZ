@@ -2,37 +2,64 @@ import ArrowButton from "components/atoms/ArrowButton/ArrowButton";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import ProjectTask from "components/organisms/ProjectTask/ProjectTask";
-import styled from "styled-components";
+import { useProject } from "hooks/useProject";
+import styled, { css } from "styled-components";
 import { theme } from "theme/theme";
 import { PropsProjectColumn } from "types/types";
 import { columnSwap, columnRemove, checkTaskOrder } from "utils/firebaseUtils";
+import ColumnForm from "../ColumnForm/ColumnForm";
 
-const WrapperProjectColumn = styled.div`
+const HeaderProjectColumn = styled.div`
   display: flex;
-  padding-right: 5px;
+  position: relative;
+  padding: 5px 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+const WrapperContentProjectColumn = styled.div`
+  display: flex;
   flex-direction: column;
-  height: 568px;
+  height: min(calc(100vh - 150px), 600px);
+  padding-right: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
   gap: 5px;
   overflow-y: auto;
 `;
 
-const ProjectColumn = ({ doc, column, tasks, columns }: PropsProjectColumn) => {
+const WrapperWip = styled.div<{ wip?: boolean }>`
+  position: relative;
+  ${({ wip }) =>
+    wip &&
+    css`
+      border-bottom: solid 4px ${({ theme }) => theme.color.error};
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      ::after {
+        content: "Przekroczenie WIP";
+        position: absolute;
+        display: block;
+        color: ${({ theme }) => theme.color.error};
+        font-weight: ${({ theme }) => theme.font.weight.medium};
+        bottom: -30px;
+      }
+    `}
+`;
+
+const ProjectColumn = ({ column }: PropsProjectColumn) => {
+  const { doc, data } = useProject();
+  if (!data) {
+    return <div>Nie udało się wczytać kolumny</div>;
+  }
+  const { columns, tasks } = data;
   return (
-    <div key={column.id + column.order}>
-      <div
-        style={{
-          display: "flex",
-          position: "relative",
-          padding: "5px 18px",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "10px",
-        }}
-      >
+    <div>
+      <HeaderProjectColumn>
         <div>{column.name}</div>
         <KebabMenu color={theme.color.primary}>
           <>
-            {"0" !== column.order && (
+            {0 !== column.order && (
               <ArrowButton
                 size="30px"
                 onClick={() => {
@@ -40,10 +67,12 @@ const ProjectColumn = ({ doc, column, tasks, columns }: PropsProjectColumn) => {
                 }}
               />
             )}
+            <ConfirmModal textButton="Edytuj" maxHeight="200px" invisibleYes invisibleNo>
+              <ColumnForm doc={doc} column={column} />
+            </ConfirmModal>
             <ConfirmModal
               textButton="usuń"
               confirmAction={() => columnRemove(doc, column, columns, tasks)}
-              buttonVersion="secondary"
               maxHeight="150px"
             >
               <p>Czy na pewno chcesz usunąć kolumne? Zadania zostaną przeniosione do pierwszej kolumny.</p>
@@ -59,14 +88,17 @@ const ProjectColumn = ({ doc, column, tasks, columns }: PropsProjectColumn) => {
             )}
           </>
         </KebabMenu>
-      </div>
-      <WrapperProjectColumn>
+      </HeaderProjectColumn>
+      <WrapperContentProjectColumn>
         {tasks
           .filter((task) => checkTaskOrder(task, column))
-          .map((task) => (
-            <ProjectTask key={task.title + task.createdAt} doc={doc} task={task} column={column} columns={columns} />
+          .map((task, i) => (
+            <WrapperWip key={task.title + task.createdAt} wip={column.wip === i + 1}>
+              <ProjectTask doc={doc} task={task} column={column} columns={columns} />
+            </WrapperWip>
           ))}
-      </WrapperProjectColumn>
+      </WrapperContentProjectColumn>
+      <div>WIP: {column.wip}</div>
     </div>
   );
 };

@@ -34,7 +34,7 @@ const TaskForm = ({ doc, task }: { doc: DocumentReference<IProject>; task?: ITas
             author: auth.currentUser.email || auth.currentUser.uid,
             color,
             backgroundColor,
-            columnOrder: "0",
+            columnOrder: 0,
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           };

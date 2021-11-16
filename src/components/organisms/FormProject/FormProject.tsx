@@ -22,10 +22,10 @@ const FormProject = ({ id }: { id?: string }) => {
           const data = {
             name: name,
           };
-          fb.updateDoc(getDocumentReferenceProject(id), data);
+          await fb.updateDoc(getDocumentReferenceProject(id), data);
         } else {
           const data = { name: name, [enumName.COLUMNS]: [], [enumName.TASKS]: [] };
-          fb.addDoc(collectionReferenceProject, data);
+          await fb.addDoc(collectionReferenceProject, data);
         }
         reset();
       } catch (error) {

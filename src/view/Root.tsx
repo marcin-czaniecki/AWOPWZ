@@ -12,9 +12,13 @@ import Project from "./pages/Project/Project";
 import { useError } from "hooks/useError";
 import Toast from "components/organisms/Toast/Toast";
 import Loading from "components/molecules/Loading/Loading";
+import { ProjectProvider } from "hooks/useProject";
+import Profile from "./pages/Profile/Profile";
+import Users from "./pages/Users/Users";
 
 const Root = () => {
   const [user, loading, error] = useAuthState(auth);
+
   const location = useLocation();
   const hookError = useError();
 
@@ -44,6 +48,22 @@ const Root = () => {
             }
           ></Route>
           <Route
+            path="/profile"
+            element={
+              <RequireAuth>
+                <Profile />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <RequireAuth>
+                <Users />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/projects"
             element={
               <RequireAuth>
@@ -55,7 +75,9 @@ const Root = () => {
             path="/projects/:id"
             element={
               <RequireAuth>
-                <Project />
+                <ProjectProvider>
+                  <Project />
+                </ProjectProvider>
               </RequireAuth>
             }
           />

@@ -29,15 +29,16 @@ export interface ITask {
   };
   color: string;
   backgroundColor: string;
-  columnOrder: string;
+  columnOrder: number;
   title: string;
   author: string;
 }
 
 export interface IColumn {
   id: string;
-  order: string;
   name: string;
+  order: number;
+  wip: number;
 }
 
 export interface IProject {
@@ -46,7 +47,7 @@ export interface IProject {
   tasks: ITask[];
 }
 
-export type TypeUpdateOrder = (task: ITask, columns: IColumn[]) => string;
+export type TypeUpdateOrder = (task: ITask, columns: IColumn[]) => number;
 export type TypeMoveTask = (
   doc: DocumentReference<any>,
   task: ITask,
@@ -95,12 +96,21 @@ export interface PropsProjectTask {
 export interface PropsColumnForm {
   doc: DocumentReference<IProject>;
   column?: IColumn;
-  lastOrder: string;
-  length: number;
+  lastOrder?: number;
+  length?: number;
 }
 
 export interface PropsTaskFormAndColumnFromSidebar {
   doc: DocumentReference<IProject>;
-  lastOrder: string;
+  lastOrder: number;
   length: number;
+}
+
+export interface IUser {
+  uid: string;
+  isAdmin: boolean;
+  verifiedByAdmin: boolean;
+  firstName?: string;
+  lastName?: string;
+  profession?: string;
 }

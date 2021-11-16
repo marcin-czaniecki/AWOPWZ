@@ -1,18 +1,13 @@
-import { DocumentReference } from "firebase/firestore";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { IColumn, IProject } from "types/types";
-import { useParams } from "react-router-dom";
+import { IColumn } from "types/types";
 import ProjectColumn from "components/organisms/ProjectColumn/ProjectColumn";
-import { getDocumentReferenceProject } from "utils/firebaseUtils";
 import ButtonBack from "components/molecules/ButtonBack/ButtonBack";
 import TaskFormAndColumnFromSidebar from "components/organisms/TaskFormAndColumnFromSidebar/TaskFormAndColumnFromSidebar";
 import { WrapperColumns } from "./Project.styles";
 import Loading from "components/molecules/Loading/Loading";
+import { useProject } from "hooks/useProject";
 
 const Project = () => {
-  const { id } = useParams();
-  const doc = getDocumentReferenceProject(id || "unknown") as DocumentReference<IProject>;
-  const [data, loading, error] = useDocumentData<IProject>(doc);
+  const { doc, data, loading, error } = useProject();
 
   if (loading) {
     return <Loading />;
@@ -29,13 +24,13 @@ const Project = () => {
       <ButtonBack />
       <TaskFormAndColumnFromSidebar
         doc={doc}
-        lastOrder={data?.columns[data.columns.length - 1]?.order || "0"}
+        lastOrder={data.columns[data.columns.length - 1]?.order || 0}
         length={data.columns.length}
       />
       <WrapperColumns>
         {data.columns.sort(sortOrder).map((column) => (
           <ProjectColumn
-            key={column.id + column.order}
+            key={column.name + column.id + column.order + column.wip}
             doc={doc}
             tasks={data.tasks}
             column={column}

@@ -1,11 +1,13 @@
 import fb, { store } from "data/fb";
-import { DocumentReference, updateDoc } from "firebase/firestore";
-import { TArrayPushOneElement, ITask, IColumn, TypeUpdateArray, TypeMoveTask, IProject } from "types/types";
+import { CollectionReference, DocumentReference, updateDoc } from "firebase/firestore";
+import { TArrayPushOneElement, ITask, IColumn, TypeUpdateArray, TypeMoveTask, IProject, IUser } from "types/types";
 import { enumName } from "./utils";
 
 export const collectionReferenceProject = fb.collection(store, enumName.PROJECTS);
+export const collectionReferenceUsers = fb.collection(store, enumName.USERS) as CollectionReference<IUser>;
 
 export const getDocumentReferenceProject = (id: string) => fb.doc(store, enumName.PROJECTS, id);
+export const getDocumentReference = (collection: string, id: string) => fb.doc(store, collection, id);
 
 export const removeDoc = async (collection: string, id: string, setError: (alert: string | null) => void) => {
   try {
@@ -21,34 +23,34 @@ export const arrayPushOneElement: TArrayPushOneElement = async (doc, FieldValue,
   });
 };
 
-export const updateTasksOrderFromCurrentColumn = (tasks: ITask[], column: IColumn, order?: string) => {
+export const updateTasksOrderFromCurrentColumn = (tasks: ITask[], column: IColumn, order?: number) => {
   const oldVersionElements = tasks.filter(({ columnOrder }) => columnOrder === column.order);
   const newVersionElements = oldVersionElements.map((task) => {
     const updatingTask = { ...task };
-    updatingTask.columnOrder = order || (Number(task.columnOrder) - 1).toString();
+    updatingTask.columnOrder = typeof order === "number" ? order : task.columnOrder - 1;
     return updatingTask;
   });
   return newVersionElements;
 };
 
 export const updateArray: TypeUpdateArray = async (doc, FieldValue, oldVersionElements, newVersionElements) => {
-  updateDoc(doc, {
-    [FieldValue]: fb.arrayUnion(...newVersionElements),
-  });
   await updateDoc(doc, {
     [FieldValue]: fb.arrayRemove(...oldVersionElements),
+  });
+  await updateDoc(doc, {
+    [FieldValue]: fb.arrayUnion(...newVersionElements),
   });
 };
 
 export const upOrderTask = (task: ITask, columns: IColumn[]) => {
-  if (parseInt(task.columnOrder) < parseInt(columns[columns.length - 1].order)) {
-    return (parseInt(task.columnOrder) + 1).toString();
+  if (task.columnOrder < columns[columns.length - 1].order) {
+    return task.columnOrder + 1;
   }
   return task.columnOrder;
 };
 export const downOrderTask = (task: ITask, columns: IColumn[]) => {
-  if (parseInt(task.columnOrder) > parseInt(columns[0].order)) {
-    return (parseInt(task.columnOrder) - 1).toString();
+  if (task.columnOrder > columns[0].order) {
+    return task.columnOrder - 1;
   }
   return task.columnOrder;
 };
@@ -75,15 +77,15 @@ type TypeColumnSwap = (
   delta: number
 ) => void;
 export const moveAllTaskToOrderColumn0: TypeMoveAllTaskToOrderColumn0 = (doc, column, tasks) => {
-  if (column.order !== "0") {
+  if (column.order !== 0) {
     const oldVersionTasks = tasks.filter(({ columnOrder }) => columnOrder === column.order);
-    const newVersionTasks = updateTasksOrderFromCurrentColumn(tasks, column, "0");
+    const newVersionTasks = updateTasksOrderFromCurrentColumn(tasks, column, 0);
     updateArray(doc, enumName.TASKS, oldVersionTasks, newVersionTasks);
   }
 };
 
 export const columnMove: TypeColumnMove = (doc, column, tasks, delta = 1) => {
-  const newOrder = (Number(column.order) + delta).toString();
+  const newOrder = column.order + delta;
   const oldVersionTasks = tasks.filter(({ columnOrder }) => columnOrder === column.order);
   const newVersionTasks = updateTasksOrderFromCurrentColumn(tasks, column, newOrder);
   updateArray(doc, enumName.TASKS, oldVersionTasks, newVersionTasks);
@@ -103,7 +105,7 @@ export const columnRemove: TypeColumnRemove = (doc, column, columns, tasks) => {
 };
 
 export const columnSwap: TypeColumnSwap = (doc, column, columns, tasks, delta = 1) => {
-  const columnHigherOrder = columns.filter(({ order }) => Number(order) === Number(column.order) + delta)[0];
+  const columnHigherOrder = columns.filter(({ order }) => order === column.order + delta)[0];
   const updateColumnHigherOrder = columnMove(doc, columnHigherOrder, tasks, -1 * delta);
   const updateCurrentColumn = columnMove(doc, column, tasks, delta);
   updateArray(doc, enumName.COLUMNS, [columnHigherOrder, column], [updateCurrentColumn, updateColumnHigherOrder]);
