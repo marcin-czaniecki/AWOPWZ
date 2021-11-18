@@ -9,6 +9,10 @@ declare module "styled-components" {
       error: string;
       background: string;
       text: string;
+      default: string;
+      success: string;
+      warning: string;
+      info: string;
     };
     screen: {
       tablet: string;
@@ -39,9 +43,13 @@ export const theme = {
     primary: "#23b2ee",
     secondary: "#4A5587",
     trinary: "#7AED18",
-    error: "rgb(250, 130, 130)",
+    error: "#fa8282",
     background: "snow",
     text: "#737c8e",
+    default: "#a95cf7",
+    success: "#f7ce5c",
+    warning: "#f7b95c",
+    info: "#5cf7ed",
   },
   screen: {
     tablet: "768px",

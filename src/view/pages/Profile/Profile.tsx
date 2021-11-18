@@ -1,12 +1,8 @@
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
-import Loading from "components/molecules/Loading/Loading";
 import ProfileForm from "components/organisms/ProfileForm/ProfileForm";
-import fb, { auth, store } from "data/fb";
-import { DocumentReference } from "firebase/firestore";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import { auth } from "data/fb";
+import { useUser } from "hooks/useUser";
 import styled from "styled-components";
-import { IUser } from "types/types";
-import { enumName } from "utils/utils";
 
 const WrapperProfile = styled.div`
   display: flex;
@@ -23,14 +19,9 @@ const WrapperInfo = styled.div`
 `;
 
 const Profile = () => {
-  const doc = fb.doc(store, enumName.USERS, auth?.currentUser?.uid || "unknown") as DocumentReference<IUser>;
-  const [data, loading, error] = useDocumentData<IUser>(doc);
+  const data = useUser();
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error || !auth.currentUser) {
+  if (!auth.currentUser) {
     return <div>Error</div>;
   }
 

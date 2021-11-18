@@ -26,7 +26,7 @@ export const ControlButton = styled.button<{ active: boolean }>`
   background-color: transparent;
   border: none;
   transition: 300ms;
-  color: ${({ active, theme }) => (active ? theme.color.trinary : "black")};
+  color: ${({ active, theme }) => (active ? theme.color.secondary : "black")};
   text-transform: capitalize;
   background: ${({ active, theme }) => (active ? theme.color.background : `rgba(0, 0, 0, 0.1)`)};
   ${({ active }) =>

@@ -1,19 +1,24 @@
 import { BrowserRouter } from "react-router-dom";
-import { ErrorProvider } from "hooks/useError";
+import { ToastProvider } from "hooks/useToast";
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from "theme/GlobalStyle";
 import { theme } from "theme/theme";
+import { UserProvider } from "hooks/useUser";
 
 const AppProvider = ({ children }: { children: React.ReactChild }) => {
   return (
-    <ErrorProvider>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          {children}
-        </ThemeProvider>
-      </BrowserRouter>
-    </ErrorProvider>
+    <ThemeProvider theme={theme}>
+      <ToastProvider>
+        <BrowserRouter>
+          <UserProvider>
+            <>
+              <GlobalStyle />
+              {children}
+            </>
+          </UserProvider>
+        </BrowserRouter>
+      </ToastProvider>
+    </ThemeProvider>
   );
 };
 

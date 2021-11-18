@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { TypeToast } from "types/types";
 
 const animationTouts = keyframes`
     0%{
@@ -15,7 +16,7 @@ const animationTouts = keyframes`
     }
 `;
 
-export const WrapperToast = styled.div`
+export const WrapperToast = styled.div<{ type?: TypeToast }>`
   position: fixed;
   bottom: 20px;
   left: 50%;
@@ -26,7 +27,7 @@ export const WrapperToast = styled.div`
   justify-content: center;
   align-items: center;
   background-color: snow;
-  color: red;
+  color: ${({ theme, type }) => (type ? theme.color[type] : theme.color["default"])};
   box-shadow: 0 10px 10px 3px rgba(0, 0, 0, 0.2);
   transform: translateX(-50%) translateY(600px);
   animation: ${animationTouts} 7s linear;

@@ -9,7 +9,7 @@ import { auth } from "data/fb";
 import Projects from "./pages/Projects/Projects";
 import MainTemplate from "components/templates/MainTamplate/MainTamplate";
 import Project from "./pages/Project/Project";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import Toast from "components/organisms/Toast/Toast";
 import Loading from "components/molecules/Loading/Loading";
 import { ProjectProvider } from "hooks/useProject";
@@ -18,9 +18,8 @@ import Users from "./pages/Users/Users";
 
 const Root = () => {
   const [user, loading, error] = useAuthState(auth);
-
   const location = useLocation();
-  const hookError = useError();
+  const { message } = useToast();
 
   if (loading) {
     return <Loading />;
@@ -34,10 +33,7 @@ const Root = () => {
     <>
       <MainTemplate>
         <Routes>
-          <Route
-            path="/unauthorization"
-            element={!user ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />}
-          />
+          <Route path="/unauthorization" element={!user ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />} />
           <Route
             index
             element={
@@ -84,7 +80,7 @@ const Root = () => {
           <Route path="*" element={<NoMatch />} />
         </Routes>
       </MainTemplate>
-      <Toast message={hookError.error} />
+      <Toast message={message} />
     </>
   );
 };

@@ -2,11 +2,11 @@ import Button from "components/atoms/Button/Button";
 import Input from "components/atoms/Input/Input";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import { auth } from "data/fb";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { PropsColumnForm } from "types/types";
-import { updateArray, arrayPushOneElement } from "utils/firebaseUtils";
-import { enumName, generateId } from "utils/utils";
+import { updateArray, arrayPush } from "utils/firebaseUtils";
+import { enumName, EnumNameOfProjectArrays, generateId } from "utils/utils";
 
 type Inputs = {
   name: string;
@@ -14,7 +14,7 @@ type Inputs = {
 };
 
 const ColumnForm = ({ doc, column, lastOrder, length }: PropsColumnForm) => {
-  const { setError } = useError();
+  const { setToast } = useToast();
   const { register, handleSubmit, reset } = useForm<Inputs>();
   const wipToNumber = (wip: number | string) => {
     const isNumberWip = typeof wip === "number";
@@ -35,11 +35,12 @@ const ColumnForm = ({ doc, column, lastOrder, length }: PropsColumnForm) => {
       order: length > 0 ? lastOrder + 1 : 0,
       wip: wipToNumber(wip),
     };
-    arrayPushOneElement(doc, enumName.COLUMNS, data);
+    arrayPush(doc, EnumNameOfProjectArrays.COLUMNS, data);
   };
+
   const onSubmit: SubmitHandler<Inputs> = async ({ name, wip }) => {
     if (!auth.currentUser) {
-      setError("Musisz się zalogować!");
+      setToast("Musisz się zalogować!");
       return;
     }
     if (column) {
@@ -68,10 +69,10 @@ const ColumnForm = ({ doc, column, lastOrder, length }: PropsColumnForm) => {
     if (name) {
       const { type } = name;
       if (type === "maxLength") {
-        setError(`W treści zadania możesz użyć maksymalnie 30 znaków`);
+        setToast(`W treści zadania możesz użyć maksymalnie 30 znaków`);
       }
       if (type === "required") {
-        setError("Musisz wpisać nazwe kolumny");
+        setToast("Musisz wpisać nazwe kolumny");
       }
     }
   };

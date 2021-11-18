@@ -2,9 +2,9 @@ import Button from "components/atoms/Button/Button";
 import Input from "components/atoms/Input/Input";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb from "data/fb";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { getDocumentReferenceProject, collectionReferenceProject } from "utils/firebaseUtils";
+import { getDocumentReferenceProject, collectionReferenceProjects } from "utils/references";
 import { enumName } from "utils/utils";
 import { WrapperFormProject } from "./FormProject.styles";
 
@@ -14,7 +14,7 @@ type Inputs = {
 
 const FormProject = ({ id }: { id?: string }) => {
   const { register, handleSubmit, reset } = useForm<Inputs>();
-  const { setError } = useError();
+  const { setToast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = ({ name }) => {
     (async () => {
       try {
@@ -25,11 +25,11 @@ const FormProject = ({ id }: { id?: string }) => {
           await fb.updateDoc(getDocumentReferenceProject(id), data);
         } else {
           const data = { name: name, [enumName.COLUMNS]: [], [enumName.TASKS]: [] };
-          await fb.addDoc(collectionReferenceProject, data);
+          await fb.addDoc(collectionReferenceProjects, data);
         }
         reset();
       } catch (error) {
-        setError("Coś poszło nie tak :c");
+        setToast("Coś poszło nie tak :c");
       }
     })();
   };

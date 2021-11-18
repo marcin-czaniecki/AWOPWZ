@@ -1,14 +1,14 @@
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 
 const Dashboard = () => {
-  const { setError } = useError();
+  const { setToast } = useToast();
   return (
     <div>
       <h3>Dashboard</h3>
       <button
         type="button"
         onClick={() => {
-          setError("coś");
+          setToast("coś");
         }}
       ></button>
     </div>

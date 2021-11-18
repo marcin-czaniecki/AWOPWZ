@@ -1,19 +1,19 @@
 import Button from "components/atoms/Button/Button";
 import Input from "components/atoms/Input/Input";
 import fb, { auth, store } from "data/fb";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import { useState } from "react";
 
 const FooterChat = () => {
   const [value, setValue] = useState("");
-  const { setError } = useError();
+  const { setToast } = useToast();
 
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     (async () => {
       try {
         if (!auth.currentUser) {
-          setError("You need to log in again!");
+          setToast("You need to log in again!");
           return;
         }
         const { uid, email } = await auth.currentUser;
@@ -29,7 +29,7 @@ const FooterChat = () => {
         await fb.addDoc(collectionRef, messageDoc);
         setValue("");
       } catch (e) {
-        setError("You can't send message :/");
+        setToast("You can't send message :/");
       }
     })();
   };

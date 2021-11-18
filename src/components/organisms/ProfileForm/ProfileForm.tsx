@@ -3,7 +3,7 @@ import Input from "components/atoms/Input/Input";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb, { store, auth } from "data/fb";
 import { DocumentReference } from "firebase/firestore";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IUser } from "types/types";
 import { enumName } from "utils/utils";
@@ -15,7 +15,7 @@ type Inputs = {
 };
 
 const ProfileForm = ({ user }: { user: Inputs }) => {
-  const { setError } = useError();
+  const { setToast } = useToast();
   const doc = fb.doc(store, enumName.USERS, auth?.currentUser?.uid || "unknown") as DocumentReference<IUser>;
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -38,7 +38,7 @@ const ProfileForm = ({ user }: { user: Inputs }) => {
             errorMessage += "stanowisko.";
           }
           if (errors) {
-            setError(errorMessage);
+            setToast(errorMessage);
           }
         })}
       >

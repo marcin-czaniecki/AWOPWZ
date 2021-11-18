@@ -2,7 +2,7 @@ import Button from "components/atoms/Button/Button";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import fb from "data/fb";
 import { updateDoc } from "firebase/firestore";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import { PropsProjectTask } from "types/types";
 import { downOrderTask, moveTask, upOrderTask } from "utils/firebaseUtils";
 import ConfirmModal from "../../molecules/ConfirmModal/ConfirmModal";
@@ -10,14 +10,14 @@ import TaskForm from "../TaskForm/TaskForm";
 import { ButtonsProjectTask, WrapperProjectTask } from "./ProjectTask.styles";
 
 const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
-  const { setError } = useError();
+  const { setToast } = useToast();
   const taskRemove = async () => {
     try {
       await updateDoc(doc, {
         tasks: fb.arrayRemove(task),
       });
     } catch (error) {
-      setError("Nie udało się usunąć zadania :c");
+      setToast("Nie udało się usunąć zadania :c");
     }
   };
   return (
@@ -25,9 +25,7 @@ const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
       <div>
         <div>{task.title}</div>
         <ButtonsProjectTask>
-          {Number(column.order) !== 0 && (
-            <Button onClick={() => moveTask(doc, task, columns, downOrderTask)}>Cofnij</Button>
-          )}
+          {Number(column.order) !== 0 && <Button onClick={() => moveTask(doc, task, columns, downOrderTask)}>Cofnij</Button>}
           {Number(column.order) !== columns.length - 1 && (
             <Button onClick={() => moveTask(doc, task, columns, upOrderTask)}>Ukończono</Button>
           )}

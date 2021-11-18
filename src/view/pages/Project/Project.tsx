@@ -7,14 +7,14 @@ import Loading from "components/molecules/Loading/Loading";
 import { useProject } from "hooks/useProject";
 
 const Project = () => {
-  const { doc, data, loading, error } = useProject();
+  const { doc, project, loading, error } = useProject();
 
   if (loading) {
     return <Loading />;
   }
 
-  if (!data || error) {
-    return <div>Nie możemy wczytać tego projektu :/</div>;
+  if (error) {
+    return <div>Error</div>;
   }
 
   const sortOrder = (a: IColumn, b: IColumn) => (Number(a.order) > Number(b.order) ? 1 : -1);
@@ -24,18 +24,12 @@ const Project = () => {
       <ButtonBack />
       <TaskFormAndColumnFromSidebar
         doc={doc}
-        lastOrder={data.columns[data.columns.length - 1]?.order || 0}
-        length={data.columns.length}
+        lastOrder={project.columns[project.columns.length - 1]?.order || 0}
+        length={project.columns.length}
       />
       <WrapperColumns>
-        {data.columns.sort(sortOrder).map((column) => (
-          <ProjectColumn
-            key={column.name + column.id + column.order + column.wip}
-            doc={doc}
-            tasks={data.tasks}
-            column={column}
-            columns={data.columns}
-          />
+        {project.columns.sort(sortOrder).map((column) => (
+          <ProjectColumn key={column.name + column.id + column.order + column.wip} column={column} />
         ))}
       </WrapperColumns>
     </>

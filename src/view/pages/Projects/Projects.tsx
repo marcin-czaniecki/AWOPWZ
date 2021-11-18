@@ -5,7 +5,7 @@ import ProjectCard from "components/organisms/ProjectCard/ProjectCard";
 import { useCollection } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { IProject } from "types/types";
-import { collectionReferenceProject } from "utils/firebaseUtils";
+import { collectionReferenceProjects } from "utils/references";
 
 const WrapperProjects = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const WrapperProjects = styled.div`
 `;
 
 const Projects = () => {
-  const [value, loading, error] = useCollection(collectionReferenceProject);
+  const [value, loading, error] = useCollection(collectionReferenceProjects);
   if (loading) {
     return <Loading />;
   }

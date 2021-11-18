@@ -1,4 +1,4 @@
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import Button from "components/atoms/Button/Button";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb, { auth } from "data/fb";
@@ -12,13 +12,13 @@ type Inputs = {
 
 const LoginForm = () => {
   const { register, handleSubmit } = useForm<Inputs>();
-  const { setError } = useError();
+  const { setToast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = ({ email, password }) => {
     (async () => {
       try {
         await fb.signInWithEmailAndPassword(auth, email, password);
       } catch (e) {
-        setError("Nieprawidłowy email lub hasło");
+        setToast("Nieprawidłowy email lub hasło");
       }
     })();
   };

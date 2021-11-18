@@ -47,25 +47,11 @@ export interface IProject {
   tasks: ITask[];
 }
 
-export type TypeUpdateOrder = (task: ITask, columns: IColumn[]) => number;
-export type TypeMoveTask = (
-  doc: DocumentReference<any>,
-  task: ITask,
-  columns: IColumn[],
-  updateOrder: TypeUpdateOrder
-) => Promise<void>;
-
 export type TypeUpdateArray = <T extends unknown>(
   doc: DocumentReference<any>,
   FieldValue: string,
   oldVersionElements: T[],
   newVersionElements: T[]
-) => void;
-
-export type TArrayPushOneElement = <T extends unknown>(
-  doc: DocumentReference<any>,
-  FieldValue: string,
-  value: T
 ) => void;
 
 export interface PropsProjectColumn {
@@ -114,3 +100,5 @@ export interface IUser {
   lastName?: string;
   profession?: string;
 }
+
+export type TypeToast = "primary" | "secondary" | "default" | "success" | "warning" | "info";

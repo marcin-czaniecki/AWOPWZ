@@ -1,21 +1,21 @@
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import fb from "data/fb";
-import { useError } from "hooks/useError";
+import { useToast } from "hooks/useToast";
 import { Link } from "react-router-dom";
 import { theme } from "theme/theme";
-import { getDocumentReferenceProject } from "utils/firebaseUtils";
+import { getDocumentReferenceProject } from "utils/references";
 import FormProject from "../FormProject/FormProject";
 import { WrapperProjectCard, WrapperContentProjectCard } from "./ProjectCard.styles";
 
 const ProjectCard = ({ id, name }: { id: string; name: string }) => {
-  const { setError } = useError();
+  const { setToast } = useToast();
 
   const projectRemove = async () => {
     try {
       fb.deleteDoc(getDocumentReferenceProject(id));
     } catch (error) {
-      setError("Z jakiegoś powodu nie udało się usunąć projektu");
+      setToast("Z jakiegoś powodu nie udało się usunąć projektu");
     }
   };
 
