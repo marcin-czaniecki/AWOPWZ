@@ -9,10 +9,8 @@ import { IColumn } from "types/types";
 import { WrapperProjectColumnHeader } from "./ProjectColumnHeader.styles";
 
 const ProjectColumnHeader = ({ column }: { column: IColumn }) => {
-  const {
-    doc,
-    project: { columns, tasks },
-  } = useProject();
+  const { doc, project } = useProject();
+  const { columns, tasks } = project;
   const { name, order } = column;
 
   const onClickColumnSwapToLeft = () => columnSwap(doc, column, columns, tasks, -1);

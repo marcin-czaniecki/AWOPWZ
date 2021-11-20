@@ -7,9 +7,7 @@ import { IUser } from "types/types";
 export const UserContext = createContext<IUser | null>(null);
 
 export const UserProvider = ({ children }: { children: JSX.Element }) => {
-  const [data] = useDocumentData<IUser>(
-    fb.doc(store, "users", auth?.currentUser?.uid || "unknown") as DocumentReference<IUser>
-  );
+  const [data] = useDocumentData<IUser>(fb.doc(store, "users", auth?.currentUser?.uid || "unknown") as DocumentReference<IUser>);
 
   return <UserContext.Provider value={{ ...data } as IUser}>{children}</UserContext.Provider>;
 };

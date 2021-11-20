@@ -3,7 +3,6 @@ import Button from "components/atoms/Button/Button";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb, { auth } from "data/fb";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Input from "components/atoms/Input/Input";
 
 type Inputs = {
   email: string;
@@ -24,12 +23,8 @@ const LoginForm = () => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FiledInput name="email" label="Twój email">
-        <Input type="email" {...register("email", { required: true })} />
-      </FiledInput>
-      <FiledInput name="password" label="Twoje hasło">
-        <Input type="password" {...register("password", { required: true })} />
-      </FiledInput>
+      <FiledInput name="email" type="email" label="Twój email" register={register} options={{ required: true }} />
+      <FiledInput name="password" type="password" label="Twoje hasło" register={register} options={{ required: true }} />
       <Button type="submit">Zaloguj</Button>
     </form>
   );

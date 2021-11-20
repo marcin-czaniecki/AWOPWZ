@@ -1,23 +1,30 @@
 import fb, { store } from "data/fb";
-import { DocumentReference, updateDoc } from "firebase/firestore";
-import { ITask, IColumn, TypeUpdateArray, IProject } from "types/types";
+import { updateDoc } from "firebase/firestore";
 import { enumName, EnumNameOfProjectArrays } from "./utils";
-
-type TypeRemoveDoc = (id: string, collection: string) => Promise<void>;
+import {
+  ITask,
+  IColumn,
+  TypeUpdateArray,
+  TypeColumnSwap,
+  TypeArrayPush,
+  TypeColumnMove,
+  TypeColumnRemove,
+  TypeMoveTask,
+  TypeRemoveDoc,
+  TypeTasksChangeOrderZero,
+  TypeUpdateOrderTask,
+  TypeUpdateTasksFromTheColumn,
+} from "types/types";
 
 export const removeDoc: TypeRemoveDoc = async (id, collection) => {
   fb.deleteDoc(fb.doc(store, collection, id));
 };
-
-type TypeArrayPush = <T extends unknown>(doc: DocumentReference<any>, FieldValue: string, value: T) => Promise<void>;
 
 export const arrayPush: TypeArrayPush = async (doc, FieldValue, value) => {
   updateDoc(doc, {
     [FieldValue]: fb.arrayUnion(value),
   });
 };
-
-type TypeUpdateTasksFromTheColumn = (tasks: ITask[], column: IColumn, order?: number) => Promise<ITask[]>;
 
 export const updateTasksFromTheColumn: TypeUpdateTasksFromTheColumn = async (tasks, column, order) => {
   const oldVersionTasks = tasks.filter(({ columnOrder }) => columnOrder === column.order);
@@ -35,8 +42,6 @@ export const updateArray: TypeUpdateArray = async (doc, FieldValue, oldVersionEl
   });
 };
 
-type TypeUpdateOrderTask = (task: ITask, columns: IColumn[]) => number;
-
 export const upOrderTask: TypeUpdateOrderTask = (task, columns) => {
   if (task.columnOrder < columns[columns.length - 1].order) {
     return task.columnOrder + 1;
@@ -51,13 +56,6 @@ export const downOrderTask: TypeUpdateOrderTask = (task, columns) => {
   return task.columnOrder;
 };
 
-export type TypeMoveTask = (
-  doc: DocumentReference<any>,
-  task: ITask,
-  columns: IColumn[],
-  updateOrder: TypeUpdateOrderTask
-) => Promise<void>;
-
 export const moveTask: TypeMoveTask = async (doc, task, columns, updateOrder) => {
   const updatingTask = { ...task };
   updatingTask.columnOrder = updateOrder(updatingTask, columns);
@@ -68,8 +66,6 @@ export const moveTask: TypeMoveTask = async (doc, task, columns, updateOrder) =>
   updateArray(doc, enumName.TASKS, [task], [updatingTask]);
 };
 
-type TypeTasksChangeOrderZero = (doc: DocumentReference<IProject>, column: IColumn, tasks: ITask[]) => void;
-
 export const tasksChangeOrderZero: TypeTasksChangeOrderZero = async (doc, column, tasks) => {
   if (column.order !== 0) {
     const oldVersionTasks = tasks.filter(({ columnOrder }) => columnOrder === column.order);
@@ -77,8 +73,6 @@ export const tasksChangeOrderZero: TypeTasksChangeOrderZero = async (doc, column
     updateArray(doc, EnumNameOfProjectArrays.TASKS, oldVersionTasks, newVersionTasks);
   }
 };
-
-type TypeColumnMove = (doc: DocumentReference<IProject>, column: IColumn, tasks: ITask[], delta: number) => Promise<IColumn>;
 
 export const columnMove: TypeColumnMove = async (doc, column, tasks, delta = 1) => {
   const newOrder = column.order + delta;
@@ -90,8 +84,6 @@ export const columnMove: TypeColumnMove = async (doc, column, tasks, delta = 1) 
   return { ...column, order: newOrder };
 };
 
-type TypeColumnRemove = (doc: DocumentReference<IProject>, column: IColumn, columns: IColumn[], tasks: ITask[]) => Promise<void>;
-
 export const columnRemove: TypeColumnRemove = async (doc, column, columns, tasks) => {
   tasksChangeOrderZero(doc, column, tasks);
   const columnsHigherOrder = columns.filter(({ order }) => Number(order) > Number(column.order));
@@ -100,14 +92,6 @@ export const columnRemove: TypeColumnRemove = async (doc, column, columns, tasks
 
   updateArray(doc, EnumNameOfProjectArrays.COLUMNS, [column, ...columnsHigherOrder], columnsWithUpdatedOrder);
 };
-
-type TypeColumnSwap = (
-  doc: DocumentReference<IProject>,
-  column: IColumn,
-  columns: IColumn[],
-  tasks: ITask[],
-  delta: number
-) => Promise<void>;
 
 export const columnSwap: TypeColumnSwap = async (doc, column, columns, tasks, delta = 1) => {
   const columnHigherOrder = columns.filter(({ order }) => order === column.order + delta)[0];

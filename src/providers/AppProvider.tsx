@@ -8,16 +8,16 @@ import { UserProvider } from "hooks/useUser";
 const AppProvider = ({ children }: { children: React.ReactChild }) => {
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <ToastProvider>
           <UserProvider>
             <>
               <GlobalStyle />
               {children}
             </>
           </UserProvider>
-        </BrowserRouter>
-      </ToastProvider>
+        </ToastProvider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 };

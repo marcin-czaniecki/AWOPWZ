@@ -14,18 +14,19 @@ export const ToastContext = createContext<{
 export const ToastProvider = ({ children }: { children: JSX.Element }) => {
   const [toast, setToast] = useState<{ message: string; type: TypeToast }>({ message: "", type: "default" });
   const { message, type } = toast;
+
   const dispatchToast = useCallback((message: string, type: TypeToast = "default") => {
     setToast({ message, type });
   }, []);
 
   useEffect(() => {
     const clearError = setTimeout(() => {
-      dispatchToast("");
+      dispatchToast("", "default");
     }, 7000);
     return () => {
       clearTimeout(clearError);
     };
-  }, [toast, dispatchToast]);
+  }, [toast.message, toast.type, dispatchToast]);
 
   return <ToastContext.Provider value={{ message, type, setToast: dispatchToast }}>{children}</ToastContext.Provider>;
 };

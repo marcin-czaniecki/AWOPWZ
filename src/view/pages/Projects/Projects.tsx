@@ -1,6 +1,6 @@
 import Loading from "components/molecules/Loading/Loading";
 import SideBar from "components/molecules/SideBar/SideBar";
-import FormProject from "components/organisms/FormProject/FormProject";
+import FormProject from "components/organisms/ProjectForm/ProjectForm";
 import ProjectCard from "components/organisms/ProjectCard/ProjectCard";
 import { useCollection } from "react-firebase-hooks/firestore";
 import styled from "styled-components";

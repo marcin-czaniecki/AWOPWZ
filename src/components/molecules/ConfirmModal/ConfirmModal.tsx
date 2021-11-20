@@ -1,26 +1,27 @@
 import Button from "components/atoms/Button/Button";
 import { useState } from "react";
-import { PropsConfirmModal } from "types/types";
+import { IModalConfirmProps } from "types/componentTypes";
 import Modal from "../Modal/Modal";
 import { WrapperConfirmButtons } from "./ConfirmModal.styles";
 
-const ConfirmModal = ({
-  confirmAction,
-  textButton,
-  children,
-  buttonVersion,
-  maxHeight,
-  maxWidth,
-  invisibleYes,
-  invisibleNo,
-}: PropsConfirmModal) => {
+const ConfirmModal = ({ confirmAction, textButton, children, maxHeight, maxWidth, invisibleYes, invisibleNo }: IModalConfirmProps) => {
   const [active, setActive] = useState(false);
+
   const openModal = () => {
     setActive(true);
   };
+
   const closeModal = () => {
     setActive(false);
   };
+
+  const onConfirmAction = () => {
+    if (confirmAction) {
+      confirmAction();
+    }
+    closeModal();
+  };
+
   return (
     <>
       <Button type="button" onClick={openModal}>
@@ -30,18 +31,7 @@ const ConfirmModal = ({
         <div>
           <div>{children}</div>
           <WrapperConfirmButtons>
-            {!invisibleYes && (
-              <Button
-                onClick={() => {
-                  if (confirmAction) {
-                    confirmAction();
-                  }
-                  closeModal();
-                }}
-              >
-                Tak
-              </Button>
-            )}
+            {!invisibleYes && <Button onClick={onConfirmAction}>Tak</Button>}
             {!invisibleNo && <Button onClick={closeModal}>Nie</Button>}
           </WrapperConfirmButtons>
         </div>

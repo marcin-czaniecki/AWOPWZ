@@ -2,7 +2,7 @@ import Button from "components/atoms/Button/Button";
 import SideBar from "components/molecules/SideBar/SideBar";
 import { useState } from "react";
 import styled from "styled-components";
-import { PropsTaskFormAndColumnFromSidebar } from "types/types";
+import { ITaskFormAndColumnFromSidebarProps } from "types/componentTypes";
 import ColumnForm from "../ColumnForm/ColumnForm";
 import TaskForm from "../TaskForm/TaskForm";
 
@@ -12,7 +12,7 @@ const ButtonsTaskFormAndColumnFromSidebar = styled.div`
   gap: 5px;
 `;
 
-const TaskFormAndColumnFromSidebar = ({ doc, lastOrder, length }: PropsTaskFormAndColumnFromSidebar) => {
+const TaskFormAndColumnFromSidebar = ({ doc, lastOrder, length }: ITaskFormAndColumnFromSidebarProps) => {
   const [typeForm, setTypeForm] = useState(false);
   const setTaskForm = () => {
     setTypeForm(true);

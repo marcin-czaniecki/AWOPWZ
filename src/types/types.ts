@@ -8,14 +8,6 @@ export interface IMessage {
   createdAt: { toDate: () => Date; seconds: number };
   updatedAt: { toDate: () => Date; seconds: number };
 }
-export interface IModal {
-  active?: boolean;
-  children: JSX.Element;
-  maxWidth?: string;
-  minWidth?: string;
-  maxHeight?: string;
-  closeAction: () => void;
-}
 
 export interface ITask {
   id: string;
@@ -61,37 +53,6 @@ export interface PropsProjectColumn {
   columns: IColumn[];
 }
 
-export interface PropsConfirmModal {
-  textButton: string;
-  children: string | JSX.Element;
-  confirmAction?: () => void;
-  buttonVersion?: "secondary" | "tertiary";
-  maxHeight?: string;
-  maxWidth?: string;
-  invisibleYes?: boolean;
-  invisibleNo?: boolean;
-}
-
-export interface PropsProjectTask {
-  doc: DocumentReference<IProject>;
-  task: ITask;
-  column: IColumn;
-  columns: IColumn[];
-}
-
-export interface PropsColumnForm {
-  doc: DocumentReference<IProject>;
-  column?: IColumn;
-  lastOrder?: number;
-  length?: number;
-}
-
-export interface PropsTaskFormAndColumnFromSidebar {
-  doc: DocumentReference<IProject>;
-  lastOrder: number;
-  length: number;
-}
-
 export interface IUser {
   uid: string;
   isAdmin: boolean;
@@ -102,3 +63,34 @@ export interface IUser {
 }
 
 export type TypeToast = "primary" | "secondary" | "default" | "success" | "warning" | "info";
+
+/* FirebaseUtils */
+
+export type TypeRemoveDoc = (id: string, collection: string) => Promise<void>;
+
+export type TypeArrayPush = <T extends unknown>(doc: DocumentReference<any>, FieldValue: string, value: T) => Promise<void>;
+
+export type TypeUpdateTasksFromTheColumn = (tasks: ITask[], column: IColumn, order?: number) => Promise<ITask[]>;
+
+export type TypeUpdateOrderTask = (task: ITask, columns: IColumn[]) => number;
+
+export type TypeMoveTask = (
+  doc: DocumentReference<any>,
+  task: ITask,
+  columns: IColumn[],
+  updateOrder: TypeUpdateOrderTask
+) => Promise<void>;
+
+export type TypeTasksChangeOrderZero = (doc: DocumentReference<IProject>, column: IColumn, tasks: ITask[]) => void;
+
+export type TypeColumnMove = (doc: DocumentReference<IProject>, column: IColumn, tasks: ITask[], delta: number) => Promise<IColumn>;
+
+export type TypeColumnRemove = (doc: DocumentReference<IProject>, column: IColumn, columns: IColumn[], tasks: ITask[]) => Promise<void>;
+
+export type TypeColumnSwap = (
+  doc: DocumentReference<IProject>,
+  column: IColumn,
+  columns: IColumn[],
+  tasks: ITask[],
+  delta: number
+) => Promise<void>;

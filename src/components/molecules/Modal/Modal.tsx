@@ -2,9 +2,9 @@ import { createPortal } from "react-dom";
 import CloseButton from "components/atoms/CloseButton/CloseButton";
 import { WrapperModal, BackgroundModal, HeaderModal, WrapperContentModal } from "./Modal.styles";
 import useModal from "hooks/useModal";
-import { IModal } from "types/types";
+import { IModalProps } from "types/componentTypes";
 
-const RenderModal = ({ children, maxWidth, minWidth, maxHeight, closeAction }: IModal) => {
+const RenderModal = ({ children, maxWidth, minWidth, maxHeight, closeAction }: IModalProps) => {
   const { modalNode, ref } = useModal(closeAction);
 
   return createPortal(
@@ -22,7 +22,7 @@ const RenderModal = ({ children, maxWidth, minWidth, maxHeight, closeAction }: I
   );
 };
 
-const Modal = ({ active, children, maxWidth, minWidth, maxHeight, closeAction }: IModal) => (
+const Modal = ({ active, children, maxWidth, minWidth, maxHeight, closeAction }: IModalProps) => (
   <>
     {active ? (
       <RenderModal maxWidth={maxWidth} minWidth={minWidth} maxHeight={maxHeight} closeAction={closeAction}>

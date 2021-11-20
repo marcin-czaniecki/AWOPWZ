@@ -1,10 +1,9 @@
 import Button from "components/atoms/Button/Button";
-import Input from "components/atoms/Input/Input";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb, { auth } from "data/fb";
 import { DocumentReference, Timestamp, updateDoc } from "firebase/firestore";
 import { useToast } from "hooks/useToast";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { IProject, ITask } from "types/types";
 import { updateArray } from "utils/firebaseUtils";
 import { enumName, generateId } from "utils/utils";
@@ -48,23 +47,30 @@ const TaskForm = ({ doc, task }: { doc: DocumentReference<IProject>; task?: ITas
     }
   };
 
+  const onError: SubmitErrorHandler<Inputs> = (errors) => {
+    if (errors?.title?.type === "maxLength") {
+      setToast(`W treści zadania możesz użyć maksymalnie 100 znaków`, "warning");
+    }
+  };
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit, (errors) => {
-        if (errors?.title?.type === "maxLength") {
-          setToast(`W treści zadania możesz użyć maksymalnie 100 znaków`, "warning");
-        }
-      })}
-    >
-      <FiledInput name="title" label="Treść zadania">
-        <Input type="text" defaultValue={task?.title || ""} {...register("title", { required: true, maxLength: 100 })} />
-      </FiledInput>
-      <FiledInput name="color" label="Wbierz kolor tekstu">
-        <Input type="color" defaultValue={task?.color || "#ffffff"} {...register("color", { required: true })} />
-      </FiledInput>
-      <FiledInput name="backgroundColor" label="Wybierz kolor tła">
-        <Input type="color" defaultValue={task?.backgroundColor || "#23b2ee"} {...register("backgroundColor", { required: true })} />
-      </FiledInput>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <FiledInput
+        name="title"
+        type="text"
+        defaultValue={task?.title || ""}
+        label="Treść zadania"
+        register={register}
+        options={{ required: true, maxLength: 100 }}
+      />
+      <FiledInput name="color" type="color" defaultValue={task?.color || "#ffffff"} label="Wbierz kolor tekstu" register={register} />
+      <FiledInput
+        name="backgroundColor"
+        type="color"
+        defaultValue={task?.backgroundColor || "#23b2ee"}
+        label="Wybierz kolor tła"
+        register={register}
+      />
       <Button type="submit">{task ? "Aktualizuj zadanie" : "Dodaj zadanie"}</Button>
     </form>
   );

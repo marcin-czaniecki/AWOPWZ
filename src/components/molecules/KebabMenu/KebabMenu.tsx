@@ -1,21 +1,26 @@
-import useHandleModal from "hooks/useHandleModal";
+import { useState } from "react";
+import { IKebabMenuProps } from "types/componentTypes";
 import { WrapperKebabMenu, ButtonKebabMenu, WrapperKebabMenuContent } from "./KebabMenu.styles";
 
-const KebabMenu = ({ children, color }: { color?: string; children?: JSX.Element | JSX.Element[] }) => {
-  const { visible, inverse } = useHandleModal();
+const KebabMenu = ({ children, color }: IKebabMenuProps) => {
+  const [visible, setVisible] = useState(false);
   return (
     <WrapperKebabMenu>
       <ButtonKebabMenu
         color={color}
         onClick={() => {
-          inverse();
+          setVisible(!visible);
         }}
       >
         <span />
         <span />
         <span />
       </ButtonKebabMenu>
-      {visible && <WrapperKebabMenuContent>{children}</WrapperKebabMenuContent>}
+      {visible && (
+        <WrapperKebabMenuContent>
+          <>{children}</>
+        </WrapperKebabMenuContent>
+      )}
     </WrapperKebabMenu>
   );
 };

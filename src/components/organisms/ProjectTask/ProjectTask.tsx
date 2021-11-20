@@ -3,14 +3,15 @@ import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import fb from "data/fb";
 import { updateDoc } from "firebase/firestore";
 import { useToast } from "hooks/useToast";
-import { PropsProjectTask } from "types/types";
+import { IProjectTaskProps } from "types/componentTypes";
 import { downOrderTask, moveTask, upOrderTask } from "utils/firebaseUtils";
 import ConfirmModal from "../../molecules/ConfirmModal/ConfirmModal";
 import TaskForm from "../TaskForm/TaskForm";
 import { ButtonsProjectTask, WrapperProjectTask } from "./ProjectTask.styles";
 
-const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
+const ProjectTask = ({ doc, task, columns, column }: IProjectTaskProps) => {
   const { setToast } = useToast();
+
   const taskRemove = async () => {
     try {
       await updateDoc(doc, {
@@ -20,6 +21,7 @@ const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
       setToast("Nie udało się usunąć zadania :c");
     }
   };
+
   return (
     <WrapperProjectTask color={task.color} backgroundColor={task.backgroundColor}>
       <div>
@@ -29,6 +31,7 @@ const ProjectTask = ({ doc, task, columns, column }: PropsProjectTask) => {
           {Number(column.order) !== columns.length - 1 && (
             <Button onClick={() => moveTask(doc, task, columns, upOrderTask)}>Ukończono</Button>
           )}
+
           <KebabMenu color={task.color}>
             <ConfirmModal textButton="Edytuj" confirmAction={taskRemove} maxHeight="250px" invisibleNo invisibleYes>
               <>

@@ -1,20 +1,13 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Unauthorized from "./pages/Unauthorized/Unauthorized";
-import RequireAuth from "components/organisms/RequireAuth/RequireAuth";
 import NoMatch from "view/pages/NoMatch/NoMatch";
-import Dashboard from "view/pages/Dashboard/Dashboard";
-import Chat from "components/organisms/Chat/Chat";
-import { auth } from "data/fb";
-import Projects from "./pages/Projects/Projects";
 import MainTemplate from "components/templates/MainTamplate/MainTamplate";
-import Project from "./pages/Project/Project";
 import { useToast } from "hooks/useToast";
 import Toast from "components/organisms/Toast/Toast";
 import Loading from "components/molecules/Loading/Loading";
-import { ProjectProvider } from "hooks/useProject";
-import Profile from "./pages/Profile/Profile";
-import Users from "./pages/Users/Users";
+import { views } from "./views";
+import { auth } from "data/fb";
 
 const Root = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -34,53 +27,15 @@ const Root = () => {
       <MainTemplate>
         <Routes>
           <Route path="/unauthorization" element={!user ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />} />
-          <Route
-            index
-            element={
-              <RequireAuth>
-                <Dashboard />
-                <Chat />
-              </RequireAuth>
+          {views.map((view) => {
+            if (!view.path || !view.element) {
+              return <NoMatch />;
             }
-          ></Route>
-          <Route
-            path="/profile"
-            element={
-              <RequireAuth>
-                <Profile />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/users"
-            element={
-              <RequireAuth>
-                <Users />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <RequireAuth>
-                <Projects />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/projects/:id"
-            element={
-              <RequireAuth>
-                <ProjectProvider>
-                  <Project />
-                </ProjectProvider>
-              </RequireAuth>
-            }
-          />
-          <Route path="*" element={<NoMatch />} />
+            return <Route path={view.path} element={view.element} />;
+          })}
         </Routes>
+        <Toast message={message} />
       </MainTemplate>
-      <Toast message={message} />
     </>
   );
 };

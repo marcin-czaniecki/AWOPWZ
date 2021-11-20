@@ -3,7 +3,6 @@ import Button from "components/atoms/Button/Button";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb, { auth, store } from "data/fb";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "components/atoms/Input/Input";
 import { enumName } from "utils/utils";
 
 type Inputs = {
@@ -61,24 +60,18 @@ const RegisterForm = () => {
         }
       })}
     >
-      <FiledInput name="email" label="Twój email">
-        <Input type="email" {...register("email", { required: true })} />
-      </FiledInput>
-      <FiledInput name="password" label="Twoje hasło">
-        <Input type="password" {...register("password", { required: true, minLength: 8 })} />
-      </FiledInput>
-      <FiledInput name="password" label="Powtórz swoje hasło">
-        <Input type="password" {...register("repeatPassword", { required: true, minLength: 8 })} />
-      </FiledInput>
-      <FiledInput name="firstName" label="Podaj swoje imie">
-        <Input type="text" {...register("firstName", { required: true })} />
-      </FiledInput>
-      <FiledInput name="lastName" label="Podaj swoje Nazwisko">
-        <Input type="text" {...register("lastName", { required: true })} />
-      </FiledInput>
-      <FiledInput name="profession" label="Podaj swój zawód/stanowisko">
-        <Input type="text" {...register("profession", { required: true })} />
-      </FiledInput>
+      <FiledInput name="email" type="email" register={register} label="Twój email" />
+      <FiledInput name="password" type="password" register={register} label="Twoje hasło" options={{ required: true, minLength: 8 }} />
+      <FiledInput
+        name="password"
+        type="password"
+        register={register}
+        label="Powtórz swoje hasło"
+        options={{ required: true, minLength: 8 }}
+      />
+      <FiledInput name="firstName" type="text" register={register} label="Podaj swoje imie" />
+      <FiledInput name="lastName" type="text" register={register} label="Podaj swoje Nazwisko" />
+      <FiledInput name="profession" type="text" register={register} label="Podaj swój zawód/stanowisko" />
       <Button type="submit">Rejestruj</Button>
     </form>
   );

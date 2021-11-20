@@ -1,5 +1,4 @@
 import Button from "components/atoms/Button/Button";
-import Input from "components/atoms/Input/Input";
 import FiledInput from "components/molecules/FiledInput/FiledInput";
 import fb, { store, auth } from "data/fb";
 import { DocumentReference } from "firebase/firestore";
@@ -42,15 +41,15 @@ const ProfileForm = ({ user }: { user: Inputs }) => {
           }
         })}
       >
-        <FiledInput name="firstName" label="Podaj swoje imie">
-          <Input type="text" defaultValue={user.firstName || ""} {...register("firstName", { required: true })} />
-        </FiledInput>
-        <FiledInput name="lastName" label="Podaj swoje Nazwisko">
-          <Input type="text" defaultValue={user.lastName || ""} {...register("lastName", { required: true })} />
-        </FiledInput>
-        <FiledInput name="profession" label="Podaj swój zawód/stanowisko">
-          <Input type="text" defaultValue={user.profession || ""} {...register("profession", { required: true })} />
-        </FiledInput>
+        <FiledInput name="firstName" type="text" defaultValue={user.firstName || ""} label="Podaj swoje imie" register={register} />
+        <FiledInput name="lastName" type="text" defaultValue={user.lastName || ""} label="Podaj swoje Nazwisko" register={register} />
+        <FiledInput
+          name="profession"
+          type="text"
+          defaultValue={user.profession || ""}
+          label="Podaj swój zawód/stanowisko"
+          register={register}
+        />
         <Button>Aktualizuj profil</Button>
       </form>
     </>

@@ -1,14 +1,13 @@
 import { DocumentReference, FirestoreError } from "firebase/firestore";
 import { createContext, useContext } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { Data } from "react-firebase-hooks/firestore/dist/firestore/types";
 import { useParams } from "react-router-dom";
 import { IProject } from "types/types";
 import { getDocumentReferenceProject } from "utils/references";
 
 interface IProjectContext {
   doc: DocumentReference<IProject>;
-  project: Data<IProject, "", "">;
+  project: IProject;
   loading: boolean;
   error: FirestoreError | undefined;
 }
@@ -24,14 +23,9 @@ export const ProjectProvider = ({ children }: { children: JSX.Element }) => {
   const doc = getDocumentReferenceProject(id || "unknown") as DocumentReference<IProject>;
   const [project, loading, error] = useDocumentData<IProject>(doc);
 
-  const data = {} as Data<IProject, "", "">;
-  if (!project) {
-    data.name = "unknown";
-    data.columns = [];
-    data.tasks = [];
-  }
-
-  return <ProjectContext.Provider value={{ doc, project: project || data, loading, error }}>{children}</ProjectContext.Provider>;
+  return (
+    <ProjectContext.Provider value={{ doc, project: (project || {}) as IProject, loading, error }}>{children}</ProjectContext.Provider>
+  );
 };
 
 export const useProject = () => {

@@ -3,10 +3,11 @@ import Message from "components/molecules/Message/Message";
 import fb, { store } from "data/fb";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { IMessage } from "types/types";
+import { EnumCollectionsName } from "utils/utils";
 import { WrapperBodyChat } from "./Chat.styles";
 
 const BodyChat = () => {
-  const [value, loading, error] = useCollection(fb.collection(store, "message"));
+  const [value, loading, error] = useCollection(fb.collection(store, EnumCollectionsName.MESSAGES));
 
   if (loading) {
     return <Loading size="100px" />;

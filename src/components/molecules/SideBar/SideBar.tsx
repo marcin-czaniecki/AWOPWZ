@@ -1,8 +1,8 @@
 import AddButton from "components/atoms/AddButton/AddButton";
 import WrapperSideBar from "components/atoms/WrapperSideBar/WrapperSideBar";
-import { useState } from "react";
+import { ReactChild, useState } from "react";
 
-const SideBar = ({ right, children }: { right?: boolean; children: JSX.Element }) => {
+const SideBar = ({ right, children }: { right?: boolean; children: ReactChild }) => {
   const [active, setActive] = useState(false);
 
   return (

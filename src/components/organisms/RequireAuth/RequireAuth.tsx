@@ -1,4 +1,3 @@
-import Loading from "components/molecules/Loading/Loading";
 import fb, { auth, store } from "data/fb";
 import { useToast } from "hooks/useToast";
 import { useEffect } from "react";
@@ -8,7 +7,7 @@ import { useLocation, Navigate } from "react-router-dom";
 const RequireAuth = ({ children }: { children: any }) => {
   let location = useLocation();
   const { setToast } = useToast();
-  const [dataUser, loading, error] = useDocumentData(fb.doc(store, "users", auth?.currentUser?.uid || "unknown"));
+  const [dataUser] = useDocumentData(fb.doc(store, "users", auth?.currentUser?.uid || "unknown"));
 
   useEffect(() => {
     return () => {
@@ -17,14 +16,6 @@ const RequireAuth = ({ children }: { children: any }) => {
       }
     };
   }, [setToast, dataUser?.verifiedByAdmin]);
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <div>Error</div>;
-  }
 
   if (dataUser?.verifiedByAdmin === false) {
     fb.signOut(auth);
