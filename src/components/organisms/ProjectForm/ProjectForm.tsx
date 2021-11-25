@@ -1,18 +1,18 @@
-import Button from "components/atoms/Button/Button";
-import FiledInput from "components/molecules/FiledInput/FiledInput";
+import Form from "components/molecules/Form/Form";
 import fb from "data/fb";
 import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getDocumentReferenceProject, collectionReferenceProjects } from "utils/references";
 import { enumName } from "utils/utils";
-import { WrapperFormProject } from "./ProjectForm.styles";
 
 type Inputs = {
   name: string;
 };
 
+const Fields = [{ name: "name", type: "text", label: "Nazwa projektu" }];
+
 const ProjectForm = ({ id }: { id?: string }) => {
-  const { register, handleSubmit, reset } = useForm<Inputs>();
+  const { reset } = useForm<Inputs>();
   const { setToast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = async ({ name }) => {
     try {
@@ -27,12 +27,10 @@ const ProjectForm = ({ id }: { id?: string }) => {
       setToast("Coś poszło nie tak :c");
     }
   };
+
   return (
     <>
-      <WrapperFormProject onSubmit={handleSubmit(onSubmit)}>
-        <FiledInput name="name" type="text" label={"Nazwa projektu"} register={register} />
-        <Button>{id ? "Zmień nazwę" : "Dodaj projekt"}</Button>
-      </WrapperFormProject>
+      <Form fields={Fields} onSubmit={onSubmit} />
     </>
   );
 };

@@ -1,11 +1,11 @@
-import Button from "components/atoms/Button/Button";
-import FiledInput from "components/molecules/FiledInput/FiledInput";
-import fb, { store, auth } from "data/fb";
-import { DocumentReference } from "firebase/firestore";
+import Form from "components/molecules/Form/Form";
+import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { IUser } from "types/types";
-import { enumName } from "utils/utils";
+import { useUser } from "hooks/useUser";
+import { SubmitHandler } from "react-hook-form";
+import { EnumCollectionsName } from "utils/utils";
+
+const { updateDoc, doc } = StoreService;
 
 type Inputs = {
   firstName?: string;
@@ -13,45 +13,32 @@ type Inputs = {
   profession?: string;
 };
 
-const ProfileForm = ({ user }: { user: Inputs }) => {
+const ProfileForm = ({ user }: { user: { [key: string]: string } }) => {
   const { setToast } = useToast();
-  const doc = fb.doc(store, enumName.USERS, auth?.currentUser?.uid || "unknown") as DocumentReference<IUser>;
-  const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    fb.updateDoc(doc, {
-      ...data,
-    });
+  const { currentUser } = useUser();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      if (currentUser) {
+        await updateDoc(data, await doc(EnumCollectionsName.USERS, currentUser?.uid));
+      } else {
+        setToast("Musisz być zalogowany!");
+      }
+    } catch (error: any) {
+      setToast(error.message);
+    }
   };
+
   return (
     <>
-      <form
-        onSubmit={handleSubmit(onSubmit, (errors) => {
-          let errorMessage = "Musisz podać swoje ";
-          if (errors.firstName) {
-            errorMessage += "imie, ";
-          }
-          if (errors.lastName) {
-            errorMessage += "nazwisko, ";
-          }
-          if (errors.profession) {
-            errorMessage += "stanowisko.";
-          }
-          if (errors) {
-            setToast(errorMessage);
-          }
-        })}
-      >
-        <FiledInput name="firstName" type="text" defaultValue={user.firstName || ""} label="Podaj swoje imie" register={register} />
-        <FiledInput name="lastName" type="text" defaultValue={user.lastName || ""} label="Podaj swoje Nazwisko" register={register} />
-        <FiledInput
-          name="profession"
-          type="text"
-          defaultValue={user.profession || ""}
-          label="Podaj swój zawód/stanowisko"
-          register={register}
-        />
-        <Button>Aktualizuj profil</Button>
-      </form>
+      <Form
+        fields={[
+          { name: "firstName", type: "text", label: "Podaj swoje imię", defaultValue: user["firstName"] },
+          { name: "lastName", type: "text", label: "Podaj swoje Nazwisko", defaultValue: user["lastName"] },
+          { name: "profession", type: "text", label: "Podaj swój zawód/stanowisko", defaultValue: user["profession"] },
+        ]}
+        onSubmit={onSubmit}
+      />
     </>
   );
 };

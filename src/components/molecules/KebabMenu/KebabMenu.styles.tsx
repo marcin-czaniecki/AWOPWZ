@@ -19,10 +19,10 @@ export const ButtonKebabMenu = styled.button<{ color?: string }>`
   }
 `;
 
-export const WrapperKebabMenuContent = styled.div`
+export const WrapperKebabMenuContent = styled.div<{ top?: boolean }>`
   position: absolute;
   right: 0%;
-  top: 100%;
+  top: ${({ top }) => (top ? "-100%" : "100%")};
   display: flex;
   gap: 5px;
   background-color: ${({ theme }) => theme.color.background};

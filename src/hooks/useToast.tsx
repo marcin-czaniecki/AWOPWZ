@@ -22,7 +22,7 @@ export const ToastProvider = ({ children }: { children: JSX.Element }) => {
   useEffect(() => {
     const clearError = setTimeout(() => {
       dispatchToast("", "default");
-    }, 7000);
+    }, 4000);
     return () => {
       clearTimeout(clearError);
     };

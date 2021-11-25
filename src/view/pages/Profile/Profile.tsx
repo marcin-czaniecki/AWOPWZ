@@ -1,40 +1,30 @@
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
+import Loading from "components/molecules/Loading/Loading";
 import ProfileForm from "components/organisms/ProfileForm/ProfileForm";
-import { auth } from "data/fb";
+import AuthService from "data/AuthService";
 import { useUser } from "hooks/useUser";
-import styled from "styled-components";
-
-const WrapperProfile = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  button {
-    margin-right: auto;
-  }
-`;
-const WrapperInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
+import { WrapperProfile, WrapperInfo } from "./Profile.styles";
 
 const Profile = () => {
-  const data = useUser();
-
-  if (!auth.currentUser) {
-    return <div>Error</div>;
+  const { currentUser, dataUser } = useUser();
+  if (!dataUser || !currentUser) {
+    return <Loading />;
   }
-
+  const { email } = currentUser;
+  const { firstName, lastName, profession } = dataUser;
   return (
     <WrapperProfile>
       <WrapperInfo>
-        <div>Email: {auth.currentUser.email}</div>
-        <div>Imie: {data?.firstName || "Unknown"}</div>
-        <div>Nazwisko: {data?.lastName || "Unknown"}</div>
-        <div>Profesja: {data?.profession || "Uknown"}</div>
+        <div>Email: {email}</div>
+        <div>Imię: {firstName || "Unknown"}</div>
+        <div>Nazwisko: {lastName || "Unknown"}</div>
+        <div>Profesja: {profession || "Uknown"}</div>
       </WrapperInfo>
       <ConfirmModal textButton="Edytuj" invisibleYes invisibleNo maxHeight="250px">
-        <ProfileForm user={{ firstName: data?.firstName, lastName: data?.lastName, profession: data?.profession }} />
+        <ProfileForm user={{ firstName: firstName || "", lastName: lastName || "", profession: profession || "" }} />
+      </ConfirmModal>
+      <ConfirmModal textButton="Usuń konto" maxHeight="110px" confirmAction={() => currentUser && AuthService.removeAccount(currentUser)}>
+        <p>Czy na pewno chcesz usunąć konto?</p>
       </ConfirmModal>
     </WrapperProfile>
   );

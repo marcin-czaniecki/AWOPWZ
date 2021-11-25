@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Input from "components/atoms/Input/Input";
-import { IFiledInputProps } from "types/componentTypes";
+import { IFieldInputProps } from "types/componentTypes";
 
 const WrapperFiledInput = styled.div`
   margin-bottom: 10px;
@@ -10,7 +10,7 @@ const StyledLabel = styled.label`
   font-size: ${({ theme }) => theme.font.size.s};
 `;
 
-const FiledInput = ({ name, label, type, register, options = { required: true }, ...props }: IFiledInputProps) => {
+const FieldInput = ({ name, label, type, register, options = { required: true }, ...props }: IFieldInputProps) => {
   return (
     <WrapperFiledInput>
       <StyledLabel htmlFor={name}>{label}</StyledLabel>
@@ -19,4 +19,4 @@ const FiledInput = ({ name, label, type, register, options = { required: true },
   );
 };
 
-export default FiledInput;
+export default FieldInput;

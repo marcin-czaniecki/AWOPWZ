@@ -1,14 +1,17 @@
-import BodyChat from "./BodyChat";
+import ChatBody from "components/molecules/ChatBody/ChatBody";
+import ChatFooter from "components/molecules/ChatFooter/ChatFooter";
+import { useParams } from "react-router-dom";
 import { WrapperChat } from "./Chat.styles";
-import FooterChat from "./FooterChat";
-import HeaderChat from "./HeaderChat";
 
-const Chat = () => {
+const Chat = ({ path }: { path: string }) => {
+  const { id } = useParams();
+  if (!id) {
+    return <div>brak</div>;
+  }
   return (
     <WrapperChat>
-      <HeaderChat />
-      <BodyChat />
-      <FooterChat />
+      <ChatBody path={path} />
+      <ChatFooter path={path} />
     </WrapperChat>
   );
 };

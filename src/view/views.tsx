@@ -1,8 +1,6 @@
 import RequireAuth from "components/organisms/RequireAuth/RequireAuth";
 import { ProjectProvider } from "hooks/useProject";
-import { Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import NoMatch from "./pages/NoMatch/NoMatch";
 import Profile from "./pages/Profile/Profile";
 import Project from "./pages/Project/Project";
 import Projects from "./pages/Projects/Projects";
@@ -10,9 +8,9 @@ import Users from "./pages/Users/Users";
 
 export const views = [
   {
-    to: "/",
+    to: "/dashboard",
     text: "dashboard",
-    path: "/",
+    path: "/dashboard",
     element: (
       <RequireAuth>
         <Dashboard />
@@ -61,5 +59,4 @@ export const views = [
       </RequireAuth>
     ),
   },
-  { to: null, text: null, path: "*", element: <Route path="*" element={<NoMatch />} /> },
 ];

@@ -1,10 +1,13 @@
 import Button from "components/atoms/Button/Button";
-import FiledInput from "components/molecules/FiledInput/FiledInput";
+import FieldInput from "components/molecules/FieldInput/FieldInput";
 import { auth } from "data/fb";
+import StoreService from "data/StoreService";
+import { DocumentReference } from "firebase/firestore";
+import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { IColumnFormProps } from "types/componentTypes";
-import { updateArray, arrayPush } from "utils/firebaseUtils";
+import { updateArray } from "utils/firebaseUtils";
 import { enumName, EnumNameOfProjectArrays, generateId, wipToNumber } from "utils/utils";
 
 type Inputs = {
@@ -12,7 +15,8 @@ type Inputs = {
   wip: number;
 };
 
-const ColumnForm = ({ doc, column, lastOrder, length }: IColumnFormProps) => {
+const ColumnForm = ({ column, lastOrder, length }: IColumnFormProps) => {
+  const { doc } = useProject();
   const { setToast } = useToast();
   const { register, handleSubmit, reset } = useForm<Inputs>();
 
@@ -27,7 +31,7 @@ const ColumnForm = ({ doc, column, lastOrder, length }: IColumnFormProps) => {
       order: length > 0 ? lastOrder + 1 : 0,
       wip: wipToNumber(wip),
     };
-    arrayPush(doc, EnumNameOfProjectArrays.COLUMNS, data);
+    StoreService.arrayPush(EnumNameOfProjectArrays.COLUMNS, data, doc);
   };
 
   const onSubmit: SubmitHandler<Inputs> = async ({ name, wip }) => {
@@ -74,7 +78,7 @@ const ColumnForm = ({ doc, column, lastOrder, length }: IColumnFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
-      <FiledInput
+      <FieldInput
         name="name"
         type="text"
         label="Nazwa kolumny"
@@ -82,7 +86,7 @@ const ColumnForm = ({ doc, column, lastOrder, length }: IColumnFormProps) => {
         register={register}
         options={{ required: true, maxLength: 30 }}
       />
-      <FiledInput name="wip" type="number" label="Ustaw wip" defaultValue={column?.wip || 0} register={register} />
+      <FieldInput name="wip" type="number" label="Ustaw wip" defaultValue={column?.wip || 0} register={register} />
       <Button type="submit">{column ? "Aktualizuj kolumne" : "Dodaj kolumne"}</Button>
     </form>
   );

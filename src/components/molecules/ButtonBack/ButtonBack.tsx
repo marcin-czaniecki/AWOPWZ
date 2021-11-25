@@ -1,12 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { Link, To, useNavigate } from "react-router-dom";
 import { StyledButtonBack } from "./ButtonBack.styles";
 
-const ButtonBack = () => {
+const ButtonBack = ({ path }: { path?: To }) => {
   const navigate = useNavigate();
+  if (path) {
+    return (
+      <Link to={path}>
+        <StyledButtonBack />
+      </Link>
+    );
+  }
   return (
     <StyledButtonBack
       onClick={() => {
-        navigate(-1);
+        if (!path) {
+          navigate(-1);
+        }
       }}
     />
   );

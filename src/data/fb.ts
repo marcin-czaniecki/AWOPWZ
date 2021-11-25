@@ -12,8 +12,9 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
 };
+
 export const app = fb.initializeApp(firebaseConfig);
-export const auth = fb.getAuth();
-export const store = fb.getFirestore();
+export const auth = fb.getAuth(app);
+export const store = fb.getFirestore(app);
 
 export default fb;

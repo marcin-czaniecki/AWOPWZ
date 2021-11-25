@@ -35,7 +35,7 @@ const ProjectTask = ({ doc, task, columns, column }: IProjectTaskProps) => {
           <KebabMenu color={task.color}>
             <ConfirmModal textButton="Edytuj" confirmAction={taskRemove} maxHeight="250px" invisibleNo invisibleYes>
               <>
-                <TaskForm doc={doc} task={task} />
+                <TaskForm task={task} />
               </>
             </ConfirmModal>
             <ConfirmModal textButton="Usuń" confirmAction={taskRemove} maxHeight="110px">

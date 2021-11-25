@@ -47,9 +47,9 @@ export const theme = {
     background: "snow",
     text: "#737c8e",
     default: "#a95cf7",
-    success: "#f7ce5c",
-    warning: "#f7b95c",
-    info: "#5cf7ed",
+    success: "#be9b00",
+    warning: "#d81212",
+    info: "#00a5bb",
   },
   screen: {
     tablet: "768px",

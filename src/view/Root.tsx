@@ -1,40 +1,58 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import NoMatch from "view/pages/NoMatch/NoMatch";
 import MainTemplate from "components/templates/MainTamplate/MainTamplate";
 import { useToast } from "hooks/useToast";
 import Toast from "components/organisms/Toast/Toast";
-import Loading from "components/molecules/Loading/Loading";
 import { views } from "./views";
-import { auth } from "data/fb";
 
-const Root = () => {
-  const [user, loading, error] = useAuthState(auth);
+import { useUser } from "hooks/useUser";
+import Loading from "components/molecules/Loading/Loading";
+
+const WaitingOnVerification = () => {
   const location = useLocation();
-  const { message } = useToast();
+  const { currentUser, dataUser } = useUser();
 
-  if (loading) {
+  if (dataUser?.verifiedByAdmin === true && currentUser) {
+    return <Navigate to={localStorage.getItem("lastPath") || views[0].path} state={{ from: location }} />;
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/unauthorization" state={{ from: location }} />;
+  }
+
+  if (!dataUser) {
     return <Loading />;
   }
 
-  if (error) {
-    return <div>Error</div>;
+  return (
+    <div>
+      <h1>Musisz poczekać na weryfikacje od administratora.</h1>
+    </div>
+  );
+};
+
+const Root = () => {
+  const { currentUser } = useUser();
+  const location = useLocation();
+  const { message, type } = useToast();
+
+  if (location.pathname !== "/" && location.pathname !== "/unauthorization") {
+    localStorage.setItem("lastPath", location.pathname);
   }
 
   return (
     <>
       <MainTemplate>
         <Routes>
-          <Route path="/unauthorization" element={!user ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />} />
-          {views.map((view) => {
-            if (!view.path || !view.element) {
-              return <NoMatch />;
-            }
-            return <Route path={view.path} element={view.element} />;
-          })}
+          <Route index element={<WaitingOnVerification />} />
+          <Route path="/unauthorization" element={!currentUser ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />} />
+          {views.map((view) => (
+            <Route key={view.path + Root.name} path={view.path} element={view.element} />
+          ))}
+          <Route path="*" element={<NoMatch />} />
         </Routes>
-        <Toast message={message} />
+        <Toast message={message} type={type} />
       </MainTemplate>
     </>
   );

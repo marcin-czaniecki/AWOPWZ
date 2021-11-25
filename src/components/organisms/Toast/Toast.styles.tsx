@@ -30,6 +30,6 @@ export const WrapperToast = styled.div<{ type?: TypeToast }>`
   color: ${({ theme, type }) => (type ? theme.color[type] : theme.color["default"])};
   box-shadow: 0 10px 10px 3px rgba(0, 0, 0, 0.2);
   transform: translateX(-50%) translateY(600px);
-  animation: ${animationTouts} 7s linear;
+  animation: ${animationTouts} 4s linear;
   z-index: 15;
 `;

@@ -1,35 +1,45 @@
 import { printDate, addLeadingZero } from "@janossik/date";
-import fb, { store, auth } from "data/fb";
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import StoreService from "data/StoreService";
+import { useToast } from "hooks/useToast";
+import { useUser } from "hooks/useUser";
 import { theme } from "theme/theme";
-import { IMessage } from "types/types";
-import { removeDoc } from "utils/firebaseUtils";
+import { IMessageProps } from "types/componentTypes";
 import { EnumCollectionsName } from "utils/utils";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import KebabMenu from "../KebabMenu/KebabMenu";
 import { WrapperMessage, DataFiled, ContentMessage } from "./Message.styles";
 
-const Message = ({ author, id, uid, content, createdAt, updatedAt }: IMessage) => {
-  const uidC = auth?.currentUser?.uid || "unknown";
-  const [dUser] = useDocumentDataOnce(fb.doc(store, EnumCollectionsName.USERS));
-  const isPermissions = uidC === uid || dUser?.isAdmin;
+const { removeDoc, doc } = StoreService;
+
+const Message = ({ author, id, uid, content, createdAt, path }: IMessageProps) => {
+  const { dataUser } = useUser();
+  const isPermissions = dataUser?.uid === uid || dataUser?.isAdmin;
+  const { setToast } = useToast();
+
+  const removeMessage = async () => {
+    try {
+      await removeDoc(await doc(path, id));
+      await removeDoc(await doc(EnumCollectionsName.MESSAGES, `ref${id}`));
+    } catch (error: any) {
+      setToast(error.message);
+    }
+  };
 
   return (
     <WrapperMessage>
-      <DataFiled isI={uidC !== uid}>{author ? author : uid}</DataFiled>
+      <DataFiled isI={dataUser?.uid !== uid}>{author ? author : uid}</DataFiled>
       <ContentMessage>{content}</ContentMessage>
       <DataFiled>
-        Wysłano:
-        {`${printDate("ddmmmyy", "pl", createdAt.toDate())},`}
+        Wysłano: {`${printDate("ddmmmyy", "pl", createdAt.toDate())},`}
         {` ${addLeadingZero(createdAt.toDate().getHours())}:${addLeadingZero(createdAt.toDate().getMinutes())}`}
       </DataFiled>
-      <KebabMenu color={theme.color.text}>
-        {isPermissions && (
-          <ConfirmModal textButton="usuń" maxHeight="110px" confirmAction={() => removeDoc(id, EnumCollectionsName.MESSAGES)}>
+      {isPermissions && (
+        <KebabMenu color={theme.color.text} top>
+          <ConfirmModal textButton="usuń" maxHeight="110px" confirmAction={removeMessage}>
             <p>Czy na pewno chcesz usunąć tą wiadomość?</p>
           </ConfirmModal>
-        )}
-      </KebabMenu>
+        </KebabMenu>
+      )}
     </WrapperMessage>
   );
 };

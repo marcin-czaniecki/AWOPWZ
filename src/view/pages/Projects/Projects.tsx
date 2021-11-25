@@ -31,7 +31,7 @@ const Projects = () => {
 
       {value?.docs.map((doc) => {
         const data = doc.data() as IProject;
-        return <ProjectCard key={doc.id} id={doc.id} {...data} />;
+        return <ProjectCard key={doc.id + Projects.name} id={doc.id} {...data} />;
       })}
     </WrapperProjects>
   );

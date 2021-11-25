@@ -27,10 +27,10 @@ const ProjectColumnHeader = ({ column }: { column: IColumn }) => {
         <>
           {unequalWithFirstOrder && <ArrowButton size="30px" onClick={onClickColumnSwapToLeft} />}
           <ConfirmModal invisibleYes invisibleNo maxHeight="200px" textButton="Edytuj">
-            <ColumnForm doc={doc} column={column} />
+            <ColumnForm column={column} />
           </ConfirmModal>
           <ConfirmModal confirmAction={confirmColumnRemove} maxHeight="150px" textButton="usuń">
-            <p>Czy na pewno chcesz usunąć kolumne? Zadania zostaną przeniosione do pierwszej kolumny!</p>
+            <p>Czy na pewno chcesz usunąć kolumnę? Zadania zostaną przeniesione do pierwszej kolumny!</p>
           </ConfirmModal>
           {unequalWithLastOrder && <ArrowButton right size="30px" onClick={onClickColumnSwapToRight} />}
         </>

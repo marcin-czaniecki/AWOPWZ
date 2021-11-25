@@ -24,11 +24,3 @@ export const ContentMessage = styled.div`
   padding: 0 10px;
   font-size: ${({ theme }) => theme.font.size.s};
 `;
-
-export const KebabButton = styled.div`
-  position: relative;
-  ::after {
-  }
-  ::before {
-  }
-`;

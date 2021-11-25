@@ -4,6 +4,7 @@ const CloseButton = styled.button`
   position: relative;
   height: 30px;
   width: 30px;
+  margin-bottom: 10px;
   border: solid 5px ${({ theme }) => theme.color.primary};
   background: ${({ theme }) => theme.color.primary};
   border-radius: 100%;

@@ -4,6 +4,8 @@ import CustomLink from "components/molecules/CustomLink/CustomLink";
 import { auth } from "data/fb";
 import { signOut } from "firebase/auth";
 import useHandleModal from "hooks/useHandleModal";
+import { Fragment } from "react";
+import { Link } from "react-router-dom";
 import { views } from "view/views";
 import { WrapperNavigation, LogOutButton } from "./Navigation.styles";
 
@@ -17,30 +19,21 @@ const Navigation = () => {
           inverse();
         }}
       />
-      <WrapperSideBar ref={ref} active={visible}>
+      <WrapperSideBar ref={ref} active={visible} zindex="12">
         <WrapperNavigation>
-          {views.map(({ to, text }) => {
+          {views.map(({ to, path, text }) => {
             if (!to || !text) {
-              return <></>;
+              return <Fragment key={path}></Fragment>;
             }
             return (
-              <CustomLink
-                to={to}
-                onClick={() => {
-                  close();
-                }}
-              >
+              <CustomLink key={text + to} to={to} onClick={close}>
                 {text}
               </CustomLink>
             );
           })}
-          <LogOutButton
-            onClick={() => {
-              signOut(auth);
-            }}
-          >
-            Log out
-          </LogOutButton>
+          <Link to="/unauthorization">
+            <LogOutButton onClick={() => signOut(auth)}>Log out</LogOutButton>
+          </Link>
         </WrapperNavigation>
       </WrapperSideBar>
     </>

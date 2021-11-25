@@ -3,21 +3,21 @@ import Message from "components/molecules/Message/Message";
 import fb, { store } from "data/fb";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { IMessage } from "types/types";
-import { EnumCollectionsName } from "utils/utils";
-import { WrapperBodyChat } from "./Chat.styles";
+import { WrapperChatBody } from "./ChatBody.styles";
 
-const BodyChat = () => {
-  const [value, loading, error] = useCollection(fb.collection(store, EnumCollectionsName.MESSAGES));
+const ChatBody = ({ path }: { path: string }) => {
+  const [value, loading, error] = useCollection(fb.collection(store, path));
 
   if (loading) {
     return <Loading size="100px" />;
   }
+
   if (error) {
     return <div>...</div>;
   }
 
   return (
-    <WrapperBodyChat>
+    <WrapperChatBody>
       {value?.docs
         .sort((a, b) => {
           const message1 = a.data() as IMessage;
@@ -26,11 +26,10 @@ const BodyChat = () => {
         })
         .map((value) => {
           const message = value.data() as IMessage;
-
-          return <Message key={value.id} {...message} id={value.id} />;
+          return <Message key={value.id} {...message} id={value.id} path={path} />;
         })}
-    </WrapperBodyChat>
+    </WrapperChatBody>
   );
 };
 
-export default BodyChat;
+export default ChatBody;

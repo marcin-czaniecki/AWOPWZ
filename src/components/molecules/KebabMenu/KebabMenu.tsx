@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IKebabMenuProps } from "types/componentTypes";
 import { WrapperKebabMenu, ButtonKebabMenu, WrapperKebabMenuContent } from "./KebabMenu.styles";
 
-const KebabMenu = ({ children, color }: IKebabMenuProps) => {
+const KebabMenu = ({ children, color, top }: IKebabMenuProps & { top?: boolean }) => {
   const [visible, setVisible] = useState(false);
   return (
     <WrapperKebabMenu>
@@ -17,7 +17,7 @@ const KebabMenu = ({ children, color }: IKebabMenuProps) => {
         <span />
       </ButtonKebabMenu>
       {visible && (
-        <WrapperKebabMenuContent>
+        <WrapperKebabMenuContent top={top}>
           <>{children}</>
         </WrapperKebabMenuContent>
       )}

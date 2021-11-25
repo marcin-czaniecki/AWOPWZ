@@ -1,7 +1,7 @@
 import { DocumentReference } from "firebase/firestore";
 import { ReactChild } from "react";
-import { UseFormRegister, RegisterOptions } from "react-hook-form";
-import { IProject, ITask, IColumn } from "./types";
+import { UseFormRegister, RegisterOptions, SubmitErrorHandler, SubmitHandler } from "react-hook-form";
+import { IProject, ITask, IColumn, IMessage } from "./types";
 
 export interface IChild {
   children: ReactChild;
@@ -32,19 +32,17 @@ export interface IProjectTaskProps {
 }
 
 export interface IColumnFormProps {
-  doc: DocumentReference<IProject>;
   column?: IColumn;
   lastOrder?: number;
   length?: number;
 }
 
-export interface ITaskFormAndColumnFromSidebarProps {
-  doc: DocumentReference<IProject>;
+export interface IProjectSidebarProps {
   lastOrder: number;
   length: number;
 }
 
-export interface IFiledInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   register: UseFormRegister<any>;
@@ -54,4 +52,16 @@ export interface IFiledInputProps extends React.InputHTMLAttributes<HTMLInputEle
 export interface IKebabMenuProps {
   color?: string;
   children: ReactChild | ReactChild[];
+}
+
+export interface IMessageProps extends IMessage {
+  path: string;
+}
+
+export interface IForm<T> {
+  clear?: boolean;
+  contentButton?: string;
+  onSubmit: SubmitHandler<T>;
+  onError?: SubmitErrorHandler<T>;
+  fields: { name: string; type: string; label: string; defaultValue?: any; [key: string]: any }[];
 }
