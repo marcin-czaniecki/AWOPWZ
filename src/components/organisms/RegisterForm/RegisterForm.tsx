@@ -5,7 +5,7 @@ import Form from "components/molecules/Form/Form";
 import StoreService from "data/StoreService";
 import { EnumCollectionsName } from "utils/utils";
 
-const { createDoc, doc, collection } = StoreService;
+const { createDoc, collection } = StoreService;
 
 type Inputs = {
   email: string;

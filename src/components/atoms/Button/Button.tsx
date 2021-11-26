@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Button = styled.button`
   min-height: 30px;
-  min-width: 60px;
+  min-width: 80px;
   padding: 4px 15px;
   font-weight: ${({ theme }) => theme.font.weight.medium};
   background-color: ${({ theme }) => theme.color.secondary};

@@ -2,7 +2,6 @@ import Button from "components/atoms/Button/Button";
 import FieldInput from "components/molecules/FieldInput/FieldInput";
 import { auth } from "data/fb";
 import StoreService from "data/StoreService";
-import { DocumentReference } from "firebase/firestore";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";

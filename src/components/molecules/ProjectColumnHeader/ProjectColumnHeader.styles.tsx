@@ -6,5 +6,6 @@ export const WrapperProjectColumnHeader = styled.div`
   padding: 5px 18px;
   justify-content: center;
   align-items: center;
+  background-color: ${({ theme }) => theme.color.background};
   gap: 10px;
 `;

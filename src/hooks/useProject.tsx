@@ -18,9 +18,9 @@ export const ProjectContext = createContext<IProjectContext>({
   error: undefined,
 } as IProjectContext);
 
-export const ProjectProvider = ({ children }: { children: JSX.Element }) => {
-  const { id } = useParams();
-  const doc = getDocumentReferenceProject(id || "unknown") as DocumentReference<IProject>;
+export const ProjectProvider = ({ children, id }: { children: JSX.Element; id?: string }) => {
+  const params = useParams();
+  const doc = getDocumentReferenceProject(id || params?.id || "unknown") as DocumentReference<IProject>;
   const [project, loading, error] = useDocumentData<IProject>(doc);
 
   return (

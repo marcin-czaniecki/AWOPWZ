@@ -1,22 +1,21 @@
 import Button from "components/atoms/Button/Button";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
-import fb from "data/fb";
-import { updateDoc } from "firebase/firestore";
+import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { IProjectTaskProps } from "types/componentTypes";
 import { downOrderTask, moveTask, upOrderTask } from "utils/firebaseUtils";
+import { EnumNameOfProjectArrays } from "utils/utils";
 import ConfirmModal from "../../molecules/ConfirmModal/ConfirmModal";
 import TaskForm from "../TaskForm/TaskForm";
 import { ButtonsProjectTask, WrapperProjectTask } from "./ProjectTask.styles";
 
+const { removeArrayElement } = StoreService;
+
 const ProjectTask = ({ doc, task, columns, column }: IProjectTaskProps) => {
   const { setToast } = useToast();
-
   const taskRemove = async () => {
     try {
-      await updateDoc(doc, {
-        tasks: fb.arrayRemove(task),
-      });
+      await removeArrayElement(EnumNameOfProjectArrays.TASKS, [task], doc);
     } catch (error) {
       setToast("Nie udało się usunąć zadania :c");
     }

@@ -60,6 +60,7 @@ export interface IUser {
   firstName?: string;
   lastName?: string;
   profession?: string;
+  pinnedProjects?: { name: string; ref: DocumentReference<IProject> }[];
 }
 
 export type TypeToast = "primary" | "secondary" | "default" | "success" | "warning" | "info";

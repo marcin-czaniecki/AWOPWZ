@@ -20,6 +20,7 @@ export enum EnumCollectionsName {
 export enum EnumNameOfProjectArrays {
   COLUMNS = "columns",
   TASKS = "tasks",
+  PINNED_PROJECTS = "pinnedProjects",
 }
 
 export const generateId = () => Math.round(Math.random() * Math.pow(10, 10)).toString(16);

@@ -23,7 +23,8 @@ export const WrapperKebabMenuContent = styled.div<{ top?: boolean }>`
   position: absolute;
   right: 0%;
   top: ${({ top }) => (top ? "-100%" : "100%")};
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 5px;
   background-color: ${({ theme }) => theme.color.background};
   z-index: 8;

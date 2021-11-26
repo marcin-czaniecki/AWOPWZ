@@ -12,16 +12,20 @@ interface IGlobalUser {
   dataUser?: IUser | null;
 }
 
+const {
+  sync: { docWithType },
+} = StoreService;
+
 export const UserContext = createContext<IGlobalUser>({});
 
 export const UserProvider = ({ children }: { children: JSX.Element }) => {
   const [currentUser] = useAuthState(auth);
-  const [docRef, setDocRef] = useState(StoreService.docWithTypeSync<IUser>(EnumCollectionsName.USERS, `${currentUser?.uid}`));
+  const [docRef, setDocRef] = useState(docWithType<IUser>(EnumCollectionsName.USERS, `${currentUser?.uid}`));
   const [dataUser] = useDocumentData<IUser>(docRef);
 
   useEffect(() => {
     if (currentUser?.uid) {
-      setDocRef(StoreService.docWithTypeSync<IUser>(EnumCollectionsName.USERS, currentUser.uid));
+      setDocRef(docWithType<IUser>(EnumCollectionsName.USERS, currentUser.uid));
     }
   }, [currentUser, dataUser]);
 
