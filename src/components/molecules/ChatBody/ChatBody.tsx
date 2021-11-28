@@ -1,5 +1,5 @@
 import Loading from "components/molecules/Loading/Loading";
-import Message from "components/molecules/Message/Message";
+import Message from "components/organisms/Message/Message";
 import fb, { store } from "data/fb";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { IMessage } from "types/types";

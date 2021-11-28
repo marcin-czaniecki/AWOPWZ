@@ -5,8 +5,8 @@ import { useUser } from "hooks/useUser";
 import { theme } from "theme/theme";
 import { IMessageProps } from "types/componentTypes";
 import { CollectionsName } from "utils/utils";
-import ConfirmModal from "../ConfirmModal/ConfirmModal";
-import KebabMenu from "../KebabMenu/KebabMenu";
+import ConfirmModal from "../../molecules/ConfirmModal/ConfirmModal";
+import KebabMenu from "../../molecules/KebabMenu/KebabMenu";
 import { WrapperMessage, WrapperDataFiled, WrapperMessageContent, AuthorFiled, WrapperMessageBody } from "./Message.styles";
 
 const { removeDoc, doc } = StoreService;
