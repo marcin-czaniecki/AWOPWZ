@@ -6,19 +6,14 @@ const ButtonBack = ({ path }: { path?: To }) => {
   if (path) {
     return (
       <Link to={path}>
-        <StyledButtonBack />
+        <StyledButtonBack typeButton="arrow" />
       </Link>
     );
   }
-  return (
-    <StyledButtonBack
-      onClick={() => {
-        if (!path) {
-          navigate(-1);
-        }
-      }}
-    />
-  );
+
+  const moveToPreviousPage = () => !path && navigate(-1);
+
+  return <StyledButtonBack typeButton="arrow" onClick={moveToPreviousPage} />;
 };
 
 export default ButtonBack;

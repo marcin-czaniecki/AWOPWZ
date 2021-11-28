@@ -6,7 +6,7 @@ import { collectionReferenceUsers } from "utils/references";
 import Input from "components/atoms/Input/Input";
 import { store } from "data/fb";
 import { doc, updateDoc } from "firebase/firestore";
-import { EnumCollectionsName } from "utils/utils";
+import { CollectionsName } from "utils/utils";
 import { useUser } from "hooks/useUser";
 import { useToast } from "hooks/useToast";
 
@@ -19,7 +19,7 @@ const WrapperUser = styled.div`
   gap: 20px;
 `;
 const handleVerifiedByAdmin = async (uid: string) => {
-  const docRef = doc(store, EnumCollectionsName.USERS, uid);
+  const docRef = doc(store, CollectionsName.USERS, uid);
   try {
     await updateDoc(docRef, {
       verifiedByAdmin: true,

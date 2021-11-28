@@ -3,7 +3,7 @@ import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { SubmitHandler } from "react-hook-form";
-import { EnumCollectionsName } from "utils/utils";
+import { CollectionsName } from "utils/utils";
 
 const { updateDoc, doc } = StoreService;
 
@@ -20,7 +20,7 @@ const ProfileForm = ({ user }: { user: { [key: string]: string } }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       if (currentUser) {
-        await updateDoc(data, await doc(EnumCollectionsName.USERS, currentUser?.uid));
+        await updateDoc(data, await doc(CollectionsName.USERS, currentUser?.uid));
       } else {
         setToast("Musisz być zalogowany!");
       }

@@ -1,5 +1,5 @@
 import Loading from "components/molecules/Loading/Loading";
-import SideBar from "components/molecules/SideBar/SideBar";
+import AdditionBar from "components/molecules/AdditionBar/AdditionBar";
 import FormProject from "components/organisms/ProjectForm/ProjectForm";
 import ProjectCard from "components/organisms/ProjectCard/ProjectCard";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -25,16 +25,17 @@ const Projects = () => {
     return <div>error</div>;
   }
   return (
-    <WrapperProjects>
-      <SideBar right>
+    <>
+      <AdditionBar right>
         <FormProject />
-      </SideBar>
-
-      {value?.docs.map((doc) => {
-        const data = doc.data() as IProject;
-        return <ProjectCard key={doc.id + Projects.name} id={doc.id} {...data} />;
-      })}
-    </WrapperProjects>
+      </AdditionBar>
+      <WrapperProjects>
+        {value?.docs.map((doc) => {
+          const data = doc.data() as IProject;
+          return <ProjectCard key={doc.id + Projects.name} id={doc.id} {...data} />;
+        })}
+      </WrapperProjects>
+    </>
   );
 };
 

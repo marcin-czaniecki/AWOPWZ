@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CloseButton from "components/atoms/CloseButton/CloseButton";
+import Button from "components/atoms/Button/Button";
 import Chat from "components/organisms/Chat/Chat";
 import { WrapperProjectChat, HiddenChatButton } from "./ProjectChat.styles";
 
@@ -9,7 +9,7 @@ const ProjectChat = ({ name, path }: { name: string; path: string }) => {
   return (
     <>
       <WrapperProjectChat visible={active}>
-        <CloseButton onClick={() => setActive(false)} />
+        <Button typeButton="close" onClick={() => setActive(false)} />
         <Chat path={path} />
       </WrapperProjectChat>
       <HiddenChatButton visible={active} onClick={() => setActive(true)}>

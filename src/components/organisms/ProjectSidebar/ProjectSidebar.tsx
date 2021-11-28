@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "components/atoms/Button/Button";
-import SideBar from "components/molecules/SideBar/SideBar";
+import AdditionBar from "components/molecules/AdditionBar/AdditionBar";
 import { IProjectSidebarProps } from "types/componentTypes";
 import ColumnForm from "components/organisms/ColumnForm/ColumnForm";
 import TaskForm from "components/organisms/TaskForm/TaskForm";
@@ -21,7 +21,7 @@ const ProjectSidebar = ({ lastOrder, length }: IProjectSidebarProps) => {
     setTypeForm(false);
   };
   return (
-    <SideBar right>
+    <AdditionBar right>
       <>
         <ButtonsProjectSidebar>
           <Button onClick={setTaskForm}>Nowe zadanie</Button>
@@ -32,7 +32,7 @@ const ProjectSidebar = ({ lastOrder, length }: IProjectSidebarProps) => {
           {!typeForm && <ColumnForm lastOrder={lastOrder} length={length} />}
         </div>
       </>
-    </SideBar>
+    </AdditionBar>
   );
 };
 

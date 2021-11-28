@@ -3,7 +3,7 @@ import { SubmitHandler } from "react-hook-form";
 import AuthService from "data/AuthService";
 import Form from "components/molecules/Form/Form";
 import StoreService from "data/StoreService";
-import { EnumCollectionsName } from "utils/utils";
+import { CollectionsName } from "utils/utils";
 
 const { createDoc, collection } = StoreService;
 
@@ -44,7 +44,7 @@ const RegisterForm = () => {
           lastName: data.lastName,
           profession: data.profession,
         },
-        await collection(EnumCollectionsName.USERS, uid)
+        await collection(CollectionsName.USERS, uid)
       );
       setToast(`Założyłeś nowe konto :D`);
     } catch (e: any) {

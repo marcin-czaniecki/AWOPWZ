@@ -1,5 +1,5 @@
 import Hamburger from "components/atoms/Hamburger/Hamburger";
-import WrapperSideBar from "components/atoms/WrapperSideBar/WrapperSideBar";
+import SideBar from "components/atoms/SideBar/SideBar";
 import CustomLink from "components/molecules/CustomLink/CustomLink";
 import { auth } from "data/fb";
 import { signOut } from "firebase/auth";
@@ -19,7 +19,7 @@ const Navigation = () => {
           inverse();
         }}
       />
-      <WrapperSideBar ref={ref} active={visible} zindex="12">
+      <SideBar ref={ref} active={visible} zIndex="12">
         <WrapperNavigation>
           {views.map(({ to, path, text }) => {
             if (!to || !text) {
@@ -35,7 +35,7 @@ const Navigation = () => {
             <LogOutButton onClick={() => signOut(auth)}>Log out</LogOutButton>
           </Link>
         </WrapperNavigation>
-      </WrapperSideBar>
+      </SideBar>
     </>
   );
 };

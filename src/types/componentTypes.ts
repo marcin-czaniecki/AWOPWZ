@@ -65,3 +65,22 @@ export interface IForm<T> {
   onError?: SubmitErrorHandler<T>;
   fields: { name: string; type: string; label: string; defaultValue?: any; [key: string]: any }[];
 }
+
+export interface IInstructionProps {
+  introduction: string;
+  title: string;
+  steps: string[];
+}
+
+export interface IProjectHeaderProps {
+  pinnedProject: {
+    name: string;
+    ref: DocumentReference<IProject>;
+  } | null;
+  setPinnedProject: (
+    pinnedProject: {
+      name: string;
+      ref: DocumentReference<IProject>;
+    } | null
+  ) => void;
+}

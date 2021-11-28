@@ -1,7 +1,7 @@
 import Loading from "components/molecules/Loading/Loading";
 import { useProject } from "hooks/useProject";
 import { IColumn } from "types/types";
-import { createPath, EnumCollectionsName } from "utils/utils";
+import { createPath, CollectionsName } from "utils/utils";
 import ProjectChat from "../ProjectChat/ProjectChat";
 import ProjectColumn from "../ProjectColumn/ProjectColumn";
 import ProjectSidebar from "../ProjectSidebar/ProjectSidebar";
@@ -10,7 +10,7 @@ import { WrapperColumns } from "./ProjectBody.styles";
 const ProjectBody = () => {
   const { doc, project, loading, error } = useProject();
   const sortOrder = (a: IColumn, b: IColumn) => (Number(a.order) > Number(b.order) ? 1 : -1);
-  const pathMessages = createPath(EnumCollectionsName.PROJECTS, doc.id, EnumCollectionsName.MESSAGES);
+  const pathMessages = createPath(CollectionsName.PROJECTS, doc.id, CollectionsName.MESSAGES);
 
   if (loading) {
     return <Loading />;

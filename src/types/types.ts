@@ -57,9 +57,9 @@ export interface IUser {
   uid: string;
   isAdmin: boolean;
   verifiedByAdmin: boolean;
-  firstName?: string;
-  lastName?: string;
-  profession?: string;
+  firstName: string;
+  lastName: string;
+  profession: string;
   pinnedProjects?: { name: string; ref: DocumentReference<IProject> }[];
 }
 
@@ -95,3 +95,10 @@ export type TypeColumnSwap = (
   tasks: ITask[],
   delta: number
 ) => Promise<void>;
+
+export interface IView {
+  to?: string | null;
+  text?: string | null;
+  path: string;
+  element: JSX.Element;
+}

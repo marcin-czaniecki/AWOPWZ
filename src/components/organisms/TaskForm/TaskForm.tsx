@@ -1,12 +1,12 @@
 import Form from "components/molecules/Form/Form";
 import fb from "data/fb";
+import StoreService from "data/StoreService";
 import { updateDoc } from "firebase/firestore";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
 import { SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { ITask } from "types/types";
-import { updateArray } from "utils/firebaseUtils";
-import { createTask, EnumNameOfProjectArrays } from "utils/utils";
+import { createTask, ArrayName } from "utils/utils";
 
 type Inputs = {
   title: string;
@@ -20,10 +20,10 @@ const TaskForm = ({ task }: { task?: ITask }) => {
   const onSubmit: SubmitHandler<Inputs> = async ({ title, color, backgroundColor }) => {
     try {
       if (task) {
-        updateArray(doc, EnumNameOfProjectArrays.TASKS, [task], [{ ...task, title, color, backgroundColor }]);
+        StoreService.updateArray(ArrayName.TASKS, [task], [{ ...task, title, color, backgroundColor }], doc);
       } else {
         await updateDoc(doc, {
-          tasks: fb.arrayUnion(createTask(title, color, backgroundColor)),
+          [ArrayName.TASKS]: fb.arrayUnion(createTask(title, color, backgroundColor)),
         });
       }
     } catch (error) {

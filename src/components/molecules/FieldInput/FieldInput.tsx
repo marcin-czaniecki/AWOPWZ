@@ -13,7 +13,7 @@ const StyledLabel = styled.label`
 const FieldInput = ({ name, label, type, register, options = { required: true }, ...props }: IFieldInputProps) => {
   return (
     <WrapperFiledInput>
-      <StyledLabel htmlFor={name}>{label}</StyledLabel>
+      {label && <StyledLabel htmlFor={name}>{label}</StyledLabel>}
       <Input type={type} {...register(name, options)} {...props} />
     </WrapperFiledInput>
   );

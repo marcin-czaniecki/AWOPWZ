@@ -2,11 +2,13 @@ import styled from "styled-components";
 
 export const WrapperMessage = styled.div`
   display: flex;
-  flex-direction: column;
   position: relative;
   padding: 5px 10px 10px;
-  gap: 10px;
-  ::after {
+  & > div:nth-child(2) {
+    margin-top: auto;
+    margin-bottom: 5px;
+  }
+  &::after {
     content: " ";
     position: absolute;
     bottom: 0;
@@ -16,11 +18,37 @@ export const WrapperMessage = styled.div`
   }
 `;
 
-export const DataFiled = styled.div<{ isI?: boolean }>`
-  font-size: ${({ theme }) => theme.font.size.xs};
-  margin-left: ${({ isI }) => isI && "auto"};
+export const WrapperMessageBody = styled.div<{ isCurrentUser?: boolean }>`
+  display: flex;
+  flex-direction: ${({ isCurrentUser }) => !isCurrentUser && `row-reverse`};
+  gap: 10px;
+  div {
+    display: grid;
+    gap: 15px;
+  }
+  & > div:nth-child(1) {
+    width: 40px;
+    margin-left: ${({ isCurrentUser }) => !isCurrentUser && `40px`};
+  }
+  & > div:nth-child(2) {
+  }
 `;
-export const ContentMessage = styled.div`
-  padding: 0 10px;
+export const AuthorFiled = styled.div<{ autoMarginLeft?: boolean }>`
+  font-size: ${({ theme }) => theme.font.size.xs};
+  margin-left: ${({ autoMarginLeft }) => autoMarginLeft && "auto"};
+`;
+
+export const WrapperMessageContent = styled.div<{ isCurrentUser?: boolean }>`
+  background: ${({ theme, isCurrentUser }) => (isCurrentUser ? theme.color.primary : theme.color.text)};
+  margin-left: ${({ isCurrentUser }) => isCurrentUser && "100px"};
+  color: snow;
+  padding: 10px 15px;
+  margin-left: auto;
+  border-radius: 20px;
   font-size: ${({ theme }) => theme.font.size.s};
+`;
+
+export const WrapperDataFiled = styled.div<{ autoMarginLeft?: boolean }>`
+  font-size: ${({ theme }) => theme.font.size.xs};
+  margin-left: ${({ autoMarginLeft }) => autoMarginLeft && "auto"};
 `;

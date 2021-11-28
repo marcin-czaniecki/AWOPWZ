@@ -1,7 +1,7 @@
 import { auth } from "data/fb";
 import { Timestamp } from "firebase/firestore";
 import { FieldErrors } from "react-hook-form";
-import { ITask, IColumn, TypeToast } from "types/types";
+import { IColumn, ITask, TypeToast } from "types/types";
 
 export enum enumName {
   COLUMNS = "columns",
@@ -11,13 +11,13 @@ export enum enumName {
   MESSAGE = "message",
 }
 
-export enum EnumCollectionsName {
+export enum CollectionsName {
   USERS = "users",
   MESSAGES = "messages",
   PROJECTS = "projects",
 }
 
-export enum EnumNameOfProjectArrays {
+export enum ArrayName {
   COLUMNS = "columns",
   TASKS = "tasks",
   PINNED_PROJECTS = "pinnedProjects",

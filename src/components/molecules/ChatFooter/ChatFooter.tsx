@@ -3,7 +3,7 @@ import { Timestamp } from "firebase/firestore";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { SubmitHandler } from "react-hook-form";
-import { EnumCollectionsName } from "utils/utils";
+import { CollectionsName } from "utils/utils";
 import Form from "../Form/Form";
 
 const { collection, createDoc, setDoc, doc } = StoreService;
@@ -31,7 +31,7 @@ const FooterChat = ({ path }: { path: string }) => {
         updatedAt: now,
       };
       const docRef = await createDoc(messageBody, await collection(path));
-      await setDoc({ uid: uid, messageRef: docRef }, await doc(EnumCollectionsName.MESSAGES, `ref${docRef.id}`));
+      await setDoc({ uid: uid, messageRef: docRef }, await doc(CollectionsName.MESSAGES, `ref${docRef.id}`));
     } catch (e) {
       setToast("You can't send message :/");
     }

@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import CloseButton from "components/atoms/CloseButton/CloseButton";
+import Button from "components/atoms/Button/Button";
 import { WrapperModal, BackgroundModal, HeaderModal, WrapperContentModal } from "./Modal.styles";
 import useModal from "hooks/useModal";
 import { IModalProps } from "types/componentTypes";
@@ -12,7 +12,7 @@ const RenderModal = ({ children, maxWidth, minWidth, maxHeight, closeAction }: I
       <BackgroundModal ref={ref}>
         <WrapperModal maxWidth={maxWidth} minWidth={minWidth} maxHeight={maxHeight}>
           <HeaderModal>
-            <CloseButton onClick={closeAction} />
+            <Button typeButton="close" onClick={closeAction} />
           </HeaderModal>
           <WrapperContentModal>{children}</WrapperContentModal>
         </WrapperModal>

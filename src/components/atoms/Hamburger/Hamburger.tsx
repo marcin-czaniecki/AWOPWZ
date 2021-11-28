@@ -32,7 +32,7 @@ const Wrapper = styled.button<{ active?: boolean; backgroundColor?: string; colo
   }
 `;
 
-const Body = styled.span<{ active: boolean; backgroundColor?: string; color?: string }>`
+const Body = styled.span<{ active: boolean }>`
   position: relative;
   display: block;
   height: 5px;
@@ -89,7 +89,7 @@ const Body = styled.span<{ active: boolean; backgroundColor?: string; color?: st
         `}
 `;
 
-const Hamburger = (props: any) => {
+const Hamburger = (props: any & { active?: boolean; backgroundColor?: string; color?: string }) => {
   return (
     <Wrapper {...props}>
       <Body {...props} active={props?.active} />

@@ -1,7 +1,7 @@
-import ArrowButton from "components/atoms/ArrowButton/ArrowButton";
+import Button from "components/atoms/Button/Button";
 import styled from "styled-components";
 
-export const StyledButtonBack = styled(ArrowButton)`
+export const StyledButtonBack = styled(Button)`
   position: absolute;
   top: 5px;
   left: 5px;

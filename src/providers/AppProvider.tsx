@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyle from "theme/GlobalStyle";
 import { theme } from "theme/theme";
 import { UserProvider } from "hooks/useUser";
+import MainTemplate from "components/templates/MainTamplate/MainTamplate";
 
 const AppProvider = ({ children }: { children: React.ReactChild }) => {
   return (
@@ -11,10 +12,12 @@ const AppProvider = ({ children }: { children: React.ReactChild }) => {
       <BrowserRouter>
         <ToastProvider>
           <UserProvider>
-            <>
-              <GlobalStyle />
-              {children}
-            </>
+            <MainTemplate>
+              <>
+                <GlobalStyle />
+                {children}
+              </>
+            </MainTemplate>
           </UserProvider>
         </ToastProvider>
       </BrowserRouter>

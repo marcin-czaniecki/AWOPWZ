@@ -1,11 +1,11 @@
 import { useRef, useEffect } from "react";
 
-const modalContainer = document.createElement("div");
+const modalContainer = document.createElement("article");
 document.body.prepend(modalContainer);
 
 const useModal = (closeAction: () => void) => {
   const ref = useRef<HTMLDivElement>(null);
-  const modalNode = document.createElement("div");
+  const modalNode = document.createElement("article");
 
   useEffect(() => {
     const { current } = ref;

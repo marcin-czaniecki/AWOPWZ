@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const BackgroundModal = styled.div`
+export const BackgroundModal = styled.article`
   position: fixed;
   display: flex;
   height: 100%;
@@ -11,10 +11,9 @@ export const BackgroundModal = styled.div`
   z-index: 13;
 `;
 
-export const WrapperModal = styled.div<{ maxHeight?: string; maxWidth?: string; minWidth?: string }>`
+export const WrapperModal = styled.section<{ maxHeight?: string; maxWidth?: string; minWidth?: string }>`
   position: relative;
-  width: ${({ maxWidth, minWidth }) =>
-    ` clamp(${minWidth ? minWidth : "280px"}, 100%, ${maxWidth ? maxWidth : "600px"})`};
+  width: ${({ maxWidth, minWidth }) => ` clamp(${minWidth ? minWidth : "280px"}, 100%, ${maxWidth ? maxWidth : "600px"})`};
 
   height: clamp(100px, 100%, ${({ maxHeight }) => (maxHeight ? maxHeight : "70%")});
   margin: 0 10px;

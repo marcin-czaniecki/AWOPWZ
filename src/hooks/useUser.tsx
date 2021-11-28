@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { IUser } from "types/types";
-import { EnumCollectionsName } from "utils/utils";
+import { CollectionsName } from "utils/utils";
 
 interface IGlobalUser {
   currentUser?: User | null;
@@ -20,12 +20,12 @@ export const UserContext = createContext<IGlobalUser>({});
 
 export const UserProvider = ({ children }: { children: JSX.Element }) => {
   const [currentUser] = useAuthState(auth);
-  const [docRef, setDocRef] = useState(docWithType<IUser>(EnumCollectionsName.USERS, `${currentUser?.uid}`));
+  const [docRef, setDocRef] = useState(docWithType<IUser>(CollectionsName.USERS, `${currentUser?.uid}`));
   const [dataUser] = useDocumentData<IUser>(docRef);
 
   useEffect(() => {
     if (currentUser?.uid) {
-      setDocRef(docWithType<IUser>(EnumCollectionsName.USERS, currentUser.uid));
+      setDocRef(docWithType<IUser>(CollectionsName.USERS, currentUser.uid));
     }
   }, [currentUser, dataUser]);
 

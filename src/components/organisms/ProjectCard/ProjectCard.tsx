@@ -5,9 +5,9 @@ import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { Link } from "react-router-dom";
 import { theme } from "theme/theme";
-import { EnumCollectionsName, EnumNameOfProjectArrays } from "utils/utils";
+import { ArrayName, CollectionsName } from "utils/utils";
 import FormProject from "../ProjectForm/ProjectForm";
-import { WrapperProjectCard, WrapperContentProjectCard } from "./ProjectCard.styles";
+import { WrapperContentProjectCard, WrapperProjectCard } from "./ProjectCard.styles";
 
 const { removeDoc, doc, arrayPush, removeArrayElement } = StoreService;
 
@@ -16,43 +16,47 @@ const ProjectCard = ({ id, name }: { id: string; name: string }) => {
   const { currentUser } = useUser();
   const projectRemove = async () => {
     try {
-      removeDoc(await doc(EnumCollectionsName.PROJECTS, id));
+      await removeDoc(await doc(CollectionsName.PROJECTS, id));
       if (currentUser) {
-        removeArrayElement(
-          EnumNameOfProjectArrays.PINNED_PROJECTS,
-          [{ name: name, ref: await doc(EnumCollectionsName.PROJECTS, id) }],
-          await doc(EnumCollectionsName.USERS, currentUser.uid)
+        await removeArrayElement(
+          ArrayName.PINNED_PROJECTS,
+          [{ name: name, ref: await doc(CollectionsName.PROJECTS, id) }],
+          await doc(CollectionsName.USERS, currentUser.uid)
         );
+      } else {
+        setToast("Musisz być zalogowany.");
       }
-    } catch (error) {
+    } catch (error: any) {
       setToast("Niestety nie możesz usunąć tego projektu.");
+    }
+  };
+
+  const pinProject = async () => {
+    try {
+      if (currentUser) {
+        await arrayPush(
+          ArrayName.PINNED_PROJECTS,
+          { name: name, ref: await doc(CollectionsName.PROJECTS, id) },
+          await doc(CollectionsName.USERS, currentUser.uid)
+        );
+      } else {
+        setToast("Musisz być zalogowany.");
+      }
+    } catch (error: any) {
+      setToast("Nie możesz przypiąć tego projektu.");
     }
   };
 
   return (
     <WrapperProjectCard>
       <KebabMenu color={theme.color.primary}>
-        <ConfirmModal textButton="Usuń" confirmAction={projectRemove} maxHeight="110px">
+        <ConfirmModal textButton="Usuń" maxHeight="110px" confirmAction={projectRemove}>
           <p>Czy na pewno chcesz usunąć projekt</p>
         </ConfirmModal>
         <ConfirmModal textButton="Edytuj" maxHeight="120px" invisibleYes invisibleNo>
           <FormProject id={id} />
         </ConfirmModal>
-        <ConfirmModal
-          textButton="Przypnij"
-          maxHeight="120px"
-          confirmAction={async () => {
-            console.log(currentUser);
-
-            if (currentUser) {
-              arrayPush(
-                EnumNameOfProjectArrays.PINNED_PROJECTS,
-                { name: name, ref: await doc(EnumCollectionsName.PROJECTS, id) },
-                await doc(EnumCollectionsName.USERS, currentUser.uid)
-              );
-            }
-          }}
-        >
+        <ConfirmModal textButton="Przypnij" maxHeight="110px" confirmAction={pinProject}>
           <p>Czy na pewno chcesz przypiąć ten projekt?</p>
         </ConfirmModal>
       </KebabMenu>

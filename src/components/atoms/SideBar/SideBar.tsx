@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const WrapperSideBar = styled.div<{ active?: boolean; right?: boolean; zindex?: string }>`
+const SideBar = styled.div<{ active?: boolean; right?: boolean; zIndex?: string }>`
   position: fixed;
   top: 0;
   right: ${({ right }) => right && 0};
@@ -16,6 +16,7 @@ const WrapperSideBar = styled.div<{ active?: boolean; right?: boolean; zindex?: 
   border-right: ${({ theme, right }) => !right && `solid 5px ${theme.color.primary}`};
   transform: translateX(${({ active, right }) => (active ? "0%" : right ? "100%" : "-100%")});
   transition: 300ms;
-  z-index: ${({ zindex }) => (zindex ? zindex : "9")};
+  z-index: ${({ zIndex }) => (zIndex ? zIndex : "9")};
 `;
-export default WrapperSideBar;
+
+export default SideBar;
