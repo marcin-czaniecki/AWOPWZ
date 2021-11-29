@@ -2,7 +2,11 @@ import styled, { css } from "styled-components";
 
 type TypeButton = "default" | "arrow" | "close" | "kebab" | "add";
 
-interface IButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+interface IButtonProps
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   typeButton?: TypeButton;
   arrowRight?: boolean;
   size?: string;
@@ -74,7 +78,7 @@ const Button = styled.button<IButtonProps>`
       height: 30px;
       width: 30px;
       margin-bottom: 10px;
-      border: solid 5px ${({ theme }) => theme.color.primary};
+      border: solid 2px ${({ theme }) => theme.color.background};
       background: ${({ theme }) => theme.color.primary};
       border-radius: 100%;
       ::after {
@@ -83,7 +87,7 @@ const Button = styled.button<IButtonProps>`
         top: 50%;
         left: 50%;
         height: 3px;
-        width: 110%;
+        width: 70%;
         background: ${({ theme }) => theme.color.background};
         transform: translate(-50%, -50%) rotate(45deg);
         transition: 300ms;
@@ -94,7 +98,7 @@ const Button = styled.button<IButtonProps>`
         top: 50%;
         left: 50%;
         height: 3px;
-        width: 110%;
+        width: 70%;
         background: ${({ theme }) => theme.color.background};
         transform: translate(-50%, -50%) rotate(-45deg);
         transition: 300ms;
@@ -121,7 +125,8 @@ const Button = styled.button<IButtonProps>`
         margin-left: auto;
         height: 6px;
         width: 6px;
-        background-color: ${({ theme }) => (colorKebab ? colorKebab : theme.color.background)};
+        background-color: ${({ theme }) =>
+          colorKebab ? colorKebab : theme.color.background};
         border-radius: 1000%;
       }
     `}

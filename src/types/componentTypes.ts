@@ -1,6 +1,11 @@
 import { DocumentReference } from "firebase/firestore";
 import { ReactChild } from "react";
-import { UseFormRegister, RegisterOptions, SubmitErrorHandler, SubmitHandler } from "react-hook-form";
+import {
+  UseFormRegister,
+  RegisterOptions,
+  SubmitErrorHandler,
+  SubmitHandler,
+} from "react-hook-form";
 import { IProject, ITask, IColumn, IMessage } from "./types";
 
 export interface IChild {
@@ -42,7 +47,8 @@ export interface IProjectSidebarProps {
   length: number;
 }
 
-export interface IFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IFieldInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   register: UseFormRegister<any>;
@@ -63,7 +69,13 @@ export interface IForm<T> {
   contentButton?: string;
   onSubmit: SubmitHandler<T>;
   onError?: SubmitErrorHandler<T>;
-  fields: { name: string; type: string; label: string; defaultValue?: any; [key: string]: any }[];
+  fields: {
+    name: string;
+    type: string;
+    label: string;
+    defaultValue?: any;
+    [key: string]: any;
+  }[];
 }
 
 export interface IInstructionProps {
@@ -83,4 +95,11 @@ export interface IProjectHeaderProps {
       ref: DocumentReference<IProject>;
     } | null
   ) => void;
+}
+
+export interface ISwitchButtonsProps {
+  isVisibleLeftButton?: boolean;
+  isVisibleRightButton?: boolean;
+  actionLeftButton: () => void;
+  actionRightButton: () => void;
 }
