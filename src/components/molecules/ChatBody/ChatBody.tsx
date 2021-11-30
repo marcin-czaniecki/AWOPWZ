@@ -1,12 +1,12 @@
 import Loading from "components/molecules/Loading/Loading";
 import Message from "components/organisms/Message/Message";
-import fb, { store } from "data/fb";
+import StoreService from "data/StoreService";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { IMessage } from "types/types";
 import { WrapperChatBody } from "./ChatBody.styles";
 
 const ChatBody = ({ path }: { path: string }) => {
-  const [value, loading, error] = useCollection(fb.collection(store, path));
+  const [value, loading, error] = useCollection(StoreService.sync.collection(path));
 
   if (loading) {
     return <Loading size="100px" />;

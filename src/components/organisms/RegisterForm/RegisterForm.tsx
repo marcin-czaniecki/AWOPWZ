@@ -1,7 +1,7 @@
 import { useToast } from "hooks/useToast";
 import { SubmitHandler } from "react-hook-form";
 import AuthService from "data/AuthService";
-import Form from "components/molecules/Form/Form";
+import Form from "components/organisms/Form/Form";
 import StoreService from "data/StoreService";
 import { CollectionsName } from "utils/utils";
 

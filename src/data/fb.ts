@@ -2,7 +2,6 @@ import * as fireBase from "firebase/app";
 import * as fireStore from "firebase/firestore";
 import * as fireAuth from "firebase/auth";
 
-const fb = { ...fireBase, ...fireStore, ...fireAuth };
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -13,8 +12,7 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-export const app = fb.initializeApp(firebaseConfig);
-export const auth = fb.getAuth(app);
-export const store = fb.getFirestore(app);
+export const app = fireBase.initializeApp(firebaseConfig);
+export const store = fireStore.getFirestore(app);
+export const auth = fireAuth.getAuth(app);
 
-export default fb;

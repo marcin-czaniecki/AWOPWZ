@@ -1,4 +1,4 @@
-import Form from "components/molecules/Form/Form";
+import Form from "components/organisms/Form/Form";
 import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";

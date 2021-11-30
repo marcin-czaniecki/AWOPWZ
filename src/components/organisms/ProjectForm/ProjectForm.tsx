@@ -1,5 +1,5 @@
-import Form from "components/molecules/Form/Form";
-import fb from "data/fb";
+import Form from "components/organisms/Form/Form";
+import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getDocumentReferenceProject, collectionReferenceProjects } from "utils/references";
@@ -17,10 +17,10 @@ const ProjectForm = ({ id }: { id?: string }) => {
   const onSubmit: SubmitHandler<Inputs> = async ({ name }) => {
     try {
       if (id) {
-        await fb.updateDoc(getDocumentReferenceProject(id), { name });
+        await StoreService.updateDoc( { name } ,getDocumentReferenceProject(id));
       } else {
         const data = { name, [enumName.COLUMNS]: [], [enumName.TASKS]: [] };
-        await fb.addDoc(collectionReferenceProjects, data);
+        await StoreService.createDoc(data, collectionReferenceProjects);
       }
       reset();
     } catch (error) {

@@ -4,7 +4,7 @@ import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { SubmitHandler } from "react-hook-form";
 import { CollectionsName } from "utils/utils";
-import Form from "../Form/Form";
+import Form from "../../organisms/Form/Form";
 
 const { collection, createDoc, setDoc, doc } = StoreService;
 

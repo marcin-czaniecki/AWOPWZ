@@ -1,12 +1,10 @@
-import Form from "components/molecules/Form/Form";
-import fb from "data/fb";
+import Form from "components/organisms/Form/Form";
 import StoreService from "data/StoreService";
-import { updateDoc } from "firebase/firestore";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
-import { SubmitHandler, SubmitErrorHandler } from "react-hook-form";
+import { SubmitErrorHandler, SubmitHandler } from "react-hook-form";
 import { ITask } from "types/types";
-import { createTask, ArrayName } from "utils/utils";
+import { ArrayName, createTask } from "utils/utils";
 
 type Inputs = {
   title: string;
@@ -22,9 +20,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
       if (task) {
         StoreService.updateArray(ArrayName.TASKS, [task], [{ ...task, title, color, backgroundColor }], doc);
       } else {
-        await updateDoc(doc, {
-          [ArrayName.TASKS]: fb.arrayUnion(createTask(title, color, backgroundColor)),
-        });
+        StoreService.arrayPush(ArrayName.TASKS,createTask(title, color, backgroundColor),doc)
       }
     } catch (error) {
       setToast("Nie udało się dodać zadania", "warning");
