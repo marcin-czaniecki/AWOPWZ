@@ -1,11 +1,27 @@
-import ButtonBack from "components/molecules/ButtonBack/ButtonBack";
-import ProjectBody from "components/organisms/ProjectBody/ProjectBody";
+import ProjectBoard from "components/organisms/ProjectBoard/ProjectBoard";
+import ProjectChat from "components/organisms/ProjectChat/ProjectChat";
+import { useProject } from "hooks/useProject";
+import styled from "styled-components";
+import { createPath, CollectionsName } from "utils/utils";
+
+const ProjectLabel = styled.div`
+  margin: 20px 0px 10px;
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  font-size: ${({ theme }) => theme.font.size.l};
+`;
 
 const Project = () => {
+  const { doc, project } = useProject();
+  const pathMessages = createPath(
+    CollectionsName.PROJECTS,
+    doc.id,
+    CollectionsName.MESSAGES
+  );
   return (
     <>
-      <ButtonBack path="/projects" />
-      <ProjectBody />
+      <ProjectLabel>Tablica: {project.name}</ProjectLabel>
+      <ProjectBoard />
+      <ProjectChat name={project.name} path={pathMessages} />
     </>
   );
 };

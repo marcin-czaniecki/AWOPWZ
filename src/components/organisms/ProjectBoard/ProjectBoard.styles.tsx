@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const WrapperColumns = styled.div`
+export const WrapperProjectBoardColumns = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 10px;

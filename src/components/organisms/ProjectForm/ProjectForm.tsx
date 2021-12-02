@@ -1,9 +1,7 @@
 import Form from "components/organisms/Form/Form";
-import StoreService from "data/StoreService";
+import { ProjectService } from "data/ProjectService";
 import { useToast } from "hooks/useToast";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { getDocumentReferenceProject, collectionReferenceProjects } from "utils/references";
-import { enumName } from "utils/utils";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
   name: string;
@@ -17,10 +15,9 @@ const ProjectForm = ({ id }: { id?: string }) => {
   const onSubmit: SubmitHandler<Inputs> = async ({ name }) => {
     try {
       if (id) {
-        await StoreService.updateDoc( { name } ,getDocumentReferenceProject(id));
+        ProjectService.updateProjectName(name,id)
       } else {
-        const data = { name, [enumName.COLUMNS]: [], [enumName.TASKS]: [] };
-        await StoreService.createDoc(data, collectionReferenceProjects);
+       ProjectService.initNewProject(name)
       }
       reset();
     } catch (error) {

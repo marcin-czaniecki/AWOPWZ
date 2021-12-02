@@ -4,7 +4,7 @@ import Button from "components/atoms/Button/Button";
 import AdditionBar from "components/molecules/AdditionBar/AdditionBar";
 import { IProjectSidebarProps } from "types/componentTypes";
 import ColumnForm from "components/organisms/ColumnForm/ColumnForm";
-import TaskForm from "components/organisms/TaskForm/TaskForm";
+import TaskForm from "components/organisms/ProjectBoardColumnTaskForm/ProjectBoardColumnTaskForm";
 
 const ButtonsProjectSidebar = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ const ButtonsProjectSidebar = styled.div`
   gap: 5px;
 `;
 
-const ProjectSidebar = ({ lastOrder, length }: IProjectSidebarProps) => {
+const ProjectBoardSidebar = ({ lastOrder, length }: IProjectSidebarProps) => {
   const [typeForm, setTypeForm] = useState(false);
   const setTaskForm = () => {
     setTypeForm(true);
@@ -36,4 +36,4 @@ const ProjectSidebar = ({ lastOrder, length }: IProjectSidebarProps) => {
   );
 };
 
-export default ProjectSidebar;
+export default ProjectBoardSidebar;

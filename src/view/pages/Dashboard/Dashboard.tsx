@@ -1,6 +1,6 @@
 import Instruction from "components/molecules/Instruction/Instruction";
 import Loading from "components/molecules/Loading/Loading";
-import ProjectBody from "components/organisms/ProjectBody/ProjectBody";
+import ProjectBoard from "components/organisms/ProjectBoard/ProjectBoard";
 import { ProjectHeaderForDashboard } from "components/organisms/ProjectHeaderForDashboard/ProjectHeaderForDashboard";
 import { DocumentReference } from "firebase/firestore";
 import { ProjectProvider } from "hooks/useProject";
@@ -12,11 +12,18 @@ import { instruction } from "utils/instructions";
 
 const Dashboard = () => {
   const { dataUser } = useUser();
-  const [pinnedProject, setPinnedProject] = useState<{ name: string; ref: DocumentReference<IProject> } | null>(null);
+  const [pinnedProject, setPinnedProject] = useState<{
+    name: string;
+    ref: DocumentReference<IProject>;
+  } | null>(null);
   const [project, loading, error] = useDocumentData(pinnedProject?.ref);
 
   useEffect(() => {
-    if (dataUser?.pinnedProjects && dataUser.pinnedProjects.length && pinnedProject === null) {
+    if (
+      dataUser?.pinnedProjects &&
+      dataUser.pinnedProjects.length &&
+      pinnedProject === null
+    ) {
       setPinnedProject(dataUser.pinnedProjects[0]);
     }
   }, [dataUser?.pinnedProjects, pinnedProject]);
@@ -40,8 +47,11 @@ const Dashboard = () => {
         {project && pinnedProject && pinnedProject.ref && (
           <ProjectProvider id={pinnedProject.ref.id}>
             <>
-              <ProjectHeaderForDashboard pinnedProject={pinnedProject} setPinnedProject={setPinnedProject} />
-              <ProjectBody />
+              <ProjectHeaderForDashboard
+                pinnedProject={pinnedProject}
+                setPinnedProject={setPinnedProject}
+              />
+              <ProjectBoard />
             </>
           </ProjectProvider>
         )}

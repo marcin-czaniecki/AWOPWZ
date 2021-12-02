@@ -1,5 +1,6 @@
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
+import { ProjectService } from "data/ProjectService";
 import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
@@ -9,20 +10,15 @@ import { ArrayName, CollectionsName } from "utils/utils";
 import FormProject from "../ProjectForm/ProjectForm";
 import { WrapperContentProjectCard, WrapperProjectCard } from "./ProjectCard.styles";
 
-const { removeDoc, doc, arrayPush, removeArrayElement } = StoreService;
+const {  doc, arrayPush } = StoreService;
 
 const ProjectCard = ({ id, name }: { id: string; name: string }) => {
   const { setToast } = useToast();
   const { currentUser } = useUser();
   const projectRemove = async () => {
     try {
-      await removeDoc(await doc(CollectionsName.PROJECTS, id));
       if (currentUser) {
-        await removeArrayElement(
-          ArrayName.PINNED_PROJECTS,
-          [{ name: name, ref: await doc(CollectionsName.PROJECTS, id) }],
-          await doc(CollectionsName.USERS, currentUser.uid)
-        );
+        ProjectService.removeProject(currentUser.uid,name,id);
       } else {
         setToast("Musisz być zalogowany.");
       }
@@ -35,7 +31,7 @@ const ProjectCard = ({ id, name }: { id: string; name: string }) => {
     try {
       if (currentUser) {
         await arrayPush(
-          ArrayName.PINNED_PROJECTS,
+          ArrayName.pinnedProjects,
           { name: name, ref: await doc(CollectionsName.PROJECTS, id) },
           await doc(CollectionsName.USERS, currentUser.uid)
         );

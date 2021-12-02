@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const WrapperProjectColumnTasks = styled.div`
+export const ProjectBoardColumnFooter = styled.div`
+  padding: 7px 10px;
+`;
+
+export const WrapperProjectBoardColumnTasks = styled.div`
   display: flex;
   flex-direction: column;
   height: min(calc(100vh - 150px), 600px);

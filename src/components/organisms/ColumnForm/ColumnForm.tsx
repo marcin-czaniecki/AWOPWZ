@@ -6,7 +6,7 @@ import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
 import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { IColumnFormProps } from "types/componentTypes";
-import { enumName, ArrayName, generateId, wipToNumber } from "utils/utils";
+import {  ArrayName, generateId, wipToNumber } from "utils/utils";
 
 type Inputs = {
   name: string;
@@ -29,7 +29,7 @@ const ColumnForm = ({ column, lastOrder, length }: IColumnFormProps) => {
       order: length > 0 ? lastOrder + 1 : 0,
       wip: wipToNumber(wip),
     };
-    StoreService.arrayPush(ArrayName.COLUMNS, data, doc);
+    StoreService.arrayPush(ArrayName.columns, data, doc);
   };
 
   const onSubmit: SubmitHandler<Inputs> = async ({ name, wip }) => {
@@ -53,7 +53,7 @@ const ColumnForm = ({ column, lastOrder, length }: IColumnFormProps) => {
       }
 
       if (unequalName || unequalWip) {
-        StoreService.updateArray(enumName.COLUMNS, [column], [{ ...column, ...data }], doc);
+        StoreService.updateArray(ArrayName.columns, [column], [{ ...column, ...data }], doc);
       }
     } else {
       addColumn({ name, wip });

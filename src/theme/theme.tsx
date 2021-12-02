@@ -27,6 +27,8 @@ declare module "styled-components" {
         m: string;
         l: string;
         xl: string;
+        xxl: string;
+        xxxl: string;
       };
       weight: {
         light: number;
@@ -66,9 +68,10 @@ export const theme = {
       xs: "12px",
       s: "14px",
       m: "16px",
-      l: "24px",
-      xl: "36px",
-      xxl: "44px",
+      l: "20px",
+      xl: "24px",
+      xxl: "36px",
+      xxxl: "48px",
     },
     weight: {
       light: 300,

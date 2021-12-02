@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { Incoming } from "utils/animations";
 
-export const WrapperProjectTask = styled.div<{ backgroundColor: string; color: string }>`
+export const WrapperProjectBoardColumnTask = styled.div<{
+  backgroundColor: string;
+  color: string;
+}>`
   position: relative;
   display: flex;
   min-height: 120px;
@@ -13,7 +16,7 @@ export const WrapperProjectTask = styled.div<{ backgroundColor: string; color: s
   animation: ${Incoming} 1s;
 `;
 
-export const ButtonsProjectTask = styled.div`
+export const ProjectBoardColumnTaskButtons = styled.div`
   position: absolute;
   left: 2.5%;
   bottom: 7px;

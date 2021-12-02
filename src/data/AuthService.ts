@@ -15,7 +15,7 @@ class AuthService {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       return user;
     } catch (e) {
-      throw new Error("Nie udało się zalogować. Sprawdź dokładnie wpisywane dane i spróbuj ponownie!");
+      throw new Error( "Nie udało się zalogować. Sprawdź dokładnie wpisywane dane i spróbuj ponownie!" );
     }
   }
   static async signOut() {
@@ -27,7 +27,7 @@ class AuthService {
   }
   static async createUser(email: string, password: string) {
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword( auth, email, password);
       return user;
     } catch (e) {
       throw new Error("Nie udało się utworzyć konta.");

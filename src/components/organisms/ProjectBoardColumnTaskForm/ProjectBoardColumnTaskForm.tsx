@@ -18,9 +18,9 @@ const TaskForm = ({ task }: { task?: ITask }) => {
   const onSubmit: SubmitHandler<Inputs> = async ({ title, color, backgroundColor }) => {
     try {
       if (task) {
-        StoreService.updateArray(ArrayName.TASKS, [task], [{ ...task, title, color, backgroundColor }], doc);
+        StoreService.updateArray(ArrayName.tasks, [task], [{ ...task, title, color, backgroundColor }], doc);
       } else {
-        StoreService.arrayPush(ArrayName.TASKS,createTask(title, color, backgroundColor),doc)
+        StoreService.arrayPush(ArrayName.tasks,createTask(title, color, backgroundColor),doc)
       }
     } catch (error) {
       setToast("Nie udało się dodać zadania", "warning");

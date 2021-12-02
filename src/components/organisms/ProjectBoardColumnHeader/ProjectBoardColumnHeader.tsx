@@ -6,18 +6,18 @@ import { useProject } from "hooks/useProject";
 import { theme } from "theme/theme";
 import { IColumn } from "types/types";
 import ColumnForm from "../ColumnForm/ColumnForm";
-import { WrapperProjectColumnHeader } from "./ProjectColumnHeader.styles";
+import { WrapperProjectColumnHeader } from "./ProjectBoardColumnHeader.styles";
 
-const ProjectColumnHeader = ({ column }: { column: IColumn }) => {
+const ProjectBoardColumnHeader = ({ column }: { column: IColumn }) => {
   const {
     doc,
     project: { columns, tasks },
   } = useProject();
   const { name, order } = column;
-  const pS = new ProjectService({ tasks, columns, doc });
+  const projectService = new ProjectService({ tasks, columns, doc });
 
   const { swapWithASmallerOrder, swapWithALargerOrder, columnRemove } =
-    pS.getColumnSupport(column);
+    projectService.getColumnSupport(column);
 
   const isUnequalWithFirstOrder = 0 !== order;
   const isUnequalWithLastOrder = columns[columns.length - 1].order !== order;
@@ -54,4 +54,4 @@ const ProjectColumnHeader = ({ column }: { column: IColumn }) => {
   );
 };
 
-export default ProjectColumnHeader;
+export default ProjectBoardColumnHeader;

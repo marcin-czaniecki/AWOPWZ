@@ -3,13 +3,6 @@ import { Timestamp } from "firebase/firestore";
 import { FieldErrors } from "react-hook-form";
 import { IColumn, ITask, TypeToast } from "types/types";
 
-export enum enumName {
-  COLUMNS = "columns",
-  TASKS = "tasks",
-  PROJECTS = "projects",
-  USERS = "users",
-  MESSAGE = "message",
-}
 
 export enum CollectionsName {
   USERS = "users",
@@ -18,9 +11,9 @@ export enum CollectionsName {
 }
 
 export enum ArrayName {
-  COLUMNS = "columns",
-  TASKS = "tasks",
-  PINNED_PROJECTS = "pinnedProjects",
+  columns = "columns",
+  tasks = "tasks",
+  pinnedProjects = "pinnedProjects",
 }
 
 export const generateId = () => Math.round(Math.random() * Math.pow(10, 10)).toString(16);

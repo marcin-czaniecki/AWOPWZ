@@ -25,7 +25,7 @@ export const ProjectHeaderForDashboard = ({ pinnedProject, setPinnedProject }: I
 
   const unpinProject = () => {
     if (dataUser && dataUser.pinnedProjects) {
-      removeArrayElement(ArrayName.PINNED_PROJECTS, [pinnedProject], doc(CollectionsName.USERS, dataUser.uid));
+      removeArrayElement(ArrayName.pinnedProjects, [pinnedProject], doc(CollectionsName.USERS, dataUser.uid));
       setPinnedProject(dataUser.pinnedProjects[0] || null);
     }
   };

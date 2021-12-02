@@ -4,6 +4,6 @@ export const WrapperFiledInput = styled.div`
   margin-bottom: 10px;
 `;
 
-export const StyledLabel = styled.label`
+export const FiledInputLabel = styled.label`
   font-size: ${({ theme }) => theme.font.size.s};
 `;

@@ -1,22 +1,33 @@
 import Button from "components/atoms/Button/Button";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
-import TaskForm from "components/organisms/TaskForm/TaskForm";
+import TaskForm from "components/organisms/ProjectBoardColumnTaskForm/ProjectBoardColumnTaskForm";
 import { ProjectService } from "data/ProjectService";
 import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { IProjectTaskProps } from "types/componentTypes";
 import { ArrayName } from "utils/utils";
-import { ButtonsProjectTask, WrapperProjectTask } from "./ProjectTask.styles";
+import {
+  ProjectBoardColumnTaskButtons,
+  WrapperProjectBoardColumnTask,
+} from "./ProjectBoardColumnTask.styles";
 
 const { removeArrayElement } = StoreService;
 
-const ProjectTask = ({ doc, task, columns, column }: IProjectTaskProps) => {
-  const projectService = new ProjectService({ columns, doc });
+const ProjectBoardColumnTask = ({
+  doc,
+  task,
+  columns,
+  column: { order },
+}: IProjectTaskProps) => {
   const { setToast } = useToast();
-  const taskRemove = async () => {
+  const projectService = new ProjectService({ columns, doc });
+  const { color, backgroundColor, title: content } = task;
+  const { length } = columns;
+
+  const removeTask = async () => {
     try {
-      await removeArrayElement(ArrayName.TASKS, [task], doc);
+      await removeArrayElement(ArrayName.tasks, [task], doc);
     } catch (error) {
       setToast("Nie udało się usunąć zadania :c");
     }
@@ -24,21 +35,19 @@ const ProjectTask = ({ doc, task, columns, column }: IProjectTaskProps) => {
 
   const moveLeft = () => projectService.moveTask(task, -1);
   const moveRight = () => projectService.moveTask(task, 1);
-  return (
-    <WrapperProjectTask
-      color={task.color}
-      backgroundColor={task.backgroundColor}
-    >
-      <div>{task.title}</div>
-      <ButtonsProjectTask>
-        {Number(column.order) !== 0 && (
-          <Button onClick={moveLeft}>Cofnij</Button>
-        )}
-        {Number(column.order) !== columns.length - 1 && (
-          <Button onClick={moveRight}>Ukończono</Button>
-        )}
+  const isFirstOrder = Number(order) === 0;
+  const isLastOrder = Number(order) === length - 1;
 
-        <KebabMenu color={task.color} top>
+  return (
+    <WrapperProjectBoardColumnTask
+      color={color}
+      backgroundColor={backgroundColor}
+    >
+      <div>{content}</div>
+      <ProjectBoardColumnTaskButtons>
+        {!isFirstOrder && <Button onClick={moveLeft}>Cofnij</Button>}
+        {!isLastOrder && <Button onClick={moveRight}>Ukończono</Button>}
+        <KebabMenu color={color} top>
           <ConfirmModal
             textButton="Edytuj"
             maxHeight="250px"
@@ -49,15 +58,15 @@ const ProjectTask = ({ doc, task, columns, column }: IProjectTaskProps) => {
           </ConfirmModal>
           <ConfirmModal
             textButton="Usuń"
-            confirmAction={taskRemove}
+            confirmAction={removeTask}
             maxHeight="110px"
           >
             <p>Czy na pewno chcesz usunąć zadanie?</p>
           </ConfirmModal>
         </KebabMenu>
-      </ButtonsProjectTask>
-    </WrapperProjectTask>
+      </ProjectBoardColumnTaskButtons>
+    </WrapperProjectBoardColumnTask>
   );
 };
 
-export default ProjectTask;
+export default ProjectBoardColumnTask;
