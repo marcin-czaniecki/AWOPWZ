@@ -20,12 +20,19 @@ export const WrapperProjectHeader = styled.div`
   margin-bottom: 10px;
 `;
 
-export const ProjectHeaderForDashboard = ({ pinnedProject, setPinnedProject }: IProjectHeaderProps) => {
+export const ProjectHeaderForDashboard = ({
+  pinnedProject,
+  setPinnedProject,
+}: IProjectHeaderProps) => {
   const { dataUser } = useUser();
 
   const unpinProject = () => {
     if (dataUser && dataUser.pinnedProjects) {
-      removeArrayElement(ArrayName.pinnedProjects, [pinnedProject], doc(CollectionsName.USERS, dataUser.uid));
+      removeArrayElement(
+        ArrayName.pinnedProjects,
+        [pinnedProject],
+        doc(CollectionsName.users, dataUser.uid)
+      );
       setPinnedProject(dataUser.pinnedProjects[0] || null);
     }
   };

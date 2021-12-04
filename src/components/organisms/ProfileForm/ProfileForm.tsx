@@ -20,7 +20,7 @@ const ProfileForm = ({ user }: { user: { [key: string]: string } }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       if (currentUser) {
-        await updateDoc(data, await doc(CollectionsName.USERS, currentUser?.uid));
+        await updateDoc(data, await doc(CollectionsName.users, currentUser?.uid));
       } else {
         setToast("Musisz być zalogowany!");
       }
@@ -33,9 +33,24 @@ const ProfileForm = ({ user }: { user: { [key: string]: string } }) => {
     <>
       <Form
         fields={[
-          { name: "firstName", type: "text", label: "Podaj swoje imię", defaultValue: user["firstName"] },
-          { name: "lastName", type: "text", label: "Podaj swoje Nazwisko", defaultValue: user["lastName"] },
-          { name: "profession", type: "text", label: "Podaj swój zawód/stanowisko", defaultValue: user["profession"] },
+          {
+            name: "firstName",
+            type: "text",
+            label: "Podaj swoje imię",
+            defaultValue: user["firstName"],
+          },
+          {
+            name: "lastName",
+            type: "text",
+            label: "Podaj swoje Nazwisko",
+            defaultValue: user["lastName"],
+          },
+          {
+            name: "profession",
+            type: "text",
+            label: "Podaj swój zawód/stanowisko",
+            defaultValue: user["profession"],
+          },
         ]}
         onSubmit={onSubmit}
       />

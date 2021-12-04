@@ -1,49 +1,121 @@
-import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
-import { useLocation } from "react-router";
+import AdditionBar from "components/molecules/AdditionBar/AdditionBar";
+import Card from "components/molecules/Card/Card";
+import Loading from "components/molecules/Loading/Loading";
+import Form from "components/organisms/Form/Form";
+import StoreService from "data/StoreService";
+import { useToast } from "hooks/useToast";
+import { useUser } from "hooks/useUser";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { SubmitHandler } from "react-hook-form";
+import styled from "styled-components";
+import { ITeam } from "types/types";
+import { collectionReferenceTeams } from "utils/references";
+import { ArrayName, CollectionsName } from "utils/utils";
 
-interface ICardHeaderProps {
-  children?: React.ReactChild;
-  KebabMenuChildren?: React.ReactChild[];
-}
+const WrapperListTeams = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: clamp(300px, 100%, 1300px);
+  margin: 0 auto;
+  justify-content: center;
+  gap: 20px;
+`;
 
-const CardHeader = ({ children, KebabMenuChildren }: ICardHeaderProps) => {
-  return (
-    <div>
-      <div>{children}</div>
-      {KebabMenuChildren && <KebabMenu>{KebabMenuChildren}</KebabMenu>}
-    </div>
-  );
+const Fields = [{ name: "name", type: "text", label: "Nazwa zespołu" }];
+
+type Inputs = {
+  name: string;
 };
 
-const CardBody = ({ children }: { children: React.ReactChild }) => {
-  return <div>{children}</div>;
-};
+const TeamsForm = ({ id }: { id?: string }) => {
+  const { dataUser } = useUser();
+  const { setToast } = useToast();
+  const onSubmit: SubmitHandler<Inputs> = async ({ name }) => {
+    if (!dataUser?.isAdmin) {
+      setToast("Musisz być administratorem.");
+    }
+    try {
+      if (id) {
+      } else {
+        if (!dataUser?.uid) {
+          setToast("Wyszła niezgodność z twoim kontem, musisz skontaktować się z administratorem!");
+          return;
+        }
+        const data = {
+          name,
+          uidLeader: dataUser?.uid,
+          projects: [],
+          members: [
+            {
+              ref: await StoreService.doc(CollectionsName.users, dataUser?.uid),
+            },
+          ],
+        };
 
-interface ICardProps {
-  header?: React.ReactChild;
-  children: React.ReactChild;
-  settings?: React.ReactChild[];
-}
+        const doc = await StoreService.createDoc(
+          data,
+          await StoreService.collection(CollectionsName.teams)
+        );
 
-const Card = ({ header, children }: ICardProps) => {
+        StoreService.arrayPush(
+          ArrayName.teams,
+          {
+            id: doc.id,
+            canServiceTasks: true,
+            canServiceColumns: true,
+            canServiceProjects: true,
+            canServiceMember: true,
+            isLeader: true,
+          },
+          await StoreService.doc(CollectionsName.users, dataUser?.uid)
+        );
+      }
+    } catch (error) {
+      setToast("Coś poszło nie tak :c");
+    }
+  };
+
   return (
-    <div>
-      <CardHeader>{header}</CardHeader>
-      <CardBody>{children}</CardBody>
-    </div>
-  );
-};
-
-const TeamCard = ({ children }: { children: React.ReactElement }) => {
-  return (
-    <div>
-      <Card>{children}</Card>
-    </div>
+    <>
+      <Form
+        fields={Fields}
+        onSubmit={onSubmit}
+        contentButton={id ? "Zmień nazwę zespołu" : "Dodaj zespół"}
+      />
+    </>
   );
 };
 
 const Teams = () => {
-  return <div>x</div>;
+  const { dataUser } = useUser();
+  const [value, loading, error] = useCollection(collectionReferenceTeams);
+  if (loading) {
+    return <Loading />;
+  }
+  if (error || !dataUser) {
+    return <div>error</div>;
+  }
+  return (
+    <>
+      {dataUser?.isAdmin && (
+        <AdditionBar right>
+          <TeamsForm />
+        </AdditionBar>
+      )}
+      <WrapperListTeams>
+        {value?.docs.map((doc) => {
+          const findTeam = dataUser.teams.find((userTeam) => userTeam.id === doc.id);
+          if (!findTeam && !dataUser.isAdmin) return null;
+          const team = doc.data() as ITeam;
+          return (
+            <Card key={doc.id} to={`/teams/${doc.id}`} kebabMenuChildren={<div></div>}>
+              {team.name}
+            </Card>
+          );
+        })}
+      </WrapperListTeams>
+    </>
+  );
 };
 
 export default Teams;

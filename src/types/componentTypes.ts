@@ -20,6 +20,11 @@ export interface IModalProps extends IChild {
   closeAction: () => void;
 }
 
+export interface IFormModalProps extends IChild {
+  textButton: string;
+  maxHeight?: string;
+  maxWidth?: string;
+}
 export interface IModalConfirmProps extends IChild {
   textButton: string;
   confirmAction?: () => void;
@@ -102,4 +107,11 @@ export interface ISwitchButtonsProps {
   isVisibleRightButton?: boolean;
   actionLeftButton: () => void;
   actionRightButton: () => void;
+}
+
+export interface ICardProps {
+  to: string;
+  color?: string;
+  children: ReactChild;
+  kebabMenuChildren: ReactChild | ReactChild[];
 }

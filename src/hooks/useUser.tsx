@@ -20,12 +20,14 @@ export const UserContext = createContext<IGlobalUser>({});
 
 export const UserProvider = ({ children }: { children: JSX.Element }) => {
   const [currentUser] = useAuthState(auth);
-  const [docRef, setDocRef] = useState(docWithType<IUser>(CollectionsName.USERS, `${currentUser?.uid}`));
+  const [docRef, setDocRef] = useState(
+    docWithType<IUser>(CollectionsName.users, `${currentUser?.uid}`)
+  );
   const [dataUser] = useDocumentData<IUser>(docRef);
 
   useEffect(() => {
     if (currentUser?.uid) {
-      setDocRef(docWithType<IUser>(CollectionsName.USERS, currentUser.uid));
+      setDocRef(docWithType<IUser>(CollectionsName.users, currentUser.uid));
     }
   }, [currentUser, dataUser]);
 

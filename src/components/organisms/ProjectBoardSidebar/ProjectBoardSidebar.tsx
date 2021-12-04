@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "components/atoms/Button/Button";
 import AdditionBar from "components/molecules/AdditionBar/AdditionBar";
 import { IProjectSidebarProps } from "types/componentTypes";
-import ColumnForm from "components/organisms/ColumnForm/ColumnForm";
+import ProjectBoardColumnForm from "components/organisms/ProjectBoardColumnForm/ProjectBoardColumnForm";
 import TaskForm from "components/organisms/ProjectBoardColumnTaskForm/ProjectBoardColumnTaskForm";
 
 const ButtonsProjectSidebar = styled.div`
@@ -29,7 +29,7 @@ const ProjectBoardSidebar = ({ lastOrder, length }: IProjectSidebarProps) => {
         </ButtonsProjectSidebar>
         <div>
           {typeForm && <TaskForm />}
-          {!typeForm && <ColumnForm lastOrder={lastOrder} length={length} />}
+          {!typeForm && <ProjectBoardColumnForm lastOrder={lastOrder} length={length} />}
         </div>
       </>
     </AdditionBar>

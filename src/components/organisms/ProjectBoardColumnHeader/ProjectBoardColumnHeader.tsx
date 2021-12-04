@@ -5,7 +5,7 @@ import { ProjectService } from "data/ProjectService";
 import { useProject } from "hooks/useProject";
 import { theme } from "theme/theme";
 import { IColumn } from "types/types";
-import ColumnForm from "../ColumnForm/ColumnForm";
+import ProjectBoardColumnForm from "../ProjectBoardColumnForm/ProjectBoardColumnForm";
 import { WrapperProjectColumnHeader } from "./ProjectBoardColumnHeader.styles";
 
 const ProjectBoardColumnHeader = ({ column }: { column: IColumn }) => {
@@ -31,22 +31,12 @@ const ProjectBoardColumnHeader = ({ column }: { column: IColumn }) => {
           actionLeftButton={swapWithASmallerOrder}
           actionRightButton={swapWithALargerOrder}
         />
-        <ConfirmModal
-          invisibleYes
-          invisibleNo
-          maxHeight="200px"
-          textButton="Edytuj"
-        >
-          <ColumnForm column={column} />
+        <ConfirmModal invisibleYes invisibleNo maxHeight="200px" textButton="Edytuj">
+          <ProjectBoardColumnForm column={column} />
         </ConfirmModal>
-        <ConfirmModal
-          confirmAction={columnRemove}
-          maxHeight="150px"
-          textButton="usuń"
-        >
+        <ConfirmModal confirmAction={columnRemove} maxHeight="150px" textButton="usuń">
           <p>
-            Czy na pewno chcesz usunąć kolumnę? Zadania zostaną przeniesione do
-            pierwszej kolumny!
+            Czy na pewno chcesz usunąć kolumnę? Zadania zostaną przeniesione do pierwszej kolumny!
           </p>
         </ConfirmModal>
       </KebabMenu>

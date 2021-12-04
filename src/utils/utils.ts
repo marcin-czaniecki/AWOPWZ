@@ -3,16 +3,18 @@ import { Timestamp } from "firebase/firestore";
 import { FieldErrors } from "react-hook-form";
 import { IColumn, ITask, TypeToast } from "types/types";
 
-
 export enum CollectionsName {
-  USERS = "users",
-  MESSAGES = "messages",
-  PROJECTS = "projects",
+  users = "users",
+  messages = "messages",
+  teams = "teams",
+  projects = "projects",
 }
 
 export enum ArrayName {
   columns = "columns",
   tasks = "tasks",
+  teams = "teams",
+  projects = "projects",
   pinnedProjects = "pinnedProjects",
 }
 
@@ -29,7 +31,8 @@ export const wipToNumber = (wip: number | string) => {
   return 0;
 };
 
-export const pathNameToArray = (pathname: string) => pathname.split("/").filter((item) => item.length);
+export const pathNameToArray = (pathname: string) =>
+  pathname.split("/").filter((item) => item.length);
 
 export const createTask = (title: string, color: string, backgroundColor: string) => ({
   id: generateId(),
@@ -42,7 +45,10 @@ export const createTask = (title: string, color: string, backgroundColor: string
   updatedAt: Timestamp.now(),
 });
 
-export const errorHandler = (fields: { [key: string]: string }[], setToast: (message: string, type?: TypeToast | undefined) => void) => {
+export const errorHandler = (
+  fields: { [key: string]: string }[],
+  setToast: (message: string, type?: TypeToast | undefined) => void
+) => {
   const onError = (errors: FieldErrors) => {
     let time = 0;
     fields.forEach((filed) => {

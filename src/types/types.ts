@@ -37,6 +37,7 @@ export interface IProject {
   name: string;
   columns: IColumn[];
   tasks: ITask[];
+  teamId: string;
 }
 
 export type TypeUpdateArray = <T extends unknown>(
@@ -52,6 +53,18 @@ export interface PropsProjectColumn {
   tasks: ITask[];
   columns: IColumn[];
 }
+export interface IPinnedProjects {
+  name: string;
+  ref: DocumentReference<IProject>;
+}
+export interface ITeamUser {
+  id: string;
+  canServiceTasks: boolean;
+  canServiceColumns: boolean;
+  canServiceProjects: boolean;
+  canServiceMember: boolean;
+  isLeader: boolean;
+}
 
 export interface IUser {
   uid: string;
@@ -60,7 +73,15 @@ export interface IUser {
   firstName: string;
   lastName: string;
   profession: string;
-  pinnedProjects?: { name: string; ref: DocumentReference<IProject> }[];
+  pinnedProjects?: IPinnedProjects[];
+  teams: ITeamUser[];
+}
+
+export interface ITeam {
+  uidLeader: string;
+  name: string;
+  members: DocumentReference<any>[];
+  projects: IPinnedProjects[];
 }
 
 export type TypeToast = "primary" | "secondary" | "default" | "success" | "warning" | "info";
@@ -69,9 +90,17 @@ export type TypeToast = "primary" | "secondary" | "default" | "success" | "warni
 
 export type TypeRemoveDoc = (id: string, collection: string) => Promise<void>;
 
-export type TypeArrayPush = <T extends unknown>(doc: DocumentReference<any>, FieldValue: string, value: T) => Promise<void>;
+export type TypeArrayPush = <T extends unknown>(
+  doc: DocumentReference<any>,
+  FieldValue: string,
+  value: T
+) => Promise<void>;
 
-export type TypeUpdateTasksFromTheColumn = (tasks: ITask[], column: IColumn, order?: number) => Promise<ITask[]>;
+export type TypeUpdateTasksFromTheColumn = (
+  tasks: ITask[],
+  column: IColumn,
+  order?: number
+) => Promise<ITask[]>;
 
 export type TypeUpdateOrderTask = (task: ITask, columns: IColumn[]) => number;
 
@@ -82,11 +111,25 @@ export type TypeMoveTask = (
   updateOrder: TypeUpdateOrderTask
 ) => Promise<void>;
 
-export type TypeTasksChangeOrderZero = (doc: DocumentReference<IProject>, column: IColumn, tasks: ITask[]) => void;
+export type TypeTasksChangeOrderZero = (
+  doc: DocumentReference<IProject>,
+  column: IColumn,
+  tasks: ITask[]
+) => void;
 
-export type TypeColumnMove = (doc: DocumentReference<IProject>, column: IColumn, tasks: ITask[], delta: number) => Promise<IColumn>;
+export type TypeColumnMove = (
+  doc: DocumentReference<IProject>,
+  column: IColumn,
+  tasks: ITask[],
+  delta: number
+) => Promise<IColumn>;
 
-export type TypeColumnRemove = (doc: DocumentReference<IProject>, column: IColumn, columns: IColumn[], tasks: ITask[]) => Promise<void>;
+export type TypeColumnRemove = (
+  doc: DocumentReference<IProject>,
+  column: IColumn,
+  columns: IColumn[],
+  tasks: ITask[]
+) => Promise<void>;
 
 export type TypeColumnSwap = (
   doc: DocumentReference<IProject>,

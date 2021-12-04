@@ -19,7 +19,7 @@ const WrapperUser = styled.div`
   gap: 20px;
 `;
 const handleVerifiedByAdmin = async (uid: string) => {
-  const docRef = doc(store, CollectionsName.USERS, uid);
+  const docRef = doc(store, CollectionsName.users, uid);
   try {
     await updateDoc(docRef, {
       verifiedByAdmin: true,

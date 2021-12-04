@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
 import Project from "./pages/Project/Project";
 import Projects from "./pages/Projects/Projects";
+import Team from "./pages/Team/Team";
+import Teams from "./pages/Teams/Teams";
 import Users from "./pages/Users/Users";
 
 export const views: IView[] = [
@@ -45,6 +47,26 @@ export const views: IView[] = [
     element: (
       <RequireAuth>
         <Projects />
+      </RequireAuth>
+    ),
+  },
+  {
+    to: "/teams",
+    text: "Zespoły",
+    path: "/teams",
+    element: (
+      <RequireAuth>
+        <Teams />
+      </RequireAuth>
+    ),
+  },
+  {
+    to: null,
+    text: null,
+    path: "/teams/:id",
+    element: (
+      <RequireAuth>
+        <Team />
       </RequireAuth>
     ),
   },

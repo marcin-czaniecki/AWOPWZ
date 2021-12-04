@@ -6,9 +6,15 @@ import { views } from "view/views";
 const Anteroom = () => {
   const location = useLocation();
   const { currentUser, dataUser } = useUser();
+  const isPermission = dataUser?.verifiedByAdmin === true && currentUser;
 
-  if (dataUser?.verifiedByAdmin === true && currentUser) {
-    return <Navigate to={localStorage.getItem("lastPath") || views[0].path} state={{ from: location }} />;
+  if (isPermission) {
+    return (
+      <Navigate
+        to={localStorage.getItem("lastPath") || views[0].path}
+        state={{ from: location }}
+      />
+    );
   }
 
   if (!currentUser) {

@@ -7,6 +7,7 @@ import StoreService from "data/StoreService";
 import { useToast } from "hooks/useToast";
 import { IProjectTaskProps } from "types/componentTypes";
 import { ArrayName } from "utils/utils";
+import FormModal from "../FormModal/FormModal";
 import {
   ProjectBoardColumnTaskButtons,
   WrapperProjectBoardColumnTask,
@@ -14,12 +15,7 @@ import {
 
 const { removeArrayElement } = StoreService;
 
-const ProjectBoardColumnTask = ({
-  doc,
-  task,
-  columns,
-  column: { order },
-}: IProjectTaskProps) => {
+const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProjectTaskProps) => {
   const { setToast } = useToast();
   const projectService = new ProjectService({ columns, doc });
   const { color, backgroundColor, title: content } = task;
@@ -39,28 +35,16 @@ const ProjectBoardColumnTask = ({
   const isLastOrder = Number(order) === length - 1;
 
   return (
-    <WrapperProjectBoardColumnTask
-      color={color}
-      backgroundColor={backgroundColor}
-    >
+    <WrapperProjectBoardColumnTask color={color} backgroundColor={backgroundColor}>
       <div>{content}</div>
       <ProjectBoardColumnTaskButtons>
         {!isFirstOrder && <Button onClick={moveLeft}>Cofnij</Button>}
         {!isLastOrder && <Button onClick={moveRight}>Ukończono</Button>}
         <KebabMenu color={color} top>
-          <ConfirmModal
-            textButton="Edytuj"
-            maxHeight="250px"
-            invisibleNo
-            invisibleYes
-          >
+          <FormModal textButton="Edytuj" maxHeight="250px">
             <TaskForm task={task} />
-          </ConfirmModal>
-          <ConfirmModal
-            textButton="Usuń"
-            confirmAction={removeTask}
-            maxHeight="110px"
-          >
+          </FormModal>
+          <ConfirmModal textButton="Usuń" confirmAction={removeTask} maxHeight="110px">
             <p>Czy na pewno chcesz usunąć zadanie?</p>
           </ConfirmModal>
         </KebabMenu>

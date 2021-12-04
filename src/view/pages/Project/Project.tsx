@@ -12,11 +12,7 @@ const ProjectLabel = styled.div`
 
 const Project = () => {
   const { doc, project } = useProject();
-  const pathMessages = createPath(
-    CollectionsName.PROJECTS,
-    doc.id,
-    CollectionsName.MESSAGES
-  );
+  const pathMessages = createPath(CollectionsName.projects, doc.id, CollectionsName.messages);
   return (
     <>
       <ProjectLabel>Tablica: {project.name}</ProjectLabel>

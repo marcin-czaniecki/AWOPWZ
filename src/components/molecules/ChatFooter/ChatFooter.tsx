@@ -31,7 +31,10 @@ const FooterChat = ({ path }: { path: string }) => {
         updatedAt: now,
       };
       const docRef = await createDoc(messageBody, await collection(path));
-      await setDoc({ uid: uid, messageRef: docRef }, await doc(CollectionsName.MESSAGES, `ref${docRef.id}`));
+      await setDoc(
+        { uid: uid, messageRef: docRef },
+        await doc(CollectionsName.messages, `ref${docRef.id}`)
+      );
     } catch (e) {
       setToast("You can't send message :/");
     }
@@ -39,7 +42,11 @@ const FooterChat = ({ path }: { path: string }) => {
 
   return (
     <div>
-      <Form contentButton="Wyślij" fields={[{ name: "message", type: "text", label: "", autoComplete: "off" }]} onSubmit={onSubmit} />
+      <Form
+        contentButton="Wyślij"
+        fields={[{ name: "message", type: "text", label: "", autoComplete: "off" }]}
+        onSubmit={onSubmit}
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { IProject } from "types/types";
 import { collectionReferenceProjects } from "utils/references";
+import { useUser } from "hooks/useUser";
 
 const WrapperProjects = styled.div`
   display: flex;
@@ -17,11 +18,12 @@ const WrapperProjects = styled.div`
 `;
 
 const Projects = () => {
+  const { dataUser } = useUser();
   const [value, loading, error] = useCollection(collectionReferenceProjects);
   if (loading) {
     return <Loading />;
   }
-  if (error) {
+  if (error || !dataUser) {
     return <div>error</div>;
   }
   return (
@@ -32,6 +34,8 @@ const Projects = () => {
       <WrapperProjects>
         {value?.docs.map((doc) => {
           const data = doc.data() as IProject;
+          const permissions = dataUser.teams.find((team) => team.id === data.teamId);
+          if (!permissions) return null;
           return <ProjectCard key={doc.id + Projects.name} id={doc.id} {...data} />;
         })}
       </WrapperProjects>
