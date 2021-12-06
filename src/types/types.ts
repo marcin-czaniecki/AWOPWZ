@@ -57,7 +57,7 @@ export interface IPinnedProjects {
   name: string;
   ref: DocumentReference<IProject>;
 }
-export interface ITeamUser {
+export interface IPermissions {
   id: string;
   canServiceTasks: boolean;
   canServiceColumns: boolean;
@@ -74,11 +74,11 @@ export interface IUser {
   lastName: string;
   profession: string;
   pinnedProjects?: IPinnedProjects[];
-  teams: ITeamUser[];
+  teams: IPermissions[];
 }
 
 export interface ITeam {
-  uidLeader: string;
+  author: string;
   name: string;
   members: DocumentReference<any>[];
   projects: IPinnedProjects[];

@@ -6,7 +6,7 @@ import {
   query,
   getDocs,
 } from "@firebase/firestore";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 const useDocumentsWithCustomQuery = <T extends unknown>(
   queryCollectionReference: Query<T>,

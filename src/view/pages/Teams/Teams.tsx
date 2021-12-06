@@ -43,7 +43,7 @@ const TeamsForm = ({ id }: { id?: string }) => {
         }
         const data = {
           name,
-          uidLeader: dataUser?.uid,
+          author: dataUser?.uid,
           projects: [],
           members: [
             {

@@ -5,7 +5,7 @@ import Form from "components/organisms/Form/Form";
 import StoreService from "data/StoreService";
 import { ArrayName, CollectionsName } from "utils/utils";
 
-const { createDoc, collection } = StoreService;
+const { setDoc, doc } = StoreService;
 
 type Inputs = {
   email: string;
@@ -45,7 +45,7 @@ const RegisterForm = () => {
     }
     try {
       const { uid } = await AuthService.createUser(data.email, data.password);
-      createDoc(
+      setDoc(
         {
           uid: uid,
           verifiedByAdmin: false,
@@ -56,7 +56,7 @@ const RegisterForm = () => {
           [ArrayName.teams]: [],
           [ArrayName.pinnedProjects]: [],
         },
-        await collection(CollectionsName.users, uid)
+        await doc(CollectionsName.users, uid)
       );
       setToast(`Założyłeś nowe konto :D`);
     } catch (e: any) {

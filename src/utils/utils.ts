@@ -12,6 +12,7 @@ export enum CollectionsName {
 
 export enum ArrayName {
   columns = "columns",
+  members = "members",
   tasks = "tasks",
   teams = "teams",
   projects = "projects",

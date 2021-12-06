@@ -2,14 +2,16 @@ import { DocumentReference, FirestoreError } from "firebase/firestore";
 import { createContext, useContext } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router-dom";
-import { IProject } from "types/types";
+import { IProject, IPermissions } from "types/types";
 import { getDocumentReferenceProject } from "utils/references";
+import { useUser } from "./useUser";
 
 interface IProjectContext {
   doc: DocumentReference<IProject>;
   project: IProject;
   loading: boolean;
   error: FirestoreError | undefined;
+  permissions?: IPermissions;
 }
 
 export const ProjectContext = createContext<IProjectContext>({
@@ -20,11 +22,18 @@ export const ProjectContext = createContext<IProjectContext>({
 
 export const ProjectProvider = ({ children, id }: { children: JSX.Element; id?: string }) => {
   const params = useParams();
-  const doc = getDocumentReferenceProject(id || params?.id || "unknown") as DocumentReference<IProject>;
+  const projectId = id || params?.id || "unknown";
+  const doc = getDocumentReferenceProject(projectId) as DocumentReference<IProject>;
   const [project, loading, error] = useDocumentData<IProject>(doc);
+  const { dataUser } = useUser();
+  const permissions = dataUser?.teams.find((team) => team.id === project?.teamId);
 
   return (
-    <ProjectContext.Provider value={{ doc, project: (project || {}) as IProject, loading, error }}>{children}</ProjectContext.Provider>
+    <ProjectContext.Provider
+      value={{ doc, project: (project || {}) as IProject, loading, error, permissions }}
+    >
+      {children}
+    </ProjectContext.Provider>
   );
 };
 

@@ -35,7 +35,8 @@ const Projects = () => {
         {value?.docs.map((doc) => {
           const data = doc.data() as IProject;
           const permissions = dataUser.teams.find((team) => team.id === data.teamId);
-          if (!permissions) return null;
+          const isPermission = !permissions && !dataUser.isAdmin;
+          if (isPermission) return null;
           return <ProjectCard key={doc.id + Projects.name} id={doc.id} {...data} />;
         })}
       </WrapperProjects>

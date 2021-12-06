@@ -6,69 +6,30 @@ import StoreService from "data/StoreService";
 import useDocumentsWithCustomQuery from "hooks/useDocumentsWithCustomQuery";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
+import { ReactChild, useEffect, useState } from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router-dom";
-import { IProject, ITeam, ITeamUser, IUser, TypeToast } from "types/types";
+import styled from "styled-components";
+import { IProject, ITeam, IPermissions, IUser } from "types/types";
 import { collectionReferenceProjects, collectionReferenceUsers } from "utils/references";
 import { ArrayName, CollectionsName } from "utils/utils";
 
-const FieldUser = ({
-  onlyAdmin,
-  children,
-  updatedUserUid,
-  fieldValue,
-  value,
-  permissions,
-}: {
-  onlyAdmin?: boolean;
-  children: string;
-  updatedUserUid: string;
-  fieldValue: string;
-  value?: boolean;
-  permissions: ITeamUser;
-}) => {
-  const { dataUser } = useUser();
-  const { setToast } = useToast();
-  return (
-    <div
-      style={{
-        backgroundColor: "red",
-        display: "grid",
-        width: "300px",
-        gridTemplateColumns: "1fr 0.1fr",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div>{children}</div>
-      <div>
-        <Input
-          checked={value}
-          type="checkbox"
-          onChange={async () => {
-            const isPermission = onlyAdmin
-              ? !dataUser?.isAdmin
-              : !(!dataUser?.isAdmin || !permissions.isLeader);
+interface IPermissionName {
+  isLeader: "isLeader";
+  canServiceMember: "canServiceMember";
+  canServiceProjects: "canServiceProjects";
+  canServiceColumns: "canServiceColumns";
+  canServiceTasks: "canServiceTasks";
+}
 
-            if (isPermission) {
-              setToast("Nie posiadasz odpowiednich uprawnień.", "info");
-              return;
-            } else {
-              await StoreService.updateArray(
-                ArrayName.teams,
-                [permissions],
-                [{ ...permissions, [fieldValue]: typeof value === "boolean" ? !value : true }],
-                await StoreService.doc(CollectionsName.users, updatedUserUid)
-              );
-            }
-          }}
-        />
-      </div>
-    </div>
-  );
-};
-
-const TeamUsers = () => {};
+const createPermission = (id: string) => ({
+  id,
+  isLeader: false,
+  canServiceMember: false,
+  canServiceProjects: false,
+  canServiceColumns: false,
+  canServiceTasks: true,
+});
 
 enum PermissionsName {
   isLeader = "isLeader",
@@ -78,10 +39,165 @@ enum PermissionsName {
   canServiceTasks = "canServiceTasks",
 }
 
+const arrayFieldUser: {
+  content: string;
+  key:
+    | "isLeader"
+    | "canServiceMember"
+    | "canServiceProjects"
+    | "canServiceColumns"
+    | "canServiceTasks";
+}[] = [
+  { content: "Lider zespołu:", key: "isLeader" },
+  { content: "Może zarządzać użytkownikami?:", key: "canServiceMember" },
+  { content: "Może zarządzać projektami?:", key: "canServiceProjects" },
+  { content: "Może zarządzać kolumnami projektu?:", key: "canServiceColumns" },
+  { content: "Może zarządać zadaniami projektu?:", key: "canServiceTasks" },
+];
+
+interface IFieldUserProps {
+  isPermission?: boolean;
+  children: string;
+  updatedUserUid: string;
+  fieldValue: string;
+  value?: boolean;
+  permissions: IPermissions;
+}
+
+const WrapperFieldUser = styled.div`
+  display: grid;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 280px;
+  grid-template-columns: 1fr 0.1fr;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FieldUser = ({
+  isPermission,
+  children,
+  updatedUserUid,
+  fieldValue,
+  value,
+  permissions,
+}: IFieldUserProps) => {
+  const { dataUser } = useUser();
+  const { setToast } = useToast();
+  return (
+    <WrapperFieldUser>
+      <div>{children}</div>
+      <div>
+        <Input
+          checked={value}
+          type="checkbox"
+          onChange={async () => {
+            if (isPermission || dataUser?.isAdmin) {
+              await StoreService.updateArray(
+                ArrayName.teams,
+                [permissions],
+                [{ ...permissions, [fieldValue]: typeof value === "boolean" ? !value : true }],
+                await StoreService.doc(CollectionsName.users, updatedUserUid)
+              );
+            } else {
+              setToast("Nie posiadasz odpowiednich uprawnień.", "info");
+            }
+          }}
+        />
+      </div>
+    </WrapperFieldUser>
+  );
+};
+
+const RequirePermissions = ({
+  booleanPermissions,
+  children,
+}: {
+  booleanPermissions: boolean[];
+  children: ReactChild;
+}) => {
+  const [isPermission, setIsPermission] = useState(false);
+  useEffect(() => {
+    booleanPermissions.forEach((value) => {
+      if (value === true) {
+        setIsPermission(value);
+      }
+    });
+  }, [booleanPermissions]);
+  return <>{isPermission && <>{children}</>}</>;
+};
+
+const TeamUsers = ({
+  user,
+  permissions,
+  currentUserPermissions,
+}: {
+  user: IUser;
+  permissions: IPermissions;
+  currentUserPermissions?: IPermissions;
+}) => {
+  const { dataUser } = useUser();
+  const { setToast } = useToast();
+  const params = useParams();
+  const id = params?.id;
+  if (!id) {
+    return <Loading />;
+  }
+  return (
+    <div>
+      <div>{user.firstName}</div>
+      <div>{user.lastName}</div>
+      <div>{user.profession}</div>
+      <div>
+        <div>Permissions</div>
+        {arrayFieldUser.map(({ key, content }) => (
+          <FieldUser
+            permissions={permissions}
+            updatedUserUid={user.uid}
+            fieldValue={key}
+            value={permissions[key]}
+          >
+            {content}
+          </FieldUser>
+        ))}
+      </div>
+      {user.uid !== dataUser?.uid && (
+        <RequirePermissions
+          booleanPermissions={[
+            currentUserPermissions?.isLeader || false,
+            currentUserPermissions?.canServiceMember || false,
+            dataUser?.isAdmin || false,
+          ]}
+        >
+          <button
+            onClick={() => {
+              if (permissions.isLeader) {
+                if (!dataUser?.isAdmin) {
+                  setToast("Nie masz uprawnień");
+                  return;
+                }
+              }
+
+              const refUser = StoreService.sync.doc(CollectionsName.users, user.uid);
+              const refTeam = StoreService.sync.doc(CollectionsName.teams, id);
+              StoreService.removeArrayElement(ArrayName.teams, [permissions], refUser);
+              StoreService.removeArrayElement(ArrayName.members, [refUser], refTeam);
+              setToast("Usunałeś członka zespołu");
+            }}
+          >
+            Usuń z zespołu
+          </button>
+        </RequirePermissions>
+      )}
+      <span>======</span>
+    </div>
+  );
+};
+
 const Team = () => {
   const { dataUser } = useUser();
   const { setToast } = useToast();
   const params = useParams();
+  const id = params?.id;
 
   const [projects, loadingProject, errorProject] = useDocumentsWithCustomQuery(
     collectionReferenceProjects as CollectionReference<IProject>,
@@ -96,7 +212,7 @@ const Team = () => {
   ) as DocumentReference<ITeam>;
   const [team, loadingTeam, errorTeam] = useDocumentData<ITeam>(doc);
 
-  if (loadingUsers || loadingTeam || loadingProject) {
+  if (loadingProject || loadingTeam || loadingUsers || !id) {
     return <Loading />;
   }
 
@@ -111,59 +227,54 @@ const Team = () => {
       <div>
         {users?.map((user) => {
           const permissions = user.teams.find((team) => team.id === params?.id);
-          const yourPermissions = dataUser?.teams.find((team) => team.id === params?.id);
-          if (!permissions || (!yourPermissions && !dataUser?.isAdmin)) return null;
+          const currentUserPermissions = dataUser?.teams.find((team) => team.id === params?.id);
+          if (!permissions || (!currentUserPermissions && !dataUser?.isAdmin)) return null;
 
           return (
-            <div key={user.uid}>
-              <div>{user.firstName}</div>
-              <div>{user.lastName}</div>
-              <div>{user.profession}</div>
+            <TeamUsers
+              key={user.uid}
+              currentUserPermissions={currentUserPermissions}
+              permissions={permissions}
+              user={user}
+            />
+          );
+        })}
+      </div>
+      <div>
+        {users?.map((user) => {
+          const permissions = user.teams.find((team) => team.id === params?.id);
+          const currentUserPermissions = dataUser?.teams.find((team) => team.id === params?.id);
+          if (permissions || (!currentUserPermissions && !dataUser?.isAdmin)) return null;
+
+          return (
+            <div style={{ display: "flex" }}>
               <div>
-                <div>Permissions</div>
-                <FieldUser
-                  onlyAdmin
-                  permissions={permissions}
-                  updatedUserUid={user.uid}
-                  fieldValue={PermissionsName.isLeader}
-                  value={permissions[PermissionsName.isLeader]}
-                >
-                  Lider zespołu:
-                </FieldUser>
-                <FieldUser
-                  permissions={permissions}
-                  updatedUserUid={user.uid}
-                  fieldValue={PermissionsName.canServiceMember}
-                  value={permissions[PermissionsName.canServiceMember]}
-                >
-                  Może zarządzać użytkownikami?:
-                </FieldUser>
-                <FieldUser
-                  permissions={permissions}
-                  updatedUserUid={user.uid}
-                  fieldValue={PermissionsName.canServiceProjects}
-                  value={permissions[PermissionsName.canServiceProjects]}
-                >
-                  Może zarządzać projektami?:
-                </FieldUser>
-                <FieldUser
-                  permissions={permissions}
-                  updatedUserUid={user.uid}
-                  fieldValue={PermissionsName.canServiceColumns}
-                  value={permissions[PermissionsName.canServiceColumns]}
-                >
-                  Może zarządzać kolumnami projektu?:
-                </FieldUser>
-                <FieldUser
-                  permissions={permissions}
-                  updatedUserUid={user.uid}
-                  fieldValue={PermissionsName.canServiceTasks}
-                  value={permissions[PermissionsName.canServiceTasks]}
-                >
-                  Może zarządać zadaniami projektu?:
-                </FieldUser>
+                {user.firstName} {user.lastName}
               </div>
-              <span>======</span>
+              <div>
+                <RequirePermissions
+                  booleanPermissions={[
+                    currentUserPermissions?.isLeader || false,
+                    currentUserPermissions?.canServiceMember || false,
+                    dataUser?.isAdmin || false,
+                  ]}
+                >
+                  <button
+                    onClick={() => {
+                      const refUser = StoreService.sync.doc(CollectionsName.users, user.uid);
+                      StoreService.arrayPush(ArrayName.teams, createPermission(id), refUser);
+                      StoreService.arrayPush(
+                        ArrayName.members,
+                        refUser,
+                        StoreService.sync.doc(CollectionsName.teams, id)
+                      );
+                    }}
+                  >
+                    Dodaj do zespołu
+                  </button>
+                </RequirePermissions>
+              </div>
+              <div></div>
             </div>
           );
         })}
