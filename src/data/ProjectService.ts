@@ -24,16 +24,20 @@ export class ProjectService {
       throw new Error("You need give project doc for constructor class");
     }
   }
-  static initNewProject(projectName: string) {
-    const data = {
+  static initNewProject(projectName: string, teamId: string = "unknown") {
+    const data: IProject = {
+      teamId: teamId,
       name: projectName,
       [ArrayName.columns]: [],
       [ArrayName.tasks]: [],
     };
     StoreService.createDoc(data, collectionReferenceProjects);
   }
-  static updateProjectName(newProjectName: string, idProject: string) {
-    StoreService.updateDoc({ name: newProjectName }, getDocumentReferenceProject(idProject));
+  static updateProjectName(newProjectName: string, idProject: string, teamId: string) {
+    StoreService.updateDoc(
+      { name: newProjectName, teamId: teamId },
+      getDocumentReferenceProject(idProject)
+    );
   }
   static removeProject(currentUserUid: string, projectName: string, idProject: string) {
     StoreService.removeDoc(StoreService.sync.doc(CollectionsName.projects, idProject));

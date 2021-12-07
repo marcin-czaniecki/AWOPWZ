@@ -1,3 +1,4 @@
+import { printDate } from "@janossik/date";
 import Button from "components/atoms/Button/Button";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
@@ -36,12 +37,16 @@ const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProj
 
   return (
     <WrapperProjectBoardColumnTask color={color} backgroundColor={backgroundColor}>
-      <div>{content}</div>
+      <div>
+        <div>{content}</div>
+        <div>{task.responsibleUid}</div>
+        <div>{printDate("ddmmyyyy", "pl", task.timeLimit?.toDate())}</div>
+      </div>
       <ProjectBoardColumnTaskButtons>
         {!isFirstOrder && <Button onClick={moveLeft}>Cofnij</Button>}
         {!isLastOrder && <Button onClick={moveRight}>Ukończono</Button>}
         <KebabMenu color={color} top>
-          <FormModal textButton="Edytuj" maxHeight="250px">
+          <FormModal textButton="Edytuj" maxHeight="330px">
             <TaskForm task={task} />
           </FormModal>
           <ConfirmModal textButton="Usuń" confirmAction={removeTask} maxHeight="110px">

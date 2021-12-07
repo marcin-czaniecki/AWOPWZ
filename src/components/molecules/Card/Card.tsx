@@ -7,9 +7,7 @@ import { WrapperCard, WrapperCardContent } from "./Card.styles";
 const Card = ({ to, children, kebabMenuChildren, color }: ICardProps) => {
   return (
     <WrapperCard>
-      <KebabMenu color={color || theme.color.primary}>
-        {kebabMenuChildren}
-      </KebabMenu>
+      <KebabMenu color={color || theme.color.primary}>{kebabMenuChildren}</KebabMenu>
       <Link to={to} style={{ textDecoration: "none" }}>
         <WrapperCardContent>{children}</WrapperCardContent>
       </Link>

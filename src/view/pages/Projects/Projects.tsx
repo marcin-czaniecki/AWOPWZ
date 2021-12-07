@@ -7,6 +7,10 @@ import styled from "styled-components";
 import { IProject } from "types/types";
 import { collectionReferenceProjects } from "utils/references";
 import { useUser } from "hooks/useUser";
+import {
+  CurrentUserPermissionsProvider,
+  useCurrentUserPermissions,
+} from "hooks/useCurrentUserPermissions";
 
 const WrapperProjects = styled.div`
   display: flex;
@@ -20,12 +24,17 @@ const WrapperProjects = styled.div`
 const Projects = () => {
   const { dataUser } = useUser();
   const [value, loading, error] = useCollection(collectionReferenceProjects);
+
   if (loading) {
     return <Loading />;
   }
   if (error || !dataUser) {
     return <div>error</div>;
   }
+  /*   const isPermission =
+    dataUser?.isAdmin ||
+    currentUserPermissions?.isLeader ||
+    currentUserPermissions?.canServiceProjects; */
   return (
     <>
       <AdditionBar right>
@@ -36,8 +45,13 @@ const Projects = () => {
           const data = doc.data() as IProject;
           const permissions = dataUser.teams.find((team) => team.id === data.teamId);
           const isPermission = !permissions && !dataUser.isAdmin;
+
           if (isPermission) return null;
-          return <ProjectCard key={doc.id + Projects.name} id={doc.id} {...data} />;
+          return (
+            <CurrentUserPermissionsProvider key={doc.id + Projects.name} id={permissions?.id}>
+              <ProjectCard id={doc.id} {...data} />
+            </CurrentUserPermissionsProvider>
+          );
         })}
       </WrapperProjects>
     </>

@@ -35,15 +35,23 @@ export const wipToNumber = (wip: number | string) => {
 export const pathNameToArray = (pathname: string) =>
   pathname.split("/").filter((item) => item.length);
 
-export const createTask = (title: string, color: string, backgroundColor: string) => ({
+export const createTask = (
+  title: string,
+  color: string,
+  backgroundColor: string,
+  data: Date,
+  responsibleUid: string
+): ITask => ({
   id: generateId(),
   title,
-  author: auth?.currentUser?.email || auth?.currentUser?.uid,
+  author: auth?.currentUser?.email || auth?.currentUser?.uid || "unknown",
   color,
   backgroundColor,
   columnOrder: 0,
   createdAt: Timestamp.now(),
   updatedAt: Timestamp.now(),
+  responsibleUid: responsibleUid,
+  timeLimit: Timestamp.fromDate(data),
 });
 
 export const errorHandler = (
@@ -84,3 +92,19 @@ export const createPath = (...pathSegments: string[]) => {
   });
   return path;
 };
+
+export const arrayFieldUser: {
+  content: string;
+  key:
+    | "isLeader"
+    | "canServiceMember"
+    | "canServiceProjects"
+    | "canServiceColumns"
+    | "canServiceTasks";
+}[] = [
+  { content: "Lider zespołu:", key: "isLeader" },
+  { content: "Może zarządzać użytkownikami?:", key: "canServiceMember" },
+  { content: "Może zarządzać projektami?:", key: "canServiceProjects" },
+  { content: "Może zarządzać kolumnami projektu?:", key: "canServiceColumns" },
+  { content: "Może zarządać zadaniami projektu?:", key: "canServiceTasks" },
+];

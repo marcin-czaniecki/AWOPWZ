@@ -1,4 +1,4 @@
-import { DocumentReference } from "firebase/firestore";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 import { ReactChild } from "react";
 import {
   UseFormRegister,
@@ -52,8 +52,7 @@ export interface IProjectSidebarProps {
   length: number;
 }
 
-export interface IFieldInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   register: UseFormRegister<any>;
@@ -79,6 +78,7 @@ export interface IForm<T> {
     type: string;
     label: string;
     defaultValue?: any;
+    selectOptions?: any[];
     [key: string]: any;
   }[];
 }

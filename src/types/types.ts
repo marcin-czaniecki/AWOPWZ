@@ -1,4 +1,4 @@
-import { DocumentReference } from "firebase/firestore";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 
 export interface IMessage {
   id: string;
@@ -24,6 +24,8 @@ export interface ITask {
   columnOrder: number;
   title: string;
   author: string;
+  timeLimit?: Timestamp;
+  responsibleUid?: string;
 }
 
 export interface IColumn {

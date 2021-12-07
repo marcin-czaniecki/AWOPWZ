@@ -16,10 +16,10 @@ export const WrapperCardContent = styled.div`
   color: snow;
   align-items: center;
   justify-content: center;
+  text-align: center;
   background: ${({ theme }) => theme.color.primary};
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.12),
-    0 4px 4px rgba(0, 0, 0, 0.12), 0 8px 8px rgba(0, 0, 0, 0.12),
-    0 16px 16px rgba(0, 0, 0, 0.12);
+    0 4px 4px rgba(0, 0, 0, 0.12), 0 8px 8px rgba(0, 0, 0, 0.12), 0 16px 16px rgba(0, 0, 0, 0.12);
   :hover {
     transform: scale(1.1);
     transition: 300ms;

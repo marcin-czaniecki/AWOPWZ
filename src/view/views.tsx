@@ -1,4 +1,5 @@
 import RequireAuth from "components/organisms/RequireAuth/RequireAuth";
+import { CurrentUserPermissionsProvider } from "hooks/useCurrentUserPermissions";
 import { ProjectProvider } from "hooks/useProject";
 import { IView } from "types/types";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -66,7 +67,9 @@ export const views: IView[] = [
     path: "/teams/:id",
     element: (
       <RequireAuth>
-        <Team />
+        <CurrentUserPermissionsProvider>
+          <Team />
+        </CurrentUserPermissionsProvider>
       </RequireAuth>
     ),
   },

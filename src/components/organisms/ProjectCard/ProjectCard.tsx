@@ -1,6 +1,7 @@
 import Card from "components/molecules/Card/Card";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import { ProjectService } from "data/ProjectService";
+import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import FormModal from "../FormModal/FormModal";
@@ -8,8 +9,8 @@ import FormProject from "../ProjectForm/ProjectForm";
 
 const ProjectCard = ({ id, name }: { id: string; name: string }) => {
   const { setToast } = useToast();
-  const { currentUser } = useUser();
-
+  const { currentUser, dataUser } = useUser();
+  const [currentUserPermissions] = useCurrentUserPermissions();
   const projectRemove = async () => {
     if (currentUser) {
       ProjectService.removeProject(currentUser.uid, name, id);
@@ -25,18 +26,26 @@ const ProjectCard = ({ id, name }: { id: string; name: string }) => {
       setToast("Musisz być zalogowany.");
     }
   };
-
+  console.log(currentUserPermissions);
+  const isPermissions =
+    currentUserPermissions?.canServiceProjects ||
+    currentUserPermissions?.isLeader ||
+    dataUser?.isAdmin;
   return (
     <Card
       to={`/projects/${id}`}
       kebabMenuChildren={
         <>
-          <ConfirmModal textButton="Usuń" maxHeight="110px" confirmAction={projectRemove}>
-            <p>Czy na pewno chcesz usunąć projekt</p>
-          </ConfirmModal>
-          <FormModal textButton="Edytuj" maxHeight="120px">
-            <FormProject id={id} />
-          </FormModal>
+          {isPermissions && (
+            <>
+              <ConfirmModal textButton="Usuń" maxHeight="110px" confirmAction={projectRemove}>
+                <p>Czy na pewno chcesz usunąć projekt</p>
+              </ConfirmModal>
+              <FormModal textButton="Edytuj" maxHeight="160px">
+                <FormProject id={id} name={name} />
+              </FormModal>
+            </>
+          )}
           <ConfirmModal textButton="Przypnij" maxHeight="110px" confirmAction={pinProject}>
             <p>Czy na pewno chcesz przypiąć ten projekt?</p>
           </ConfirmModal>
