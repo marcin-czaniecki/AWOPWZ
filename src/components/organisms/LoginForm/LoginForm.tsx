@@ -1,21 +1,14 @@
+import Form from "components/organisms/Form/Form";
+import AuthService from "firebase/AuthService";
 import { useToast } from "hooks/useToast";
-import Button from "components/atoms/Button/Button";
-import FieldInput from "components/molecules/FieldInput/FieldInput";
-import { useForm, SubmitHandler } from "react-hook-form";
-import AuthService from "data/AuthService";
+import { SubmitHandler } from "react-hook-form";
 
 type Inputs = {
   email: string;
   password: string;
 };
 
-const Fields = [
-  { name: "email", type: "email", label: "Twój email" },
-  { name: "password", type: "password", label: "Twoje hasło" },
-];
-
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
   const { setToast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
     try {
@@ -25,12 +18,13 @@ const LoginForm = () => {
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {Fields.map((field) => (
-        <FieldInput key={field.name + LoginForm.name} {...field} register={register} />
-      ))}
-      <Button type="submit">Zaloguj</Button>
-    </form>
+    <Form
+      fields={[
+        { name: "email", type: "email", label: "Twój email" },
+        { name: "password", type: "password", label: "Twoje hasło" },
+      ]}
+      onSubmit={onSubmit}
+    />
   );
 };
 

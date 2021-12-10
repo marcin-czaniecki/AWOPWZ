@@ -19,11 +19,7 @@ const Dashboard = () => {
   const [project, loading, error] = useDocumentData(pinnedProject?.ref);
 
   useEffect(() => {
-    if (
-      dataUser?.pinnedProjects &&
-      dataUser.pinnedProjects.length &&
-      pinnedProject === null
-    ) {
+    if (dataUser?.pinnedProjects && dataUser.pinnedProjects.length && pinnedProject === null) {
       setPinnedProject(dataUser.pinnedProjects[0]);
     }
   }, [dataUser?.pinnedProjects, pinnedProject]);
@@ -51,7 +47,11 @@ const Dashboard = () => {
                 pinnedProject={pinnedProject}
                 setPinnedProject={setPinnedProject}
               />
-              <ProjectBoard />
+              {dataUser?.teams.find((team) => team.id === project?.teamId) ? (
+                <ProjectBoard />
+              ) : (
+                <div>Utraciłeś dostęp do tego projektu.</div>
+              )}
             </>
           </ProjectProvider>
         )}

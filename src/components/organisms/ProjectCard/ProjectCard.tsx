@@ -1,16 +1,24 @@
 import Card from "components/molecules/Card/Card";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
-import { ProjectService } from "data/ProjectService";
+import FormModal from "components/organisms/FormModal/FormModal";
+import FormProject from "components/organisms/ProjectForm/ProjectForm";
+import { ProjectService } from "firebase/ProjectService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
-import FormModal from "../FormModal/FormModal";
-import FormProject from "../ProjectForm/ProjectForm";
+import { IProjectCardProps } from "types/componentTypes";
+import { ConfirmModalButtonText } from "utils/utils";
 
-const ProjectCard = ({ id, name }: { id: string; name: string }) => {
+const ProjectCard = ({ id, name, teamId }: IProjectCardProps) => {
   const { setToast } = useToast();
   const { currentUser, dataUser } = useUser();
   const [currentUserPermissions] = useCurrentUserPermissions();
+
+  if (!currentUserPermissions) {
+    return <div>Nie posiadasz odpowiednich uprawnień</div>;
+  }
+
+  const { canServiceProjects, isLeader } = currentUserPermissions;
   const projectRemove = async () => {
     if (currentUser) {
       ProjectService.removeProject(currentUser.uid, name, id);
@@ -26,11 +34,8 @@ const ProjectCard = ({ id, name }: { id: string; name: string }) => {
       setToast("Musisz być zalogowany.");
     }
   };
-  console.log(currentUserPermissions);
-  const isPermissions =
-    currentUserPermissions?.canServiceProjects ||
-    currentUserPermissions?.isLeader ||
-    dataUser?.isAdmin;
+
+  const isPermissions = canServiceProjects || isLeader || dataUser?.isAdmin;
   return (
     <Card
       to={`/projects/${id}`}
@@ -38,15 +43,23 @@ const ProjectCard = ({ id, name }: { id: string; name: string }) => {
         <>
           {isPermissions && (
             <>
-              <ConfirmModal textButton="Usuń" maxHeight="110px" confirmAction={projectRemove}>
+              <ConfirmModal
+                textButton={ConfirmModalButtonText.delete}
+                maxHeight="110px"
+                confirmAction={projectRemove}
+              >
                 <p>Czy na pewno chcesz usunąć projekt</p>
               </ConfirmModal>
-              <FormModal textButton="Edytuj" maxHeight="160px">
-                <FormProject id={id} name={name} />
+              <FormModal textButton={ConfirmModalButtonText.edit} maxHeight="160px">
+                <FormProject id={id} name={name} currentTeamId={teamId} />
               </FormModal>
             </>
           )}
-          <ConfirmModal textButton="Przypnij" maxHeight="110px" confirmAction={pinProject}>
+          <ConfirmModal
+            textButton={ConfirmModalButtonText.pin}
+            maxHeight="110px"
+            confirmAction={pinProject}
+          >
             <p>Czy na pewno chcesz przypiąć ten projekt?</p>
           </ConfirmModal>
         </>

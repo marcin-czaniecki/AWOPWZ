@@ -1,24 +1,24 @@
-import StoreService from "data/StoreService";
+import StoreService from "firebase/StoreService";
 import { CollectionReference } from "firebase/firestore";
 import { IProject, ITeam, IUser } from "types/types";
 import { CollectionsName } from "./utils";
 
-export const collectionReferenceProjects = StoreService.sync.collection(
+export const collectionReferenceProjects = StoreService.collection(
   CollectionsName.projects
 ) as CollectionReference<IProject>;
-export const collectionReferenceTeams = StoreService.sync.collection(
+export const collectionReferenceTeams = StoreService.collection(
   CollectionsName.teams
 ) as CollectionReference<ITeam>;
 
-export const collectionReferenceUsers = StoreService.sync.collection(
+export const collectionReferenceUsers = StoreService.collection(
   CollectionsName.users
 ) as CollectionReference<IUser>;
 
 export const getDocumentReferenceProject = (id: string) =>
-  StoreService.sync.doc(CollectionsName.projects, id);
+  StoreService.doc(CollectionsName.projects, id);
 
 export const getDocumentReferenceUsers = (id: string) =>
-  StoreService.sync.doc(CollectionsName.users, id);
+  StoreService.doc(CollectionsName.users, id);
 
 export const getDocumentReference = (collection: string, id: string) =>
-  StoreService.sync.doc(collection, id);
+  StoreService.doc(collection, id);

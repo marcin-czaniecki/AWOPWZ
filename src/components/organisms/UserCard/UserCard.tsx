@@ -1,5 +1,5 @@
 import Input from "components/atoms/Input/Input";
-import { store } from "data/fb";
+import { store } from "firebase/fb";
 import { doc, updateDoc } from "firebase/firestore";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";

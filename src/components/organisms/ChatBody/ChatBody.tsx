@@ -1,24 +1,26 @@
 import Loading from "components/molecules/Loading/Loading";
 import Message from "components/organisms/Message/Message";
-import StoreService from "data/StoreService";
+import StoreService from "firebase/StoreService";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { IChatProps } from "types/componentTypes";
 import { IMessage } from "types/types";
+import ErrorData from "../../molecules/ErrorData/ErrorData";
 import { WrapperChatBody } from "./ChatBody.styles";
 
-const ChatBody = ({ path }: { path: string }) => {
-  const [value, loading, error] = useCollection(StoreService.sync.collection(path));
+const ChatBody = ({ path }: IChatProps) => {
+  const [messages, loading, error] = useCollection(StoreService.collection(path));
 
   if (loading) {
     return <Loading size="100px" />;
   }
 
   if (error) {
-    return <div>...</div>;
+    return <ErrorData />;
   }
 
   return (
     <WrapperChatBody>
-      {value?.docs
+      {messages?.docs
         .sort((a, b) => {
           const message1 = a.data() as IMessage;
           const message2 = b.data() as IMessage;

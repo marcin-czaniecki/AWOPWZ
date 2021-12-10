@@ -7,10 +7,7 @@ import styled from "styled-components";
 import { IProject } from "types/types";
 import { collectionReferenceProjects } from "utils/references";
 import { useUser } from "hooks/useUser";
-import {
-  CurrentUserPermissionsProvider,
-  useCurrentUserPermissions,
-} from "hooks/useCurrentUserPermissions";
+import { CurrentUserPermissionsProvider } from "hooks/useCurrentUserPermissions";
 
 const WrapperProjects = styled.div`
   display: flex;
@@ -23,7 +20,7 @@ const WrapperProjects = styled.div`
 
 const Projects = () => {
   const { dataUser } = useUser();
-  const [value, loading, error] = useCollection(collectionReferenceProjects);
+  const [projects, loading, error] = useCollection(collectionReferenceProjects);
 
   if (loading) {
     return <Loading />;
@@ -31,17 +28,19 @@ const Projects = () => {
   if (error || !dataUser) {
     return <div>error</div>;
   }
-  /*   const isPermission =
+
+  const isPermission =
     dataUser?.isAdmin ||
-    currentUserPermissions?.isLeader ||
-    currentUserPermissions?.canServiceProjects; */
+    dataUser.teams.find((team) => team.isLeader === true || team.canServiceProjects === true);
   return (
     <>
-      <AdditionBar right>
-        <FormProject />
-      </AdditionBar>
+      {isPermission && (
+        <AdditionBar right>
+          <FormProject />
+        </AdditionBar>
+      )}
       <WrapperProjects>
-        {value?.docs.map((doc) => {
+        {projects?.docs.map((doc) => {
           const data = doc.data() as IProject;
           const permissions = dataUser.teams.find((team) => team.id === data.teamId);
           const isPermission = !permissions && !dataUser.isAdmin;

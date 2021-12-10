@@ -1,8 +1,9 @@
-import ChatBody from "components/molecules/ChatBody/ChatBody";
-import ChatFooter from "components/molecules/ChatFooter/ChatFooter";
+import ChatBody from "components/organisms/ChatBody/ChatBody";
+import ChatFooter from "components/organisms/ChatFooter/ChatFooter";
+import { IChatProps } from "types/componentTypes";
 import { WrapperChat } from "./Chat.styles";
 
-const Chat = ({ path }: { path: string }) => {
+const Chat = ({ path }: IChatProps) => {
   return (
     <WrapperChat>
       <ChatBody path={path} />

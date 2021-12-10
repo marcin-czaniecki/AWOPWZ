@@ -11,21 +11,15 @@ export interface IMessage {
 
 export interface ITask {
   id: string;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
-  updatedAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
   color: string;
   backgroundColor: string;
   columnOrder: number;
   title: string;
   author: string;
   timeLimit?: Timestamp;
-  responsibleUid?: string;
+  responsibleName?: string;
 }
 
 export interface IColumn {
@@ -83,7 +77,6 @@ export interface ITeam {
   author: string;
   name: string;
   members: DocumentReference<any>[];
-  projects: IPinnedProjects[];
 }
 
 export type TypeToast = "primary" | "secondary" | "default" | "success" | "warning" | "info";

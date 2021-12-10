@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import { views } from "view/views";
 
 const MainTemplateWrapper = styled.main`
-  padding: 40px 10px;
+  padding: 50px 10px 40px;
 `;
 
 const WrapperViewHeader = styled.div<{ isVisable: boolean }>`
@@ -35,11 +35,7 @@ const ViewHeader = () => {
   );
 };
 
-const MainTemplate = ({
-  children,
-}: {
-  children: ReactElement | ReactElement[];
-}) => {
+const MainTemplate = ({ children }: { children: ReactElement | ReactElement[] }) => {
   const { currentUser } = useUser();
   const { message, type } = useToast();
 

@@ -1,29 +1,11 @@
 import Input from "components/atoms/Input/Input";
-import StoreService from "data/StoreService";
+import TeamService from "firebase/TeamService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
-import styled from "styled-components";
-import { IPermissions } from "types/types";
-import { ArrayName, CollectionsName } from "utils/utils";
-
-interface IFieldUserWithPermissionProps {
-  isPermission?: boolean;
-  children: string;
-  updatedUserUid: string;
-  fieldValue: string;
-  value?: boolean;
-  permissions: IPermissions;
-}
-
-const WrapperFieldUser = styled.div`
-  display: grid;
-  background-color: rgba(0, 0, 0, 0.1);
-  width: 280px;
-  grid-template-columns: 1fr 0.1fr;
-  justify-content: center;
-  align-items: center;
-`;
+import { IFieldUserWithPermissionProps } from "types/componentTypes";
+import { ErrorMessage } from "utils/utils";
+import { WrapperFieldUser } from "./FieldUserWithPermission.styles";
 
 const FieldUserWithPermission = ({
   children,
@@ -39,25 +21,24 @@ const FieldUserWithPermission = ({
   const updatePermission = async () => {
     if (!dataUser?.isAdmin) {
       if (fieldValue === "isLeader") {
-        setToast("Nie posiadasz odpowiednich uprawnień.", "info");
-        return null;
+        setToast(ErrorMessage.haventPermissions, "info");
+        return;
       }
       const isLeaderPermission = !currentUserPermissions?.isLeader || permissions?.isLeader;
-      const isPermissionCanServiceMember =
+      const isServiceMemberPermission =
         !currentUserPermissions?.canServiceMember ||
         permissions?.isLeader ||
         fieldValue === "canServiceMember";
-      if (isLeaderPermission && isPermissionCanServiceMember) {
-        setToast("Nie posiadasz odpowiednich uprawnień.", "info");
-        return null;
+      if (isLeaderPermission && isServiceMemberPermission) {
+        setToast(ErrorMessage.haventPermissions, "info");
+        return;
       }
     }
-
-    await StoreService.updateArray(
-      ArrayName.teams,
-      [permissions],
-      [{ ...permissions, [fieldValue]: typeof value === "boolean" ? !value : true }],
-      await StoreService.doc(CollectionsName.users, updatedUserUid)
+    TeamService.updateMemberPermissions(
+      updatedUserUid,
+      fieldValue,
+      typeof value === "boolean" ? !value : true,
+      permissions
     );
   };
   return (

@@ -1,10 +1,18 @@
 import Button from "components/atoms/Button/Button";
+import Modal from "components/molecules/Modal/Modal";
 import { useState } from "react";
 import { IModalConfirmProps } from "types/componentTypes";
-import Modal from "../Modal/Modal";
 import { WrapperConfirmButtons } from "./ConfirmModal.styles";
 
-const ConfirmModal = ({ confirmAction, textButton, children, maxHeight, maxWidth, invisibleYes, invisibleNo }: IModalConfirmProps) => {
+const ConfirmModal = ({
+  confirmAction,
+  textButton,
+  children,
+  maxHeight,
+  maxWidth,
+  invisibleYes,
+  invisibleNo,
+}: IModalConfirmProps) => {
   const [active, setActive] = useState(false);
 
   const openModal = () => {
@@ -27,7 +35,12 @@ const ConfirmModal = ({ confirmAction, textButton, children, maxHeight, maxWidth
       <Button type="button" onClick={openModal}>
         {textButton}
       </Button>
-      <Modal active={active} closeAction={closeModal} maxHeight={maxHeight || "100px"} maxWidth={maxWidth || "300px"}>
+      <Modal
+        active={active}
+        closeAction={closeModal}
+        maxHeight={maxHeight || "100px"}
+        maxWidth={maxWidth || "300px"}
+      >
         <div>
           <div>{children}</div>
           <WrapperConfirmButtons>

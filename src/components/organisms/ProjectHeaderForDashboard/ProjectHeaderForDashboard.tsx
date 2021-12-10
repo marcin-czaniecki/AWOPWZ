@@ -1,16 +1,13 @@
 import Button from "components/atoms/Button/Button";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
-import StoreService from "data/StoreService";
+import StoreService from "firebase/StoreService";
 import { useUser } from "hooks/useUser";
 import styled from "styled-components";
 import { IProjectHeaderProps } from "types/componentTypes";
 import { ArrayName, CollectionsName } from "utils/utils";
 
-const {
-  removeArrayElement,
-  sync: { doc },
-} = StoreService;
+const { removeArrayElement, doc } = StoreService;
 
 export const WrapperProjectHeader = styled.div`
   display: flex;

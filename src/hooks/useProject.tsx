@@ -30,7 +30,7 @@ export const ProjectProvider = ({ children, id }: { children: JSX.Element; id?: 
 
   return (
     <ProjectContext.Provider
-      value={{ doc, project: (project || {}) as IProject, loading, error, permissions }}
+      value={{ doc, project: (project || undefined) as IProject, loading, error, permissions }}
     >
       {children}
     </ProjectContext.Provider>

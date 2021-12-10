@@ -2,7 +2,7 @@ import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import Loading from "components/molecules/Loading/Loading";
 import FormModal from "components/organisms/FormModal/FormModal";
 import ProfileForm from "components/organisms/ProfileForm/ProfileForm";
-import AuthService from "data/AuthService";
+import AuthService from "firebase/AuthService";
 import { useUser } from "hooks/useUser";
 import { WrapperProfile, WrapperInfo } from "./Profile.styles";
 

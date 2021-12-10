@@ -17,6 +17,9 @@ const SideBar = styled.div<{ active?: boolean; right?: boolean; zIndex?: string 
   transform: translateX(${({ active, right }) => (active ? "0%" : right ? "100%" : "-100%")});
   transition: 300ms;
   z-index: ${({ zIndex }) => (zIndex ? zIndex : "9")};
+  @media screen and (max-width: ${({ theme }) => theme.screen.tablet}) {
+    width: 100%;
+  }
 `;
 
 export default SideBar;

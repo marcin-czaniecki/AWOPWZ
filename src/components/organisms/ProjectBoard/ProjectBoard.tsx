@@ -1,3 +1,5 @@
+import Details from "components/molecules/Details/Details";
+import HoverIcon from "components/molecules/HoverIcon/HoverIcon";
 import List from "components/molecules/List/List";
 import Loading from "components/molecules/Loading/Loading";
 import { useProject } from "hooks/useProject";
@@ -14,7 +16,7 @@ const ProjectBoard = () => {
     return <Loading />;
   }
 
-  if (error) {
+  if (error || !project) {
     return <div>Error</div>;
   }
 
@@ -24,6 +26,20 @@ const ProjectBoard = () => {
         lastOrder={project.columns[project.columns.length - 1]?.order || 0}
         length={project.columns.length}
       />
+      <Details summary="Legenda wykorzystanych ikon">
+        <>
+          <HoverIcon letter="O" />
+          <p>Użytkownik odpowiedzialny za wykonanie zadania.</p>
+        </>
+        <>
+          <HoverIcon letter="T" />
+          <p>Data terminu wykonania zadania.</p>
+        </>
+        <>
+          <HoverIcon letter="Z" />
+          <p>Data ostatniej aktualizacji.</p>
+        </>
+      </Details>
       <List
         WrapperList={WrapperProjectBoardColumns}
         array={project.columns.sort(sortOrder)}

@@ -1,6 +1,7 @@
-import { WrapperLoading, Cube, Ceiling, Walls, Wall, Floor } from "./Loading.styles";
+import { ILoading } from "types/componentTypes";
+import { Ceiling, Cube, Floor, Wall, Walls, WrapperLoading } from "./Loading.styles";
 
-const Loading = ({ size = "150px" }: { size?: string }) => {
+const Loading = ({ size = "150px" }: ILoading) => {
   return (
     <WrapperLoading>
       <Cube size={size}>

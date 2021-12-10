@@ -1,7 +1,7 @@
-import { auth } from "data/fb";
+import { auth } from "firebase/fb";
 import { Timestamp } from "firebase/firestore";
 import { FieldErrors } from "react-hook-form";
-import { IColumn, ITask, TypeToast } from "types/types";
+import { IColumn, ITask, IUser, TypeToast } from "types/types";
 
 export enum CollectionsName {
   users = "users",
@@ -17,6 +17,19 @@ export enum ArrayName {
   teams = "teams",
   projects = "projects",
   pinnedProjects = "pinnedProjects",
+}
+
+export enum ConfirmModalButtonText {
+  delete = "Usuń",
+  edit = "Edytuj",
+  pin = "Przypnij",
+}
+
+export enum ErrorMessage {
+  default = "Niestety poszło coś nie tak.",
+  mustBeAdmin = "Musisz być administratorem.",
+  haventPermissions = "Nie posiadasz odpowiednich uprawnień.",
+  noValue = "Zaszła pewna niezgodność z twoim kontem.",
 }
 
 export const generateId = () => Math.round(Math.random() * Math.pow(10, 10)).toString(16);
@@ -40,7 +53,7 @@ export const createTask = (
   color: string,
   backgroundColor: string,
   data: Date,
-  responsibleUid: string
+  responsibleName: string
 ): ITask => ({
   id: generateId(),
   title,
@@ -50,7 +63,7 @@ export const createTask = (
   columnOrder: 0,
   createdAt: Timestamp.now(),
   updatedAt: Timestamp.now(),
-  responsibleUid: responsibleUid,
+  responsibleName: responsibleName,
   timeLimit: Timestamp.fromDate(data),
 });
 
@@ -103,8 +116,11 @@ export const arrayFieldUser: {
     | "canServiceTasks";
 }[] = [
   { content: "Lider zespołu:", key: "isLeader" },
-  { content: "Może zarządzać użytkownikami?:", key: "canServiceMember" },
-  { content: "Może zarządzać projektami?:", key: "canServiceProjects" },
-  { content: "Może zarządzać kolumnami projektu?:", key: "canServiceColumns" },
-  { content: "Może zarządać zadaniami projektu?:", key: "canServiceTasks" },
+  { content: "Prawo nadawania uprawnień:", key: "canServiceMember" },
+  { content: "Zarządzanie projektami:", key: "canServiceProjects" },
+  { content: "Zarządzanie kolumnami?:", key: "canServiceColumns" },
+  { content: "Zarządzanie zadaniami?:", key: "canServiceTasks" },
 ];
+
+export const getNameUser = (dataUser: IUser | null | undefined) =>
+  `${dataUser?.firstName} ${dataUser?.lastName}`;

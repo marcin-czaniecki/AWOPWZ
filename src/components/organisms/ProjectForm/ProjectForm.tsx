@@ -1,6 +1,5 @@
 import Form from "components/organisms/Form/Form";
-import { ProjectService } from "data/ProjectService";
-import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
+import { ProjectService } from "firebase/ProjectService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -12,30 +11,34 @@ type Inputs = {
   teamId: string;
 };
 
-const ProjectForm = ({ id, name }: { id?: string; name?: string }) => {
+const ProjectForm = ({
+  id,
+  currentTeamId,
+  name,
+}: {
+  id?: string;
+  currentTeamId?: string;
+  name?: string;
+}) => {
   const { dataUser } = useUser();
   const { setToast } = useToast();
   const [teamsQuerySnapshot] = useCollection(collectionReferenceTeams);
 
   const onSubmit: SubmitHandler<Inputs> = async ({ name, teamId }) => {
     const currentUserPermissions = dataUser?.teams.find((team) => team.id === teamId);
+    const isPermission =
+      currentUserPermissions?.isLeader ||
+      dataUser?.isAdmin ||
+      currentUserPermissions?.canServiceProjects;
     try {
-      const isPermission = !(
-        currentUserPermissions?.isLeader ||
-        dataUser?.isAdmin ||
-        currentUserPermissions?.canServiceProjects
-      );
-      console.log(isPermission);
-
       if (isPermission) {
-        setToast("Nie masz wystarczających uprawnień.");
-        return;
-      }
-
-      if (id) {
-        ProjectService.updateProjectName(name, id, teamId);
+        if (id) {
+          ProjectService.updateProject(name, id, teamId || currentTeamId);
+        } else {
+          await ProjectService.initNewProject(name, teamId);
+        }
       } else {
-        ProjectService.initNewProject(name, teamId);
+        setToast("Nie masz wystarczających uprawnień.");
       }
     } catch (error) {
       setToast("Coś poszło nie tak :c");
@@ -51,6 +54,7 @@ const ProjectForm = ({ id, name }: { id?: string; name?: string }) => {
             name: "teamId",
             type: "select",
             label: "Nazwa projektu",
+            defaultValue: currentTeamId,
             selectOptions: teamsQuerySnapshot?.docs.map((documentSnapshotTeam) => {
               const permissions = dataUser?.teams.find(
                 (team) => team.id === documentSnapshotTeam.id

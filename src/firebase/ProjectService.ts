@@ -1,4 +1,4 @@
-import { DocumentReference } from "firebase/firestore";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 import { ITask, IColumn, IProject } from "types/types";
 import { ArrayName, CollectionsName } from "utils/utils";
 import StoreService from "./StoreService";
@@ -31,35 +31,40 @@ export class ProjectService {
       [ArrayName.columns]: [],
       [ArrayName.tasks]: [],
     };
-    StoreService.createDoc(data, collectionReferenceProjects);
+    return StoreService.createDoc(data, collectionReferenceProjects);
   }
-  static updateProjectName(newProjectName: string, idProject: string, teamId: string) {
-    StoreService.updateDoc(
-      { name: newProjectName, teamId: teamId },
-      getDocumentReferenceProject(idProject)
-    );
+  static updateProject(newProjectName: string, idProject: string, teamId?: string) {
+    const data: any = {};
+    if (newProjectName) {
+      data.name = newProjectName;
+    }
+    if (teamId) {
+      data.teamId = teamId;
+    }
+    StoreService.updateDoc(data, getDocumentReferenceProject(idProject));
+    return getDocumentReferenceProject(idProject);
   }
   static removeProject(currentUserUid: string, projectName: string, idProject: string) {
-    StoreService.removeDoc(StoreService.sync.doc(CollectionsName.projects, idProject));
+    StoreService.removeDoc(StoreService.doc(CollectionsName.projects, idProject));
     const data = {
       name: projectName,
-      ref: StoreService.sync.doc(CollectionsName.projects, idProject),
+      ref: StoreService.doc(CollectionsName.projects, idProject),
     };
     StoreService.removeArrayElement(
       ArrayName.pinnedProjects,
       [data],
-      StoreService.sync.doc(CollectionsName.users, currentUserUid)
+      StoreService.doc(CollectionsName.users, currentUserUid)
     );
   }
   static pinProject(currentUserUid: string, projectName: string, idProject: string) {
     const data = {
       name: projectName,
-      ref: StoreService.sync.doc(CollectionsName.projects, idProject),
+      ref: StoreService.doc(CollectionsName.projects, idProject),
     };
     StoreService.arrayPush(
       ArrayName.pinnedProjects,
       data,
-      StoreService.sync.doc(CollectionsName.users, currentUserUid)
+      StoreService.doc(CollectionsName.users, currentUserUid)
     );
   }
   updateTaskOrder(task: ITask, delta: number = 1) {
@@ -76,7 +81,7 @@ export class ProjectService {
     if (!this.columns) {
       throw new Error("You need give columns for constructor class");
     }
-    const updatingTask = { ...task };
+    const updatingTask = { ...task, updatedAt: Timestamp.now() };
     updatingTask.columnOrder = this.updateTaskOrder(task, delta);
     if (updatingTask.columnOrder === task.columnOrder) {
       return;

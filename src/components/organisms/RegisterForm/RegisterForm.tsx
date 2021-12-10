@@ -1,8 +1,8 @@
 import { useToast } from "hooks/useToast";
 import { SubmitHandler } from "react-hook-form";
-import AuthService from "data/AuthService";
+import AuthService from "firebase/AuthService";
 import Form from "components/organisms/Form/Form";
-import StoreService from "data/StoreService";
+import StoreService from "firebase/StoreService";
 import { ArrayName, CollectionsName } from "utils/utils";
 
 const { setDoc, doc } = StoreService;
@@ -56,7 +56,7 @@ const RegisterForm = () => {
           [ArrayName.teams]: [],
           [ArrayName.pinnedProjects]: [],
         },
-        await doc(CollectionsName.users, uid)
+        doc(CollectionsName.users, uid)
       );
       setToast(`Założyłeś nowe konto :D`);
     } catch (e: any) {

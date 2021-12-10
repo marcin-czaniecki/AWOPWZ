@@ -1,8 +1,9 @@
 import Button from "components/atoms/Button/Button";
 import SideBar from "components/atoms/SideBar/SideBar";
-import { ReactChild, useState } from "react";
+import { useState } from "react";
+import { IAdditionBarProps } from "types/componentTypes";
 
-const AdditionBar = ({ right, children }: { right?: boolean; children: ReactChild }) => {
+const AdditionBar = ({ right, children }: IAdditionBarProps) => {
   const [active, setActive] = useState(false);
 
   return (

@@ -1,5 +1,5 @@
-import { auth } from "data/fb";
-import StoreService from "data/StoreService";
+import { auth } from "firebase/fb";
+import StoreService from "firebase/StoreService";
 import { User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -12,9 +12,7 @@ interface IGlobalUser {
   dataUser?: IUser | null;
 }
 
-const {
-  sync: { docWithType },
-} = StoreService;
+const { docWithType } = StoreService;
 
 export const UserContext = createContext<IGlobalUser>({});
 

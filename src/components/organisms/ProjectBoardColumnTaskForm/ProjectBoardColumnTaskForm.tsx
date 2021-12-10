@@ -1,7 +1,7 @@
 import { DocumentReference, getDoc, Timestamp } from "@firebase/firestore";
 import { printDate } from "@janossik/date";
 import Form from "components/organisms/Form/Form";
-import StoreService from "data/StoreService";
+import StoreService from "firebase/StoreService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
@@ -16,7 +16,7 @@ type Inputs = {
   title: string;
   color: string;
   backgroundColor: string;
-  responsibleUid: string;
+  responsibleName: string;
   timeLimit: string;
 };
 
@@ -25,7 +25,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
   const { dataUser } = useUser();
   const [currentUserPermissions] = useCurrentUserPermissions();
   const [members, setMembers] = useState<IUser[]>([]);
-  const docTeam = StoreService.sync.doc(
+  const docTeam = StoreService.doc(
     CollectionsName.teams,
     project.teamId || "unknown"
   ) as DocumentReference<ITeam>;
@@ -35,9 +35,11 @@ const TaskForm = ({ task }: { task?: ITask }) => {
   useEffect(() => {
     (async () => {
       const arrUser: IUser[] = [];
-      for await (const member of team?.members || []) {
-        const response = await getDoc<IUser>(member);
-        const user = response.data();
+      const members = team?.members || [];
+
+      for await (const member of members) {
+        const response = await getDoc(member);
+        const user = response.data() as IUser;
         if (user) {
           arrUser.push(user);
         }
@@ -50,7 +52,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
     title,
     color,
     backgroundColor,
-    responsibleUid,
+    responsibleName,
     timeLimit,
   }) => {
     if (
@@ -75,7 +77,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
               color,
               backgroundColor,
               timeLimit: Timestamp.fromDate(new Date(timeLimit)),
-              responsibleUid,
+              responsibleName,
             },
           ],
           doc
@@ -83,7 +85,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
       } else {
         StoreService.arrayPush(
           ArrayName.tasks,
-          createTask(title, color, backgroundColor, new Date(timeLimit), responsibleUid),
+          createTask(title, color, backgroundColor, new Date(timeLimit), responsibleName),
           doc
         );
       }
@@ -97,59 +99,55 @@ const TaskForm = ({ task }: { task?: ITask }) => {
       setToast(`W treści zadania możesz użyć maksymalnie 100 znaków`, "warning");
     }
   };
-  const isPermission =
-    dataUser?.isAdmin ||
-    currentUserPermissions?.isLeader ||
-    currentUserPermissions?.canServiceTasks;
+
   return (
     <>
-      {isPermission && (
-        <Form
-          fields={[
-            {
-              name: "title",
-              type: "text",
-              label: "Treść zadania",
-              defaultValue: task?.title || "",
-              options: { required: true, maxLength: 200 },
-            },
-            {
-              name: "color",
-              type: "color",
-              label: "Wybierz kolor tekstu",
-              defaultValue: task?.color || "#ffffff",
-            },
-            {
-              name: "backgroundColor",
-              type: "color",
-              label: "Wybierz kolor tła",
-              defaultValue: task?.backgroundColor || "#23b2ee",
-              options: { required: true },
-            },
-            {
-              name: "responsibleUid",
-              type: "select",
-              label: "Wybierz kolor tła",
-              selectOptions: members.map((user) => {
-                return { value: user.firstName + " " + user.lastName };
-              }),
-              defaultValue: task?.responsibleUid,
-              options: { required: true },
-            },
-            {
-              name: "timeLimit",
-              type: "date",
-              label: "Czas wykonania zadania",
-              defaultValue: printDate("yyyyddmm", "en", task?.timeLimit?.toDate() || new Date())
-                .split(".")
-                .reverse()
-                .join("-"),
-            },
-          ]}
-          onSubmit={onSubmit}
-          onError={onError}
-        />
-      )}
+      <Form
+        contentButton="Dodaj zdanie"
+        fields={[
+          {
+            name: "title",
+            type: "text",
+            label: "Treść zadania",
+            defaultValue: task?.title || "",
+            options: { required: true, maxLength: 200 },
+          },
+          {
+            name: "color",
+            type: "color",
+            label: "Wybierz kolor tekstu",
+            defaultValue: task?.color || "#ffffff",
+          },
+          {
+            name: "backgroundColor",
+            type: "color",
+            label: "Wybierz kolor tła",
+            defaultValue: task?.backgroundColor || "#23b2ee",
+            options: { required: true },
+          },
+          {
+            name: "responsibleName",
+            type: "select",
+            label: "Wybierz kolor tła",
+            selectOptions: members.map((user) => {
+              return { value: user.firstName + " " + user.lastName };
+            }),
+            defaultValue: task?.responsibleName,
+            options: { required: true },
+          },
+          {
+            name: "timeLimit",
+            type: "date",
+            label: "Czas wykonania zadania",
+            defaultValue: printDate("yyyyddmm", "en", task?.timeLimit?.toDate() || new Date())
+              .split(".")
+              .reverse()
+              .join("-"),
+          },
+        ]}
+        onSubmit={onSubmit}
+        onError={onError}
+      />
     </>
   );
 };

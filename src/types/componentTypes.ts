@@ -1,4 +1,4 @@
-import { DocumentReference, Timestamp } from "firebase/firestore";
+import { DocumentReference } from "firebase/firestore";
 import { ReactChild } from "react";
 import {
   UseFormRegister,
@@ -6,7 +6,7 @@ import {
   SubmitErrorHandler,
   SubmitHandler,
 } from "react-hook-form";
-import { IProject, ITask, IColumn, IMessage } from "./types";
+import { IProject, ITask, IColumn, IMessage, IUser, IPermissions } from "./types";
 
 export interface IChild {
   children: ReactChild;
@@ -62,10 +62,20 @@ export interface IFieldInputProps extends React.InputHTMLAttributes<HTMLInputEle
 export interface IKebabMenuProps {
   color?: string;
   children: ReactChild | ReactChild[];
+  top?: boolean;
 }
 
 export interface IMessageProps extends IMessage {
   path: string;
+}
+
+export interface IFormField {
+  name: string;
+  type: string;
+  label: string;
+  defaultValue?: any;
+  selectOptions?: any[];
+  [key: string]: any;
 }
 
 export interface IForm<T> {
@@ -73,14 +83,7 @@ export interface IForm<T> {
   contentButton?: string;
   onSubmit: SubmitHandler<T>;
   onError?: SubmitErrorHandler<T>;
-  fields: {
-    name: string;
-    type: string;
-    label: string;
-    defaultValue?: any;
-    selectOptions?: any[];
-    [key: string]: any;
-  }[];
+  fields: IFormField[];
 }
 
 export interface IInstructionProps {
@@ -114,4 +117,74 @@ export interface ICardProps {
   color?: string;
   children: ReactChild;
   kebabMenuChildren: ReactChild | ReactChild[];
+}
+
+export interface IDetalisProps {
+  summary?: string;
+  children: ReactChild | ReactChild[];
+}
+
+export interface IProjectCardProps {
+  id: string;
+  teamId: string;
+  name: string;
+}
+
+export interface ITeamCardProps {
+  name: string;
+  teamId: string;
+  members: DocumentReference<IUser>[];
+}
+
+export interface IAdditionBarProps {
+  right?: boolean;
+  children: ReactChild;
+}
+
+export interface IChatProps {
+  path: string;
+}
+
+export interface IFieldUserWithPermissionProps {
+  isPermission?: boolean;
+  children: string;
+  updatedUserUid: string;
+  fieldValue: string;
+  value?: boolean;
+  permissions: IPermissions;
+}
+
+export interface IHoverIconProps {
+  letter: string;
+  children?: ReactChild;
+}
+
+export interface IListProps<T> {
+  array: T[];
+  callbackfn: (value: T, index: number, array: T[]) => JSX.Element;
+  WrapperList: (props: { children: JSX.Element | JSX.Element[] }) => JSX.Element;
+}
+
+export interface ILoading {
+  size?: string;
+}
+
+export interface IRequiredPermissionsProps {
+  booleanPermissions: boolean[];
+  children: ReactChild;
+}
+
+export interface ISelectProps<T> {
+  field: IFormField;
+  register: UseFormRegister<T>;
+}
+
+export interface IDateFieldProps {
+  previousText?: string;
+  autoMarginLeft?: boolean;
+  showCalendar?: boolean;
+  dateAt: {
+    toDate: () => Date;
+    seconds: number;
+  };
 }

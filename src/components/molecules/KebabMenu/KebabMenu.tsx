@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { IKebabMenuProps } from "types/componentTypes";
 import { WrapperKebabMenu, WrapperKebabMenuContent } from "./KebabMenu.styles";
 
-const KebabMenu = ({ children, color, top }: IKebabMenuProps & { top?: boolean }) => {
+const KebabMenu = ({ children, color, top }: IKebabMenuProps) => {
   const [visible, setVisible] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);

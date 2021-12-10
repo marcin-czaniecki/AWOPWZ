@@ -1,6 +1,8 @@
-import StoreService from "data/StoreService";
+import StoreService from "firebase/StoreService";
+import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
+import { useUser } from "hooks/useUser";
 import { SubmitErrorHandler, SubmitHandler } from "react-hook-form";
 import { IColumnFormProps } from "types/componentTypes";
 import { ArrayName, generateId, wipToNumber } from "utils/utils";
@@ -14,7 +16,8 @@ type Inputs = {
 const ProjectBoardColumnForm = ({ column, lastOrder, length }: IColumnFormProps) => {
   const { doc } = useProject();
   const { setToast } = useToast();
-
+  const { dataUser } = useUser();
+  const [currentUserPermissions] = useCurrentUserPermissions();
   const addColumn = ({ name, wip }: Inputs) => {
     if ((!lastOrder && typeof lastOrder !== "number") || (!length && length !== 0)) {
       throw new Error(
@@ -32,6 +35,16 @@ const ProjectBoardColumnForm = ({ column, lastOrder, length }: IColumnFormProps)
   };
 
   const onSubmit: SubmitHandler<Inputs> = async ({ name, wip }) => {
+    if (
+      !(
+        dataUser?.isAdmin ||
+        currentUserPermissions?.isLeader ||
+        currentUserPermissions?.canServiceColumns
+      )
+    ) {
+      setToast("Nie posiadasz odpowiednich uprawnień.", "info");
+      return null;
+    }
     if (column) {
       const data = {
         ...column,
