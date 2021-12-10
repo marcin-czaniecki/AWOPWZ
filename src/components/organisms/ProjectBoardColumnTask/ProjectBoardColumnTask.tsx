@@ -38,7 +38,7 @@ const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProj
     try {
       await removeArrayElement(ArrayName.tasks, [task], doc);
     } catch (error) {
-      setToast("Nie udało się usunąć zadania :c");
+      setToast("Nie udało się usunąć zadania.");
     }
   };
 
@@ -74,7 +74,7 @@ const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProj
           <Button onClick={moveLeft}>Cofnij</Button>
         )}
         {!isLastOrder && (isPermission || task.responsibleName === getNameUser(dataUser)) && (
-          <Button onClick={moveRight}>Ukończono</Button>
+          <Button onClick={moveRight}>Ukończ</Button>
         )}
         <WrapperHoverIcons>
           {task.responsibleName && (
