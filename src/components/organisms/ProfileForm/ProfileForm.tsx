@@ -20,7 +20,7 @@ const ProfileForm = ({ user }: { user: { [key: string]: string } }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       if (currentUser) {
-        await updateDoc(data, await doc(CollectionsName.users, currentUser?.uid));
+        await updateDoc(data, doc(CollectionsName.users, currentUser?.uid));
       } else {
         setToast("Musisz być zalogowany!");
       }

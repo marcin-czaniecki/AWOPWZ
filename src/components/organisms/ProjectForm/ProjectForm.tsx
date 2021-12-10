@@ -48,6 +48,7 @@ const ProjectForm = ({
   return (
     <>
       <Form
+        contentButton="Dodaj projekt"
         fields={[
           { name: "name", type: "text", label: "Nazwa projektu", defaultValue: name },
           {

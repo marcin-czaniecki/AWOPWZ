@@ -87,7 +87,7 @@ export interface IForm<T> {
 }
 
 export interface IInstructionProps {
-  introduction: string;
+  introduction?: string;
   title: string;
   steps: string[];
 }

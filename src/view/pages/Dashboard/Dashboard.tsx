@@ -8,7 +8,7 @@ import { useUser } from "hooks/useUser";
 import { useEffect, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { IProject } from "types/types";
-import { instruction } from "utils/instructions";
+import { instructionPinProject } from "utils/instructions";
 
 const Dashboard = () => {
   const { dataUser } = useUser();
@@ -33,7 +33,7 @@ const Dashboard = () => {
   }
 
   if (!dataUser?.pinnedProjects || !dataUser?.pinnedProjects.length) {
-    return <Instruction {...instruction} />;
+    return <Instruction {...instructionPinProject} />;
   }
 
   return (

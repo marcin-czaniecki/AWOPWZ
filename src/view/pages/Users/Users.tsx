@@ -34,7 +34,7 @@ const Users = () => {
     <div>
       <WrapperUsers>
         {data?.map((user) => {
-          return <UserCard key={user.uid} {...user} />;
+          return !user.isAdmin ? <UserCard key={user.uid} {...user} /> : null;
         })}
       </WrapperUsers>
     </div>

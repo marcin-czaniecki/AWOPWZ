@@ -4,15 +4,9 @@ import ProjectBoard from "components/organisms/ProjectBoard/ProjectBoard";
 import ProjectChat from "components/organisms/ProjectChat/ProjectChat";
 import { CurrentUserPermissionsProvider } from "hooks/useCurrentUserPermissions";
 import { useProject } from "hooks/useProject";
-import styled from "styled-components";
 import { createPath, CollectionsName } from "utils/utils";
 import NoMatch from "../NoMatch/NoMatch";
-
-const ProjectLabel = styled.div`
-  margin: 20px 0px 10px;
-  font-weight: ${({ theme }) => theme.font.weight.medium};
-  font-size: ${({ theme }) => theme.font.size.l};
-`;
+import { ProjectLabel } from "./Project.styles";
 
 const Project = () => {
   const { doc, project, loading, error } = useProject();
