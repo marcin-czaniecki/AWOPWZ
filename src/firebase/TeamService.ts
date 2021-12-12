@@ -29,7 +29,7 @@ class TeamService {
       isLeader: true,
     };
     StoreService.arrayPush(
-      ArrayName.teams,
+      ArrayName.permissions,
       permissions,
       StoreService.doc(CollectionsName.users, uid)
     );
@@ -51,7 +51,7 @@ class TeamService {
   }
   static removeMemberPermissions(uid: string, permissions: IPermissions) {
     const refUser = StoreService.doc(CollectionsName.users, uid);
-    StoreService.removeArrayElement(ArrayName.teams, [permissions], refUser);
+    StoreService.removeArrayElement(ArrayName.permissions, [permissions], refUser);
   }
   static updateMemberPermissions(
     updatedUserUid: string,
@@ -60,7 +60,7 @@ class TeamService {
     permissions: IPermissions
   ) {
     StoreService.updateArray(
-      ArrayName.teams,
+      ArrayName.permissions,
       [permissions],
       [{ ...permissions, [fieldValue]: value }],
       StoreService.doc(CollectionsName.users, updatedUserUid)
@@ -80,7 +80,7 @@ class TeamService {
     const refUser = StoreService.doc(CollectionsName.users, uid);
     const refMebers = StoreService.doc(CollectionsName.teams, teamId);
 
-    StoreService.arrayPush(ArrayName.teams, this.generatePermissiosObject(teamId), refUser);
+    StoreService.arrayPush(ArrayName.permissions, this.generatePermissiosObject(teamId), refUser);
     StoreService.arrayPush(ArrayName.members, refUser, refMebers);
   }
 }

@@ -5,21 +5,21 @@ export interface IMessage {
   uid: string;
   author: string;
   content: string;
-  createdAt: { toDate: () => Date; seconds: number };
-  updatedAt: { toDate: () => Date; seconds: number };
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface ITask {
   id: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
   color: string;
-  backgroundColor: string;
-  columnOrder: number;
   title: string;
   author: string;
-  timeLimit?: Timestamp;
+  backgroundColor: string;
   responsibleName?: string;
+  columnOrder: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  timeLimit: Timestamp;
 }
 
 export interface IColumn {
@@ -31,9 +31,9 @@ export interface IColumn {
 
 export interface IProject {
   name: string;
+  teamId: string;
   columns: IColumn[];
   tasks: ITask[];
-  teamId: string;
 }
 
 export type TypeUpdateArray = <T extends unknown>(
@@ -49,17 +49,18 @@ export interface PropsProjectColumn {
   tasks: ITask[];
   columns: IColumn[];
 }
-export interface IPinnedProjects {
+export interface IPinnedProject {
   name: string;
   ref: DocumentReference<IProject>;
 }
+
 export interface IPermissions {
   id: string;
+  isLeader: boolean;
   canServiceTasks: boolean;
   canServiceColumns: boolean;
   canServiceProjects: boolean;
   canServiceMember: boolean;
-  isLeader: boolean;
 }
 
 export interface IUser {
@@ -69,8 +70,8 @@ export interface IUser {
   firstName: string;
   lastName: string;
   profession: string;
-  pinnedProjects?: IPinnedProjects[];
-  teams: IPermissions[];
+  pinnedProjects?: IPinnedProject[];
+  permissions: IPermissions[];
 }
 
 export interface ITeam {

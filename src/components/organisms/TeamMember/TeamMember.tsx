@@ -24,7 +24,7 @@ const TeamMember = ({ user }: { user: IUser }) => {
   const params = useParams();
   const id = params?.id;
 
-  const permissions = user.teams.find((team) => team.id === id);
+  const permissions = user.permissions.find((team) => team.id === id);
   if (!permissions) return null;
 
   if (!id) {

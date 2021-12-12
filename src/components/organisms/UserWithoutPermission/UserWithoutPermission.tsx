@@ -22,7 +22,7 @@ const WrapperUserWithoutPermission = styled.div`
 const UserWithoutPermission = ({ teamId, user }: IUserWithPermissions) => {
   const { dataUser } = useUser();
 
-  const permissions = user.teams.find((team) => team.id === teamId);
+  const permissions = user.permissions.find((team) => team.id === teamId);
   const [currentUserPermissions] = useCurrentUserPermissions();
 
   if (permissions || (!currentUserPermissions && !dataUser?.isAdmin)) return null;

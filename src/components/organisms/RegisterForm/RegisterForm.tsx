@@ -53,7 +53,7 @@ const RegisterForm = () => {
           firstName: data.firstName,
           lastName: data.lastName,
           profession: data.profession,
-          [ArrayName.teams]: [],
+          [ArrayName.permissions]: [],
           [ArrayName.pinnedProjects]: [],
         },
         doc(CollectionsName.users, uid)

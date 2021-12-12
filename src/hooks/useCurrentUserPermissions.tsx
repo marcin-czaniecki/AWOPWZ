@@ -15,7 +15,7 @@ export const CurrentUserPermissionsProvider = ({
   const { dataUser } = useUser();
   const params = useParams();
   const teamId = id || params?.id;
-  const currentUserPermissions = dataUser?.teams.find((team) => team.id === teamId);
+  const currentUserPermissions = dataUser?.permissions.find((team) => team.id === teamId);
   return (
     <CurrentUserPermissionsContext.Provider value={[currentUserPermissions || null]}>
       {children}

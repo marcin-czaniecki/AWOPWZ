@@ -34,7 +34,7 @@ const Teams = () => {
         <>
           {teams?.docs?.length ? (
             teams.docs.map((doc) => {
-              const findTeam = dataUser.teams.find((userTeam) => userTeam.id === doc.id);
+              const findTeam = dataUser.permissions.find((userTeam) => userTeam.id === doc.id);
               if (!findTeam && !dataUser.isAdmin) return null;
               const { members, name } = doc.data() as ITeam;
               return <TeamCard key={doc.id} teamId={doc.id} members={members} name={name} />;

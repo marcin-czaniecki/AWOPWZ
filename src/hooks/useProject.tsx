@@ -26,7 +26,7 @@ export const ProjectProvider = ({ children, id }: { children: JSX.Element; id?: 
   const doc = getDocumentReferenceProject(projectId) as DocumentReference<IProject>;
   const [project, loading, error] = useDocumentData<IProject>(doc);
   const { dataUser } = useUser();
-  const permissions = dataUser?.teams.find((team) => team.id === project?.teamId);
+  const permissions = dataUser?.permissions.find((team) => team.id === project?.teamId);
 
   return (
     <ProjectContext.Provider

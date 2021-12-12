@@ -18,7 +18,7 @@ const TeamCard = ({ name, teamId, members }: ITeamCardProps) => {
       try {
         const res = await getDoc(docUser);
         const member = res.data() as IUser;
-        const permissions = member.teams.find((permission) => {
+        const permissions = member.permissions.find((permission) => {
           return permission.id === teamId;
         });
         if (permissions) {

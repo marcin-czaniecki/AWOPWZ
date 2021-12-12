@@ -14,7 +14,7 @@ export enum ArrayName {
   columns = "columns",
   members = "members",
   tasks = "tasks",
-  teams = "teams",
+  permissions = "permissions",
   projects = "projects",
   pinnedProjects = "pinnedProjects",
 }

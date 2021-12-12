@@ -25,7 +25,7 @@ const ProjectForm = ({
   const [teamsQuerySnapshot] = useCollection(collectionReferenceTeams);
 
   const onSubmit: SubmitHandler<Inputs> = async ({ name, teamId }) => {
-    const currentUserPermissions = dataUser?.teams.find((team) => team.id === teamId);
+    const currentUserPermissions = dataUser?.permissions.find((team) => team.id === teamId);
     const isPermission =
       currentUserPermissions?.isLeader ||
       dataUser?.isAdmin ||
@@ -57,7 +57,7 @@ const ProjectForm = ({
             label: "Nazwa projektu",
             defaultValue: currentTeamId,
             selectOptions: teamsQuerySnapshot?.docs.map((documentSnapshotTeam) => {
-              const permissions = dataUser?.teams.find(
+              const permissions = dataUser?.permissions.find(
                 (team) => team.id === documentSnapshotTeam.id
               );
               const isPermission = permissions?.isLeader || permissions?.canServiceProjects;

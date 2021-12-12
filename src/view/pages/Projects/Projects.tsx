@@ -24,7 +24,7 @@ const Projects = () => {
 
   const isPermission =
     dataUser?.isAdmin ||
-    dataUser.teams.find((team) => team.isLeader === true || team.canServiceProjects === true);
+    dataUser.permissions.find((team) => team.isLeader === true || team.canServiceProjects === true);
   return (
     <>
       {isPermission && (
@@ -36,7 +36,7 @@ const Projects = () => {
         {projects?.docs.length ? (
           projects.docs.map((doc) => {
             const data = doc.data() as IProject;
-            const permissions = dataUser.teams.find((team) => team.id === data.teamId);
+            const permissions = dataUser.permissions.find((team) => team.id === data.teamId);
             const isPermission = !permissions && !dataUser.isAdmin;
 
             if (isPermission) return null;

@@ -14,11 +14,6 @@ const ProjectCard = ({ id, name, teamId }: IProjectCardProps) => {
   const { currentUser, dataUser } = useUser();
   const [currentUserPermissions] = useCurrentUserPermissions();
 
-  if (!currentUserPermissions) {
-    return <div>Nie posiadasz odpowiednich uprawnień</div>;
-  }
-
-  const { canServiceProjects, isLeader } = currentUserPermissions;
   const projectRemove = async () => {
     if (currentUser) {
       ProjectService.removeProject(currentUser.uid, name, id);
@@ -35,7 +30,10 @@ const ProjectCard = ({ id, name, teamId }: IProjectCardProps) => {
     }
   };
 
-  const isPermissions = canServiceProjects || isLeader || dataUser?.isAdmin;
+  const isPermissions =
+    currentUserPermissions?.canServiceProjects ||
+    currentUserPermissions?.isLeader ||
+    dataUser?.isAdmin;
   return (
     <Card
       to={`/projects/${id}`}

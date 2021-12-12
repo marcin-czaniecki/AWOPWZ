@@ -47,7 +47,7 @@ const Dashboard = () => {
                 pinnedProject={pinnedProject}
                 setPinnedProject={setPinnedProject}
               />
-              {dataUser?.teams.find((team) => team.id === project?.teamId) ? (
+              {dataUser?.permissions.find((team) => team.id === project?.teamId) ? (
                 <ProjectBoard />
               ) : (
                 <div>Utraciłeś dostęp do tego projektu.</div>
