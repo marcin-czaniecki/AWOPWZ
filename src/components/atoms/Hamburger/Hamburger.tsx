@@ -14,29 +14,9 @@ const Wrapper = styled.button<{
   justify-content: center;
   align-items: center;
   border: none;
-  z-index: 13;
+  z-index: 12;
   background-color: transparent;
   cursor: pointer;
-
-  /*   ::after {
-    content: " ";
-    position: fixed;
-    top: -10px;
-    left: -10px;
-    height: 300px;
-    width: 100px;
-    background: ${({ theme, backgroundColor }) =>
-    backgroundColor ? backgroundColor : theme.color.background};
-    transform: rotate(50deg) translateX(-115px) translateY(-100px);
-    transition: 300ms;
-    z-index: -1;
-  }
-  @media screen and (min-width: ${({ theme }) => theme.screen.tablet}) {
-    ::after {
-      background: ${({ theme, backgroundColor }) =>
-    backgroundColor ? backgroundColor : theme.color.primary};
-    }
-  } */
 `;
 
 const Body = styled.span<{ active: boolean }>`

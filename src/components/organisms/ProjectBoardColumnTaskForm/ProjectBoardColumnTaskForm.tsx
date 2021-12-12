@@ -103,7 +103,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
   return (
     <>
       <Form
-        contentButton="Dodaj zdanie"
+        contentButton={task ? "Aktualizuj zadanie" : "Dodaj zdanie"}
         fields={[
           {
             name: "title",

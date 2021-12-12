@@ -64,7 +64,7 @@ const RegisterForm = () => {
     }
   };
 
-  return <Form fields={Fields} onSubmit={onSubmit} />;
+  return <Form contentButton="Zarejestruj mnie" fields={Fields} onSubmit={onSubmit} />;
 };
 
 export default RegisterForm;

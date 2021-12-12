@@ -39,7 +39,8 @@ export const Floor = styled.div<{ size?: string }>`
   width: ${({ size }) => (size ? size : "300px")};
   height: ${({ size }) => (size ? size : "300px")};
   background: ${({ theme }) => theme.color.primary};
-  transform: scaleZ(1.3) scaleX(1.3) rotateX(90deg) translateZ(calc(${({ size }) => (size ? size : "300px")} / -1.2));
+  transform: scaleZ(1.3) scaleX(1.3) rotateX(90deg)
+    translateZ(calc(${({ size }) => (size ? size : "300px")} / -1.2));
   filter: blur(40px);
 `;
 
@@ -49,8 +50,12 @@ export const Wall = styled.span<{ i: string; size?: string }>`
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(${({ theme }) => theme.color.secondary}, ${({ theme }) => theme.color.primary});
-  transform: rotateY(calc(90deg * ${({ i }) => i})) translateZ(calc(${({ size }) => (size ? size : "300px")} / 2));
+  background: linear-gradient(
+    ${({ theme }) => theme.color.secondary},
+    ${({ theme }) => theme.color.primary}
+  );
+  transform: rotateY(calc(90deg * ${({ i }) => i}))
+    translateZ(calc(${({ size }) => (size ? size : "300px")} / 2));
   ::after {
     content: "Loading";
     position: absolute;
@@ -67,5 +72,5 @@ export const WrapperLoading = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  animation: ${Incoming} 1s;
+  animation: ${Incoming} 3s;
 `;

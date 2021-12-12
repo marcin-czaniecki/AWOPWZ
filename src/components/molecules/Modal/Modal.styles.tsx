@@ -8,19 +8,24 @@ export const BackgroundModal = styled.article`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 13;
+  z-index: 99;
 `;
 
-export const WrapperModal = styled.section<{ maxHeight?: string; maxWidth?: string; minWidth?: string }>`
+export const WrapperModal = styled.section<{
+  maxHeight?: string;
+  maxWidth?: string;
+  minWidth?: string;
+}>`
   position: relative;
-  width: ${({ maxWidth, minWidth }) => ` clamp(${minWidth ? minWidth : "280px"}, 100%, ${maxWidth ? maxWidth : "600px"})`};
+  width: ${({ maxWidth, minWidth }) =>
+    ` clamp(${minWidth ? minWidth : "280px"}, 100%, ${maxWidth ? maxWidth : "600px"})`};
 
   height: clamp(100px, 100%, ${({ maxHeight }) => (maxHeight ? maxHeight : "70%")});
   margin: 0 10px;
   padding-top: 5px;
   padding-bottom: 10px;
   background-color: ${({ theme }) => theme.color.background};
-  z-index: 14;
+  z-index: 99;
 `;
 
 export const WrapperContentModal = styled.section`

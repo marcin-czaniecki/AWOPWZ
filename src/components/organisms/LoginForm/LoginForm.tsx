@@ -19,6 +19,7 @@ const LoginForm = () => {
   };
   return (
     <Form
+      contentButton="Zaloguj mnie"
       fields={[
         { name: "email", type: "email", label: "Twój email" },
         { name: "password", type: "password", label: "Twoje hasło" },

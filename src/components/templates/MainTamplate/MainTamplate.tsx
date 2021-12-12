@@ -43,8 +43,8 @@ const MainTemplate = ({ children }: { children: ReactElement | ReactElement[] })
     <>
       {currentUser && (
         <>
-          <ViewHeader />
           <Navigation />
+          <ViewHeader />
         </>
       )}
       <MainTemplateWrapper>{children}</MainTemplateWrapper>

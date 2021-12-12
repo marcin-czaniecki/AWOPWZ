@@ -1,6 +1,6 @@
 const NoMatch = () => (
   <div style={{ padding: "20px" }}>
-    <p>We can't find this page :/</p>
+    <p>Nie możemy znaleźć tej strony :/</p>
   </div>
 );
 export default NoMatch;

@@ -13,12 +13,6 @@ const Navigation = () => {
   const { visible, ref, close, inverse } = useHandleModal();
   return (
     <>
-      <Hamburger
-        active={visible}
-        onClick={() => {
-          inverse();
-        }}
-      />
       <SideBar ref={ref} active={visible} zIndex="12">
         <WrapperNavigation>
           {views.map(({ to, path, text }) => {
@@ -32,10 +26,11 @@ const Navigation = () => {
             );
           })}
           <Link to="/unauthorization">
-            <LogOutButton onClick={() => signOut(auth)}>Log out</LogOutButton>
+            <LogOutButton onClick={() => signOut(auth)}>Wyloguj</LogOutButton>
           </Link>
         </WrapperNavigation>
       </SideBar>
+      <Hamburger active={visible} onClick={() => inverse()} />
     </>
   );
 };

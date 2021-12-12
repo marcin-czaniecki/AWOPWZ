@@ -10,10 +10,10 @@ export const Incoming = keyframes`
 `;
 
 export const cubRotate = keyframes`
-    0%{
+      0%{
     transform:rotateX(-30deg) rotateY(0deg);
     }
     100%{
-    transform:rotateX(-30deg) rotateY(360deg);
+      transform:rotateX(-30deg) rotateY(360deg);
     }
 `;

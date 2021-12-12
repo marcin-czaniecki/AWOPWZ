@@ -91,10 +91,10 @@ const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProj
         </WrapperHoverIcons>
         {isPermission && (
           <KebabMenu color={color} top>
-            <FormModal textButton="Edytuj" maxHeight="330px">
+            <FormModal textButton="Edytuj" maxHeight="350px">
               <TaskForm task={task} />
             </FormModal>
-            <ConfirmModal textButton="Usuń" confirmAction={removeTask} maxHeight="110px">
+            <ConfirmModal textButton="Usuń" confirmAction={removeTask} maxHeight="120px">
               <p>Czy na pewno chcesz usunąć zadanie?</p>
             </ConfirmModal>
           </KebabMenu>
