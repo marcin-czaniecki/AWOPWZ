@@ -3,6 +3,7 @@ import Loading from "components/molecules/Loading/Loading";
 import ProjectBoard from "components/organisms/ProjectBoard/ProjectBoard";
 import { ProjectHeaderForDashboard } from "components/organisms/ProjectHeaderForDashboard/ProjectHeaderForDashboard";
 import { DocumentReference } from "firebase/firestore";
+import { CurrentUserPermissionsProvider } from "hooks/useCurrentUserPermissions";
 import { ProjectProvider } from "hooks/useProject";
 import { useUser } from "hooks/useUser";
 import { useEffect, useState } from "react";
@@ -42,17 +43,21 @@ const Dashboard = () => {
       <>
         {project && pinnedProject && pinnedProject.ref && (
           <ProjectProvider id={pinnedProject.ref.id}>
-            <>
-              <ProjectHeaderForDashboard
-                pinnedProject={pinnedProject}
-                setPinnedProject={setPinnedProject}
-              />
-              {dataUser?.permissions.find((team) => team.id === project?.teamId) ? (
-                <ProjectBoard />
-              ) : (
-                <div>Utraciłeś dostęp do tego projektu.</div>
-              )}
-            </>
+            <CurrentUserPermissionsProvider
+              id={dataUser.permissions.find((team) => team.id === project.teamId)?.id}
+            >
+              <>
+                <ProjectHeaderForDashboard
+                  pinnedProject={pinnedProject}
+                  setPinnedProject={setPinnedProject}
+                />
+                {dataUser?.permissions.find((team) => team.id === project?.teamId) ? (
+                  <ProjectBoard />
+                ) : (
+                  <div>Utraciłeś dostęp do tego projektu.</div>
+                )}
+              </>
+            </CurrentUserPermissionsProvider>
           </ProjectProvider>
         )}
       </>

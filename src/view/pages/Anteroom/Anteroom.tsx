@@ -1,28 +1,16 @@
-import Loading from "components/molecules/Loading/Loading";
 import { useUser } from "hooks/useUser";
 import { useLocation, Navigate } from "react-router-dom";
 import { views } from "view/views";
 
 const Anteroom = () => {
   const location = useLocation();
-  const { currentUser, dataUser } = useUser();
-  const isPermission = dataUser?.verifiedByAdmin === true && currentUser;
+  const { dataUser } = useUser();
+  const isPermission = dataUser?.verifiedByAdmin === true;
 
   if (isPermission) {
     return (
-      <Navigate
-        to={localStorage.getItem("lastPath") || views[0].path}
-        state={{ from: location }}
-      />
+      <Navigate to={localStorage.getItem("lastPath") || views[0].path} state={{ from: location }} />
     );
-  }
-
-  if (!currentUser) {
-    return <Navigate to="/unauthorization" state={{ from: location }} />;
-  }
-
-  if (!dataUser) {
-    return <Loading />;
   }
 
   return (

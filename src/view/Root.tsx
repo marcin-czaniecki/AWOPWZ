@@ -13,11 +13,16 @@ const Root = () => {
   if (location.pathname !== "/" && location.pathname !== "/unauthorization") {
     localStorage.setItem("lastPath", location.pathname);
   }
-
+  if (!currentUser && location.pathname !== "/unauthorization") {
+    return <Navigate to="/unauthorization" state={{ from: location }} />;
+  }
   return (
     <Routes>
       <Route index element={<Anteroom />} />
-      <Route path="/unauthorization" element={!currentUser ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />} />
+      <Route
+        path="/unauthorization"
+        element={!currentUser ? <Unauthorized /> : <Navigate to="/" state={{ from: location }} />}
+      />
       {views.map((view) => (
         <Route key={view.path} {...view} />
       ))}
