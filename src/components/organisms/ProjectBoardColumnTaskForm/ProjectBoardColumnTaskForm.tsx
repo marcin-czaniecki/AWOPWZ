@@ -128,7 +128,7 @@ const TaskForm = ({ task }: { task?: ITask }) => {
           {
             name: "responsibleName",
             type: "select",
-            label: "Wybierz kolor tła",
+            label: "Osoba odpowiedzialna",
             selectOptions: members.map((user) => {
               return { value: user.firstName + " " + user.lastName };
             }),
