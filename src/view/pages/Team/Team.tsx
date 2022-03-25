@@ -7,15 +7,21 @@ import ProjectCard from "components/organisms/ProjectCard/ProjectCard";
 import TeamMember from "components/organisms/TeamMember/TeamMember";
 import UserWithoutPermission from "components/organisms/UserWithoutPermission/UserWithoutPermission";
 import MashTemplate from "components/templates/MashTemplate/MashTemplate";
-import StoreService from "firebase/StoreService";
+import StoreService from "fb/StoreService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import useDocumentsWithCustomQuery from "hooks/useDocumentsWithCustomQuery";
 import { useUser } from "hooks/useUser";
-import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IProject, ITeam, IUser } from "types/types";
-import { collectionReferenceProjects, collectionReferenceUsers } from "utils/references";
+import {
+  collectionReferenceProjects,
+  collectionReferenceUsers,
+} from "utils/references";
 import { CollectionsName } from "utils/utils";
 
 const WrapperListUserWithoutPermission = styled.div`
@@ -34,11 +40,14 @@ const Team = () => {
 
   const projectQueryConstraint = where("teamId", "==", teamId);
 
-  const [projects, loadingProjects, errorProjects] = useDocumentsWithCustomQuery(
-    collectionReferenceProjects,
-    projectQueryConstraint
+  const [projects, loadingProjects, errorProjects] =
+    useDocumentsWithCustomQuery(
+      collectionReferenceProjects,
+      projectQueryConstraint
+    );
+  const [users, loadingUsers, errorUsers] = useCollectionData<IUser>(
+    collectionReferenceUsers
   );
-  const [users, loadingUsers, errorUsers] = useCollectionData<IUser>(collectionReferenceUsers);
 
   const doc = StoreService.docWithType<ITeam>(CollectionsName.teams, teamId);
   const [team, loadingTeam, errorTeam] = useDocumentData<ITeam>(doc);
@@ -75,7 +84,11 @@ const Team = () => {
               WrapperList={WrapperListUserWithoutPermission}
               array={users || []}
               callbackfn={(user) => (
-                <UserWithoutPermission key={user.uid} user={user} teamId={teamId} />
+                <UserWithoutPermission
+                  key={user.uid}
+                  user={user}
+                  teamId={teamId}
+                />
               )}
             />
           </>

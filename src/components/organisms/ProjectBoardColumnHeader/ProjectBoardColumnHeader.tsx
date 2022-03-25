@@ -1,7 +1,7 @@
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import SwitchButtons from "components/molecules/SwitchButtons/SwitchButtons";
-import { ProjectService } from "firebase/ProjectService";
+import { ProjectService } from "fb/ProjectService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useProject } from "hooks/useProject";
 import { useUser } from "hooks/useUser";
@@ -44,12 +44,22 @@ const ProjectBoardColumnHeader = ({ column }: { column: IColumn }) => {
             actionLeftButton={swapWithASmallerOrder}
             actionRightButton={swapWithALargerOrder}
           />
-          <ConfirmModal invisibleYes invisibleNo maxHeight="200px" textButton="Edytuj">
+          <ConfirmModal
+            invisibleYes
+            invisibleNo
+            maxHeight="200px"
+            textButton="Edytuj"
+          >
             <ProjectBoardColumnForm column={column} />
           </ConfirmModal>
-          <ConfirmModal confirmAction={columnRemove} maxHeight="150px" textButton="usuń">
+          <ConfirmModal
+            confirmAction={columnRemove}
+            maxHeight="150px"
+            textButton="usuń"
+          >
             <p>
-              Czy na pewno chcesz usunąć kolumnę? Zadania zostaną przeniesione do pierwszej kolumny!
+              Czy na pewno chcesz usunąć kolumnę? Zadania zostaną przeniesione
+              do pierwszej kolumny!
             </p>
           </ConfirmModal>
         </KebabMenu>

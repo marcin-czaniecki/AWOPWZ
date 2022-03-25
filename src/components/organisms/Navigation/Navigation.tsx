@@ -1,7 +1,7 @@
 import Hamburger from "components/atoms/Hamburger/Hamburger";
 import SideBar from "components/atoms/SideBar/SideBar";
 import CustomLink from "components/molecules/CustomLink/CustomLink";
-import { auth } from "firebase/fb";
+import { auth } from "fb/fb";
 import { signOut } from "firebase/auth";
 import useHandleModal from "hooks/useHandleModal";
 import { Fragment } from "react";

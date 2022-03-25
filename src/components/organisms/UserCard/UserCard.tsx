@@ -1,5 +1,5 @@
 import Input from "components/atoms/Input/Input";
-import { store } from "firebase/fb";
+import { store } from "fb/fb";
 import { doc, updateDoc } from "firebase/firestore";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
@@ -19,13 +19,20 @@ const handleVerifiedByAdmin = async (verifiedByAdmin: boolean, uid: string) => {
   const docRef = doc(store, CollectionsName.users, uid);
   try {
     await updateDoc(docRef, {
-      verifiedByAdmin: typeof verifiedByAdmin === "boolean" ? !verifiedByAdmin : true,
+      verifiedByAdmin:
+        typeof verifiedByAdmin === "boolean" ? !verifiedByAdmin : true,
     });
   } catch (e: any) {
     throw new Error("Nie udało się zweryfikować tego konta.");
   }
 };
-const UserCard = ({ uid, firstName, lastName, profession, verifiedByAdmin }: IUser & {}) => {
+const UserCard = ({
+  uid,
+  firstName,
+  lastName,
+  profession,
+  verifiedByAdmin,
+}: IUser & {}) => {
   const { dataUser } = useUser();
   const { setToast } = useToast();
 

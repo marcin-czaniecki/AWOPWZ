@@ -4,8 +4,8 @@ import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import HoverIcon from "components/molecules/HoverIcon/HoverIcon";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
 import TaskForm from "components/organisms/ProjectBoardColumnTaskForm/ProjectBoardColumnTaskForm";
-import { ProjectService } from "firebase/ProjectService";
-import StoreService from "firebase/StoreService";
+import { ProjectService } from "fb/ProjectService";
+import StoreService from "fb/StoreService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
@@ -26,7 +26,12 @@ const WrapperHoverIcons = styled.div`
   gap: 10px;
 `;
 
-const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProjectTaskProps) => {
+const ProjectBoardColumnTask = ({
+  doc,
+  task,
+  columns,
+  column: { order },
+}: IProjectTaskProps) => {
   const { dataUser } = useUser();
   const [currentUserPermissions] = useCurrentUserPermissions();
   const { setToast } = useToast();
@@ -65,17 +70,22 @@ const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProj
   const isLastOrder = Number(order) === length - 1;
 
   return (
-    <WrapperProjectBoardColumnTask color={color} backgroundColor={backgroundColor}>
+    <WrapperProjectBoardColumnTask
+      color={color}
+      backgroundColor={backgroundColor}
+    >
       <div>
         <div>{content}</div>
       </div>
       <ProjectBoardColumnTaskButtons>
-        {!isFirstOrder && (isPermission || task.responsibleName === getNameUser(dataUser)) && (
-          <Button onClick={moveLeft}>Cofnij</Button>
-        )}
-        {!isLastOrder && (isPermission || task.responsibleName === getNameUser(dataUser)) && (
-          <Button onClick={moveRight}>Ukończ</Button>
-        )}
+        {!isFirstOrder &&
+          (isPermission || task.responsibleName === getNameUser(dataUser)) && (
+            <Button onClick={moveLeft}>Cofnij</Button>
+          )}
+        {!isLastOrder &&
+          (isPermission || task.responsibleName === getNameUser(dataUser)) && (
+            <Button onClick={moveRight}>Ukończ</Button>
+          )}
         <WrapperHoverIcons>
           {task.responsibleName && (
             <HoverIcon letter="O">
@@ -94,7 +104,11 @@ const ProjectBoardColumnTask = ({ doc, task, columns, column: { order } }: IProj
             <FormModal textButton="Edytuj" maxHeight="350px">
               <TaskForm task={task} />
             </FormModal>
-            <ConfirmModal textButton="Usuń" confirmAction={removeTask} maxHeight="120px">
+            <ConfirmModal
+              textButton="Usuń"
+              confirmAction={removeTask}
+              maxHeight="120px"
+            >
               <p>Czy na pewno chcesz usunąć zadanie?</p>
             </ConfirmModal>
           </KebabMenu>

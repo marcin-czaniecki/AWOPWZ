@@ -1,4 +1,4 @@
-import { auth } from "firebase/fb";
+import { auth } from "fb/fb";
 import { Timestamp } from "firebase/firestore";
 import { FieldErrors } from "react-hook-form";
 import { IColumn, ITask, IUser, TypeToast } from "types/types";
@@ -32,9 +32,11 @@ export enum ErrorMessage {
   noValue = "Zaszła pewna niezgodność z twoim kontem.",
 }
 
-export const generateId = () => Math.round(Math.random() * Math.pow(10, 10)).toString(16);
+export const generateId = () =>
+  Math.round(Math.random() * Math.pow(10, 10)).toString(16);
 
-export const checkTaskOrder = (task: ITask, column: IColumn) => task.columnOrder === column.order;
+export const checkTaskOrder = (task: ITask, column: IColumn) =>
+  task.columnOrder === column.order;
 
 export const wipToNumber = (wip: number | string) => {
   const isNumberWip = typeof wip === "number";
@@ -83,7 +85,10 @@ export const errorHandler = (
             if (e?.type === "required") {
               setToast(``, "warning");
               setTimeout(() => {
-                setToast(`Musisz wypełnić brakujące pole ${filed["label"] || ""}`, "warning");
+                setToast(
+                  `Musisz wypełnić brakujące pole ${filed["label"] || ""}`,
+                  "warning"
+                );
               }, time);
               time += 4100;
             }

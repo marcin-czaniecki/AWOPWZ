@@ -1,5 +1,5 @@
 import Form from "components/organisms/Form/Form";
-import { ProjectService } from "firebase/ProjectService";
+import { ProjectService } from "fb/ProjectService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -28,7 +28,9 @@ const ProjectForm = ({
     if (!teamId) {
       setToast("Musisz wybrać jakiś zespół.", "warning");
     }
-    const currentUserPermissions = dataUser?.permissions.find((team) => team.id === teamId);
+    const currentUserPermissions = dataUser?.permissions.find(
+      (team) => team.id === teamId
+    );
     const isPermission =
       currentUserPermissions?.isLeader ||
       dataUser?.isAdmin ||
@@ -53,27 +55,35 @@ const ProjectForm = ({
       <Form
         contentButton="Dodaj projekt"
         fields={[
-          { name: "name", type: "text", label: "Nazwa projektu", defaultValue: name },
+          {
+            name: "name",
+            type: "text",
+            label: "Nazwa projektu",
+            defaultValue: name,
+          },
           {
             name: "teamId",
             type: "select",
             label: "Wybierz zespół",
-            selectOptions: teamsQuerySnapshot?.docs.map((documentSnapshotTeam) => {
-              const permissions = dataUser?.permissions.find(
-                (team) => team.id === documentSnapshotTeam.id
-              );
-              const isPermission = permissions?.isLeader || permissions?.canServiceProjects;
-              if (!isPermission && !dataUser?.isAdmin) {
+            selectOptions: teamsQuerySnapshot?.docs.map(
+              (documentSnapshotTeam) => {
+                const permissions = dataUser?.permissions.find(
+                  (team) => team.id === documentSnapshotTeam.id
+                );
+                const isPermission =
+                  permissions?.isLeader || permissions?.canServiceProjects;
+                if (!isPermission && !dataUser?.isAdmin) {
+                  return {
+                    value: null,
+                    content: null,
+                  };
+                }
                 return {
-                  value: null,
-                  content: null,
+                  value: documentSnapshotTeam.id,
+                  content: documentSnapshotTeam.data().name,
                 };
               }
-              return {
-                value: documentSnapshotTeam.id,
-                content: documentSnapshotTeam.data().name,
-              };
-            }),
+            ),
           },
         ]}
         onSubmit={onSubmit}

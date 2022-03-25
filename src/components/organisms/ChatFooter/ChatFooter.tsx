@@ -1,5 +1,5 @@
 import Form from "components/organisms/Form/Form";
-import ChatService from "firebase/ChatService";
+import ChatService from "fb/ChatService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { SubmitHandler } from "react-hook-form";
@@ -29,7 +29,9 @@ const FooterChat = ({ path }: IChatProps) => {
     <div>
       <Form
         contentButton="Wyślij"
-        fields={[{ name: "message", type: "text", label: "", autoComplete: "off" }]}
+        fields={[
+          { name: "message", type: "text", label: "", autoComplete: "off" },
+        ]}
         onSubmit={onSubmit}
       />
     </div>

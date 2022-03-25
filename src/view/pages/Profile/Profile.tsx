@@ -2,7 +2,7 @@ import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import Loading from "components/molecules/Loading/Loading";
 import FormModal from "components/organisms/FormModal/FormModal";
 import ProfileForm from "components/organisms/ProfileForm/ProfileForm";
-import AuthService from "firebase/AuthService";
+import AuthService from "fb/AuthService";
 import { useUser } from "hooks/useUser";
 import { WrapperProfile, WrapperInfo } from "./Profile.styles";
 
@@ -33,7 +33,9 @@ const Profile = () => {
       <ConfirmModal
         textButton="Usuń konto"
         maxHeight="110px"
-        confirmAction={() => currentUser && AuthService.removeAccount(currentUser)}
+        confirmAction={() =>
+          currentUser && AuthService.removeAccount(currentUser)
+        }
       >
         <p>Czy na pewno chcesz usunąć konto?</p>
       </ConfirmModal>

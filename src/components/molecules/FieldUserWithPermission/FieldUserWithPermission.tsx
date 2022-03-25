@@ -1,5 +1,5 @@
 import Input from "components/atoms/Input/Input";
-import TeamService from "firebase/TeamService";
+import TeamService from "fb/TeamService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
@@ -24,7 +24,8 @@ const FieldUserWithPermission = ({
         setToast(ErrorMessage.haventPermissions, "info");
         return;
       }
-      const isLeaderPermission = !currentUserPermissions?.isLeader || permissions?.isLeader;
+      const isLeaderPermission =
+        !currentUserPermissions?.isLeader || permissions?.isLeader;
       const isServiceMemberPermission =
         !currentUserPermissions?.canServiceMember ||
         permissions?.isLeader ||

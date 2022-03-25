@@ -2,7 +2,7 @@ import Card from "components/molecules/Card/Card";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import FormModal from "components/organisms/FormModal/FormModal";
 import FormProject from "components/organisms/ProjectForm/ProjectForm";
-import { ProjectService } from "firebase/ProjectService";
+import { ProjectService } from "fb/ProjectService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
@@ -48,7 +48,10 @@ const ProjectCard = ({ id, name, teamId }: IProjectCardProps) => {
               >
                 <p>Czy na pewno chcesz usunąć projekt</p>
               </ConfirmModal>
-              <FormModal textButton={ConfirmModalButtonText.edit} maxHeight="160px">
+              <FormModal
+                textButton={ConfirmModalButtonText.edit}
+                maxHeight="160px"
+              >
                 <FormProject id={id} name={name} currentTeamId={teamId} />
               </FormModal>
             </>

@@ -1,6 +1,6 @@
 import Button from "components/atoms/Button/Button";
 import RequiredPermissions from "components/molecules/RequiredPermissions/RequiredPermissions";
-import TeamService from "firebase/TeamService";
+import TeamService from "fb/TeamService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useUser } from "hooks/useUser";
 import styled from "styled-components";
@@ -25,7 +25,8 @@ const UserWithoutPermission = ({ teamId, user }: IUserWithPermissions) => {
   const permissions = user.permissions.find((team) => team.id === teamId);
   const [currentUserPermissions] = useCurrentUserPermissions();
 
-  if (permissions || (!currentUserPermissions && !dataUser?.isAdmin)) return null;
+  if (permissions || (!currentUserPermissions && !dataUser?.isAdmin))
+    return null;
 
   const isPermissionsForAddMember = [
     currentUserPermissions?.isLeader || false,
@@ -40,7 +41,9 @@ const UserWithoutPermission = ({ teamId, user }: IUserWithPermissions) => {
       <div>{user.profession}</div>
       <div>
         <RequiredPermissions booleanPermissions={isPermissionsForAddMember}>
-          <Button onClick={() => TeamService.addMember(user.uid, teamId)}>Dodaj do zespołu</Button>
+          <Button onClick={() => TeamService.addMember(user.uid, teamId)}>
+            Dodaj do zespołu
+          </Button>
         </RequiredPermissions>
       </div>
     </WrapperUserWithoutPermission>

@@ -1,7 +1,7 @@
 import { DocumentReference, getDoc, Timestamp } from "@firebase/firestore";
 import { printDate } from "@janossik/date";
 import Form from "components/organisms/Form/Form";
-import StoreService from "firebase/StoreService";
+import StoreService from "fb/StoreService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
@@ -85,7 +85,13 @@ const TaskForm = ({ task }: { task?: ITask }) => {
       } else {
         StoreService.arrayPush(
           ArrayName.tasks,
-          createTask(title, color, backgroundColor, new Date(timeLimit), responsibleName),
+          createTask(
+            title,
+            color,
+            backgroundColor,
+            new Date(timeLimit),
+            responsibleName
+          ),
           doc
         );
       }
@@ -96,7 +102,10 @@ const TaskForm = ({ task }: { task?: ITask }) => {
 
   const onError: SubmitErrorHandler<Inputs> = (errors) => {
     if (errors?.title?.type === "maxLength") {
-      setToast(`W treści zadania możesz użyć maksymalnie 100 znaków`, "warning");
+      setToast(
+        `W treści zadania możesz użyć maksymalnie 100 znaków`,
+        "warning"
+      );
     }
   };
 
@@ -139,7 +148,11 @@ const TaskForm = ({ task }: { task?: ITask }) => {
             name: "timeLimit",
             type: "date",
             label: "Czas wykonania zadania",
-            defaultValue: printDate("yyyyddmm", "en", task?.timeLimit?.toDate() || new Date())
+            defaultValue: printDate(
+              "yyyyddmm",
+              "en",
+              task?.timeLimit?.toDate() || new Date()
+            )
               .split(".")
               .reverse()
               .join("-"),

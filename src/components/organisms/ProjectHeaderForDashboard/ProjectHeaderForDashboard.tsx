@@ -1,7 +1,7 @@
 import Button from "components/atoms/Button/Button";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
 import KebabMenu from "components/molecules/KebabMenu/KebabMenu";
-import StoreService from "firebase/StoreService";
+import StoreService from "fb/StoreService";
 import { useUser } from "hooks/useUser";
 import styled from "styled-components";
 import { IProjectHeaderProps } from "types/componentTypes";
@@ -41,11 +41,16 @@ export const ProjectHeaderForDashboard = ({
         <>
           {dataUser?.pinnedProjects?.map((pinnedProject) => (
             <div key={pinnedProject.name}>
-              <Button onClick={() => setPinnedProject(pinnedProject)}>{pinnedProject.name}</Button>
+              <Button onClick={() => setPinnedProject(pinnedProject)}>
+                {pinnedProject.name}
+              </Button>
             </div>
           ))}
         </>
-        <ConfirmModal textButton={`Odepnij ${pinnedProject?.name}`} confirmAction={unpinProject}>
+        <ConfirmModal
+          textButton={`Odepnij ${pinnedProject?.name}`}
+          confirmAction={unpinProject}
+        >
           <p>Po tej akcji nie będziesz widzieć tego projektu w Dashboard</p>
         </ConfirmModal>
       </KebabMenu>

@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import Root from "./view/Root";
 import AppProvider from "./providers/AppProvider";
-import Root from "view/Root";
 
 ReactDOM.render(
   <StrictMode>

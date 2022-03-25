@@ -1,5 +1,5 @@
 import DateField from "components/molecules/DateFIeld/DateField";
-import ChatService from "firebase/ChatService";
+import ChatService from "fb/ChatService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { theme } from "theme/theme";
@@ -13,7 +13,14 @@ import {
   WrapperMessageBody,
 } from "./Message.styles";
 
-const Message = ({ author, id, uid, content, createdAt, path }: IMessageProps) => {
+const Message = ({
+  author,
+  id,
+  uid,
+  content,
+  createdAt,
+  path,
+}: IMessageProps) => {
   const { dataUser } = useUser();
   const { setToast } = useToast();
   const isCurrentUser = dataUser?.uid === uid;
@@ -35,14 +42,22 @@ const Message = ({ author, id, uid, content, createdAt, path }: IMessageProps) =
         </div>
         <div>
           {!isCurrentUser && (
-            <AuthorFiled autoMarginLeft={!isCurrentUser}>{author ? author : uid}</AuthorFiled>
+            <AuthorFiled autoMarginLeft={!isCurrentUser}>
+              {author ? author : uid}
+            </AuthorFiled>
           )}
-          <WrapperMessageContent isCurrentUser={isCurrentUser}>{content}</WrapperMessageContent>
+          <WrapperMessageContent isCurrentUser={isCurrentUser}>
+            {content}
+          </WrapperMessageContent>
         </div>
       </WrapperMessageBody>
       {isPermissions && (
         <KebabMenu color={theme.color.text} top>
-          <ConfirmModal textButton="usuń" maxHeight="110px" confirmAction={removeMessage}>
+          <ConfirmModal
+            textButton="usuń"
+            maxHeight="110px"
+            confirmAction={removeMessage}
+          >
             <p>Czy na pewno chcesz usunąć tą wiadomość?</p>
           </ConfirmModal>
         </KebabMenu>

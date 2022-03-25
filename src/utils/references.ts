@@ -1,4 +1,4 @@
-import StoreService from "firebase/StoreService";
+import StoreService from "fb/StoreService";
 import { CollectionReference } from "firebase/firestore";
 import { IProject, ITeam, IUser } from "types/types";
 import { CollectionsName } from "./utils";

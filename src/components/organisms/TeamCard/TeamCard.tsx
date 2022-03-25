@@ -1,7 +1,7 @@
 import { getDoc } from "@firebase/firestore";
 import Card from "components/molecules/Card/Card";
 import ConfirmModal from "components/molecules/ConfirmModal/ConfirmModal";
-import TeamService from "firebase/TeamService";
+import TeamService from "fb/TeamService";
 import { useToast } from "hooks/useToast";
 import { ITeamCardProps } from "types/componentTypes";
 import { IUser } from "types/types";

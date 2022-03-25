@@ -1,5 +1,5 @@
 import Form from "components/organisms/Form/Form";
-import AuthService from "firebase/AuthService";
+import AuthService from "fb/AuthService";
 import { useToast } from "hooks/useToast";
 import { SubmitHandler } from "react-hook-form";
 

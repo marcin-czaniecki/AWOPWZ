@@ -1,4 +1,4 @@
-import TeamService from "firebase/TeamService";
+import TeamService from "fb/TeamService";
 import { useToast } from "hooks/useToast";
 import { useUser } from "hooks/useUser";
 import { SubmitHandler } from "react-hook-form";

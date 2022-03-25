@@ -1,4 +1,4 @@
-import StoreService from "firebase/StoreService";
+import StoreService from "fb/StoreService";
 import { useCurrentUserPermissions } from "hooks/useCurrentUserPermissions";
 import { useProject } from "hooks/useProject";
 import { useToast } from "hooks/useToast";
@@ -13,13 +13,20 @@ type Inputs = {
   wip: number;
 };
 
-const ProjectBoardColumnForm = ({ column, lastOrder, length }: IColumnFormProps) => {
+const ProjectBoardColumnForm = ({
+  column,
+  lastOrder,
+  length,
+}: IColumnFormProps) => {
   const { doc } = useProject();
   const { setToast } = useToast();
   const { dataUser } = useUser();
   const [currentUserPermissions] = useCurrentUserPermissions();
   const addColumn = ({ name, wip }: Inputs) => {
-    if ((!lastOrder && typeof lastOrder !== "number") || (!length && length !== 0)) {
+    if (
+      (!lastOrder && typeof lastOrder !== "number") ||
+      (!length && length !== 0)
+    ) {
       throw new Error(
         "You must give the lastOrder and length attributes to the ColumnForm component"
       );
@@ -61,7 +68,12 @@ const ProjectBoardColumnForm = ({ column, lastOrder, length }: IColumnFormProps)
       }
 
       if (!isSameName || !isSameWip) {
-        StoreService.updateArray(ArrayName.columns, [column], [{ ...column, ...data }], doc);
+        StoreService.updateArray(
+          ArrayName.columns,
+          [column],
+          [{ ...column, ...data }],
+          doc
+        );
       }
     } else {
       addColumn({ name, wip });
@@ -92,7 +104,12 @@ const ProjectBoardColumnForm = ({ column, lastOrder, length }: IColumnFormProps)
           defaultValue: column?.name || "",
           options: { required: true, maxLength: 30 },
         },
-        { name: "wip", type: "number", label: "Ustaw wip", defaultValue: column?.wip || 0 },
+        {
+          name: "wip",
+          type: "number",
+          label: "Ustaw wip",
+          defaultValue: column?.wip || 0,
+        },
       ]}
       onSubmit={onSubmit}
       onError={onError}

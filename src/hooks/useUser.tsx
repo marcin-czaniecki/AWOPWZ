@@ -1,5 +1,5 @@
-import { auth } from "firebase/fb";
-import StoreService from "firebase/StoreService";
+import { auth } from "fb/fb";
+import StoreService from "fb/StoreService";
 import { User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -29,7 +29,11 @@ export const UserProvider = ({ children }: { children: JSX.Element }) => {
     }
   }, [currentUser, dataUser]);
 
-  return <UserContext.Provider value={{ dataUser, currentUser }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ dataUser, currentUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUser = () => {

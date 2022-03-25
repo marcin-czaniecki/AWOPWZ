@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { theme } from "theme/theme";
 import { IUser } from "types/types";
 import { arrayFieldUser, ConfirmModalButtonText } from "utils/utils";
-import TeamService from "firebase/TeamService";
+import TeamService from "fb/TeamService";
 import {
   WrapperTeamMemberDetails,
   TeamMemberDetailsFirstPlan,
@@ -39,7 +39,9 @@ const TeamMember = ({ user }: { user: IUser }) => {
     if (!dataUser?.isAdmin) {
       const isLeaderPermission = !currentUserPermissions?.isLeader || isLeader;
       const isPermissionServiceMember =
-        !currentUserPermissions?.canServiceMember || isLeader || canServiceMember;
+        !currentUserPermissions?.canServiceMember ||
+        isLeader ||
+        canServiceMember;
       if (isLeaderPermission && isPermissionServiceMember) {
         setToast("Nie posiadasz odpowiednich uprawnień.", "info");
         return null;
@@ -68,7 +70,11 @@ const TeamMember = ({ user }: { user: IUser }) => {
         <>
           <KebabMenu color={theme.color.primary}>
             <div>
-              <ConfirmModal textButton="Zmień uprawnienia" maxHeight="210px" invisibleNo>
+              <ConfirmModal
+                textButton="Zmień uprawnienia"
+                maxHeight="210px"
+                invisibleNo
+              >
                 <WrapperTeamMemberDetailsPermission>
                   <b>Uprawnienia</b>
                   {arrayFieldUser.map(({ key, content }) => {

@@ -1,8 +1,8 @@
 import { useToast } from "hooks/useToast";
 import { SubmitHandler } from "react-hook-form";
-import AuthService from "firebase/AuthService";
+import AuthService from "fb/AuthService";
 import Form from "components/organisms/Form/Form";
-import StoreService from "firebase/StoreService";
+import StoreService from "fb/StoreService";
 import { ArrayName, CollectionsName } from "utils/utils";
 
 const { setDoc, doc } = StoreService;
@@ -64,7 +64,13 @@ const RegisterForm = () => {
     }
   };
 
-  return <Form contentButton="Zarejestruj mnie" fields={Fields} onSubmit={onSubmit} />;
+  return (
+    <Form
+      contentButton="Zarejestruj mnie"
+      fields={Fields}
+      onSubmit={onSubmit}
+    />
+  );
 };
 
 export default RegisterForm;
