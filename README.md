@@ -25,20 +25,13 @@ REACT_APP_STORAGE_BUCKET=
 REACT_APP_MESSAGING_SENDER_ID=
 REACT_APP_APP_ID=
 ```
-### 2. Co wykorzystuje aplikacja.
-```
-"firebase": "^9.3.0",
-"react": "^17.0.2",
-"react-dom": "^17.0.2",
-"react-firebase-hooks": "^4.0.0",
-"react-hook-form": "^7.19.5",
-"react-router-dom": "^6.0.1",
-"react-scripts": "4.0.3",
-"styled-components": "^5.3.3",
-"typescript": "^4.4.4",
-"web-vitals": "^1.1.2"
-```
- ### 3. Ostatnie kroki
+
+ ### 2. Instalacja zależności 
+ ```
+ npm install
+ ```
+
+ ### 2. Ostatnie kroki
  
  1. Należy w terminalu wpisać "npm i" 
  2. Należy w terminalu wpisać "npm start"
