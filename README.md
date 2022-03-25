@@ -26,12 +26,8 @@ REACT_APP_MESSAGING_SENDER_ID=
 REACT_APP_APP_ID=
 ```
 
- ### 2. Instalacja zależności 
- ```
- npm install
- ```
 
- ### 2. Ostatnie kroki
+ ### 2. Instalacja zależności
  
  1. Należy w terminalu wpisać "npm i" 
  2. Należy w terminalu wpisać "npm start"
