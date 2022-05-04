@@ -29,7 +29,7 @@ The application was created for the purposes of the diploma thesis for studies (
    REACT_APP_STORAGE_BUCKET=
    REACT_APP_MESSAGING_SENDER_ID=
    REACT_APP_APP_ID=
-4. npm start
+4. (console) npm start
 ```
 
 ## Plans for the future
