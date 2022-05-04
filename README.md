@@ -8,7 +8,7 @@ Login: marcinczaniecki1997@gmail.com
 Password: 123456qw
 ```
 
-The application was developed for the needs of engineering work. The purpose of the application is to enable the improvement of cooperation between team members using the kanban methodology and chat for projects.
+The application was created for the purposes of the diploma thesis for studies (engineer degree). The purpose of the application is to enable the improvement of cooperation between team members using the kanban methodology and chat for projects.
 
 ## Technologies
 
