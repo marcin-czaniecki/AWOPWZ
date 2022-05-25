@@ -1,4 +1,4 @@
-# DESIGN OF AN APPLICATION SUPPORTING THE ORGANIZATION OF WORK IN A TEAM
+# APPLICATION SUPPORTING THE ORGANIZATION OF WORK IN A TEAM
 Applications can be checked at https://awopwz.web.app
 
 **Sample account:**
